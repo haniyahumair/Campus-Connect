@@ -5,6 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - Campus Connect</title>
     <link rel="stylesheet" href="/styles/pages/login-register.css">
+    <style>
+        .form-step {
+            display: none;
+        }
+        
+        .form-step.active {
+            display: block;
+        }
+        
+        .form-navigation {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+    </style>
 </head>
 <body>
     <!--Sign Up Nav Section-->
@@ -31,71 +46,110 @@
                 </div>
             </div>
             
-            <!--Sign Up Form-->
+            <!--Multi-Step Sign Up Form-->
             <div class="sign-up-form">
                 <form class="register-form" id="register-form">
                     
-                    <!-- Role Selection -->
-                    <div class="role-selection">
-                        <h3>I am a:</h3>
-                        <div class="role-options">
-                            <label class="role-option">
-                                <input type="radio" name="role" value="student" checked>
-                                <div class="role-card">
-                                    <span class="role-icon">🎓</span>
-                                    <span class="role-label">Student</span>
-                                    <span class="role-desc">Attend and register for events</span>
-                                </div>
-                            </label>
+                    <!-- Step 1: Role Selection -->
+                    <div class="form-step active" data-step="1">
+                        <div class="role-selection">
+                            <h3>I am a:</h3>
+                            <div class="role-options">
+                                <label class="role-option">
+                                    <input type="radio" name="role" value="student" checked>
+                                    <div class="role-card">
+                                        <span class="role-icon">🎓</span>
+                                        <span class="role-label">Student</span>
+                                        <span class="role-desc">Attend and register for events</span>
+                                    </div>
+                                </label>
+                                
+                                <label class="role-option">
+                                    <input type="radio" name="role" value="admin">
+                                    <div class="role-card">
+                                        <span class="role-icon">👨‍💼</span>
+                                        <span class="role-label">Admin</span>
+                                        <span class="role-desc">Manage events and users</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-navigation">
+                            <button type="button" class="btn-next" onclick="nextStep()">Continue</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Account Information -->
+                    <div class="form-step" data-step="2">
+                        <h4>Account Information</h4>
+                        <div class="form-group">
+                            <input type="text" name="name" id="name" placeholder="Full Name" required style="color: var(--black);"/>
+                            <input type="email" name="email-address" id="email" placeholder="Email Address" required style="color: var(--black);"/>
+                            <input type="password" name="password" id="password" placeholder="Password (min 6 characters)" required minlength="6" style="color: var(--black);"/>
                             
-                            <label class="role-option">
-                                <input type="radio" name="role" value="admin">
-                                <div class="role-card">
-                                    <span class="role-icon">👨‍💼</span>
-                                    <span class="role-label">Admin</span>
-                                    <span class="role-desc">Manage events and users</span>
-                                </div>
-                            </label>
+                            <!-- Student ID (shown for students only) -->
+                            <input type="text" id="student_id" name="student_id" placeholder="Student ID" class="student-only" style="color: var(--black);"/>
+                            
+                            <!-- Department (shown for admins only) -->
+                            <input type="text" id="department" name="department" placeholder="Department/Organization" class="admin-only" style="color: var(--black); display: none;"/>
                         </div>
-                    </div>
-
-                    <!-- Common Fields -->
-                    <div class="form-group">
-                        <input type="text" name="name" id="name" placeholder="Full Name" required style="color: var(--black);"/>
-                        <input type="email" name="email-address" id="email" placeholder="Email Address" required style="color: var(--black);"/>
-                        <input type="password" name="password" id="password" placeholder="Password (min 6 characters)" required minlength="6" style="color: var(--black);"/>
-                    </div>
-
-                    <!-- Student-Only Fields -->
-                    <div id="studentFields">
-                        <div class="form-group">
-                            <input type="text" id="university" name="university" placeholder="University" required style="color: var(--black);"/>
-                            <input type="text" id="student_id" name="student_id" placeholder="Student ID" required style="color: var(--black);"/>
-                            <input type="text" id="major" name="major" placeholder="Major (e.g., Computer Science)" required style="color: var(--black);"/>
-                            <select id="year_of_study" name="year_of_study" required style="color: var(--black); padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
-                                <option value="">Select Year of Study</option>
-                                <option value="1">Year 1</option>
-                                <option value="2">Year 2</option>
-                                <option value="3">Year 3</option>
-                                <option value="4">Year 4</option>
-                                <option value="5">Year 5+</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Admin-Only Fields -->
-                    <div id="adminFields" style="display: none;">
-                        <div class="form-group">
-                            <input type="text" id="department" name="department" placeholder="Department/Organization" style="color: var(--black);"/>
-                        </div>
-                        <div class="info-message">
+                        
+                        <div class="info-message admin-only" style="display: none;">
                             Admin accounts require approval before full access is granted.
                         </div>
+                        
+                        <div class="form-navigation">
+                            <button type="button" class="btn-prev" onclick="prevStep()">Back</button>
+                            <button type="button" class="btn-next" onclick="nextStep()">Continue</button>
+                        </div>
                     </div>
 
-                    <div class="s-submit-btn">
-                        <input type="submit" value="Sign Up" class="sign-up-btn"/>
+                    <!-- Step 3: Profile Information -->
+                    <div class="form-step" data-step="3">
+                        <h3>Complete Your Profile</h3>
+                        
+                        <!-- Avatar Upload -->
+                        <div class="avatar-upload">
+                            <div class="avatar-preview" id="avatarPreview">
+                                <span class="avatar-preview-icon">👤</span>
+                            </div>
+                            <label class="avatar-upload-btn">
+                                Choose Avatar
+                                <input type="file" id="avatar" name="avatar" accept="image/*" style="display: none;" onchange="previewAvatar(event)"/>
+                            </label>
+                        </div>
+                        
+                        <!-- Student Profile Fields -->
+                        <div id="studentProfileFields" class="student-only">
+                            <div class="form-group">
+                                <input type="text" id="university" name="university" placeholder="University" required/>
+                                <input type="text" id="major" name="major" placeholder="Major (e.g., Computer Science)" required/>
+                                <select id="year_of_study" name="year_of_study" required>
+                                    <option value="">Select Year of Study</option>
+                                    <option value="1">Year 1</option>
+                                    <option value="2">Year 2</option>
+                                    <option value="3">Year 3</option>
+                                    <option value="4">Year 4</option>
+                                    <option value="5">Year 5+</option>
+                                </select>
+                                <textarea id="bio" name="bio" placeholder="Tell us about yourself (optional)" rows="4"></textarea>
+                            </div>
+                        </div>
+                        
+                        <!-- Admin Profile Fields -->
+                        <div id="adminProfileFields" class="admin-only" style="display: none;">
+                            <div class="form-group">
+                                <textarea id="admin_bio" name="admin_bio" placeholder="Tell us about your role (optional)" rows="4"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="form-navigation">
+                            <button type="button" class="btn-prev" onclick="prevStep()">Back</button>
+                            <button type="submit" class="btn-submit">Create Account</button>
+                        </div>
                     </div>
+
                 </form>    
             </div>
         </div>
@@ -106,41 +160,108 @@
         </div>
     </main>
 
-    <script type="module" src="/scripts/pages/signup.js"></script>
     <script>
-        function roleUpdate(){
-            const roleOptions = document.querySelector('input[name="role"].checked')
+        let currentStep = 1;
+        const totalSteps = 3;
 
-            const studentFields = document.getElementById('studentFields');
-            const adminFields = document.getElementById('adminFields');
 
-            if (roleOptions.value === 'student') {
-                studentFields.style.display = 'block';
-                adminFields.style.display = 'none';
-
-                studentFields.querySelectorAll('input, select').forEach(field => {
-                field.required = true;
+        document.addEventListener('DOMContentLoaded', function() {
+            updateFormBasedOnRole();
+            document.querySelectorAll('input[name="role"]').forEach(radio => {
+                radio.addEventListener('change', updateFormBasedOnRole);
             });
-                adminFields.querySelectorAll('input').forEach(field => {
-                field.required = false;
-            });
-
-            } else {
-                studentFields.style.display = 'none';
-                adminFields.style.display = 'block';
-
-                dminFields.querySelectorAll('input').forEach(field => {
-                field.required = true;
-            });
-                studentFields.querySelectorAll('input, select').forEach(field => {
-                field.required = false;
-            });
-        }
-        };
-
-        document.querySelectorAll('input[name="role"]').forEach(radio => {
-            radio.addEventListener('change', roleUpdate);
         });
+
+        function updateFormBasedOnRole() {
+            const role = document.querySelector('input[name="role"]:checked').value;
+            const studentFields = document.querySelectorAll('.student-only');
+            const adminFields = document.querySelectorAll('.admin-only');
+
+            if (role === 'student') {
+                studentFields.forEach(field => {
+                    field.style.display = 'block';
+                });
+                adminFields.forEach(field => {
+                    field.style.display = 'none';
+                });
+            } else {
+                studentFields.forEach(field => {
+                    field.style.display = 'none';
+                });
+                adminFields.forEach(field => {
+                    field.style.display = 'block';
+                });
+            }
+        }
+
+        function nextStep() {
+            const currentFormStep = document.querySelector(`.form-step[data-step="${currentStep}"]`);
+            
+            if (currentStep === 1) {
+                const roleSelected = document.querySelector('input[name="role"]:checked');
+                if (!roleSelected) {
+                    alert('Please select a role');
+                    return;
+                }
+            } else if (currentStep === 2) {
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
+                const role = document.querySelector('input[name="role"]:checked').value;
+                
+                if (!name || !email || !password) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+                
+                if (password.length < 6) {
+                    alert('Password must be at least 6 characters');
+                    return;
+                }
+                if (role === 'student') {
+                    const studentId = document.getElementById('student_id').value.trim();
+                    if (!studentId) {
+                        alert('Please enter your Student ID');
+                        return;
+                    }
+                } else {
+                    const department = document.getElementById('department').value.trim();
+                    if (!department) {
+                        alert('Please enter your department/organization');
+                        return;
+                    }
+                }
+            }
+
+            if (currentStep < totalSteps) {
+                document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.remove('active');
+                currentStep++;
+                document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.remove('active');
+                currentStep--;
+                document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function previewAvatar(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('avatarPreview');
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Avatar Preview">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
     </script>
+    <script type="module" src="/scripts/pages/signup.js"></script>
 </body>
 </html>

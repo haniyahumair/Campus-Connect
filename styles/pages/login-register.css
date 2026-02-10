@@ -8,8 +8,10 @@
 :root{
     --white: #ffffff;
     --black: #000000;
-    --primary-grey: #F2F2F2;
+    --primary-grey: #f0f0f0;
     --seconday-grey: #E9E9E9;
+    --primary-accent: #FF8A80;
+    --secondary-accent: #2EC4B6; 
     --header-font: 'Fraunces', serif;
     --subheader-font: 'Inter', sans-serif;
     --text-font: 'Manrope', sans-serif;
@@ -270,4 +272,27 @@ main{
 .form-group select {
     width: 100%;
     margin-bottom: 15px;
+}
+
+/* button */
+.btn-next, .btn-submit{
+    background-color: var(--black);
+    border: none;
+    color: var(--white);
+    font-size: 1rem;
+    padding: 12px 50px ;
+    border-radius: 25px;
+    width: 100%;    
+    cursor: pointer;
+}
+
+.btn-prev{
+    background-color: transparent;
+    border: 1px solid var(--black);
+    color: var(--black);
+    font-size: 1rem;
+    padding: 12px 50px ;
+    border-radius: 25px;
+    width: 50%;    
+    cursor: pointer;
 }

@@ -46,8 +46,8 @@ export function showModal(title, message, type = 'success', options = {}) {
 
 function getIcon(type) {
     const icons = {
-        success: '/assets/icons/Tick.png',
-        error: '/assets/icons/Cross.png',
+        success: '../../assets/icons/Tick.png',
+        error: '../../assets/icons/Cross.png',
         warning: '⚠️',
         info: 'ℹ️',
         loading: '⏳'
