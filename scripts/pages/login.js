@@ -12,18 +12,17 @@ form?.addEventListener('submit', (e) => {
     const email = emailInput.value.trim();
     const password = passwordInput.value.trim();
 
-    //basic email + password validation
+    // basic email + password validation
     if (!email || !password) {
         alert('Please enter both email and password.');
         return;
     }
 
-    // mock user until backend is ready
-    const user = {
-        id: Date.now().toString(),
-        name: email.split('@')[0],
-        role: 'USER'
-    };
+    // Fetch profile data from the profiles table in Supabase.
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+    });
 
     // save the auth session
     setAuth(user);
