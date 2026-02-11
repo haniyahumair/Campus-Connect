@@ -166,15 +166,4 @@ function setupForm() {
             submitBtn.value = 'Sign Up'
         }
     })
-showModal(
-   'Welcome to Campus Connect!',
-    'Your account has been created successfully. You can now explore events and connect with your campus community!',
-   'success',
-        {
-        autoClose: 3000,  // Auto-close after 3 seconds
-        onClose: () => {
-            window.location.href = '/pages/login.html'
-            }
-        }
-)    
 }
