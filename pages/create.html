@@ -64,37 +64,52 @@
     <form class="create-events-form">
         <div class="event-info">
             <label class="form-label ">Event Title</label>
-            <input type="text" class="form-control" placeholder="Event Name">
+            <input type="text" class="form-control" placeholder="Event Name" required>
         </div>
 
         <div class="event-info">
             <label class="form-label ">About Event</label>
-            <textarea class="form-control" rows="3" placeholder="About"></textarea>
+            <textarea class="form-control" rows="3" placeholder="About" required></textarea>
         </div>
 
         <div class="event-info">
             <label class="form-label ">Date</label>
-            <input type="date" class="form-control">
+            <input type="date" class="form-control" required>
         </div>
 
         <div class="event-info">
-            <label class="form-label ">Time</label>
-            <input type="time" class="form-control">
+            <label class="form-label ">Start Time</label>
+            <input type="time" class="form-control start-time" required>
+        </div>
+
+        <div class="event-info">
+            <label class="form-label ">End Time</label>
+            <input type="time" class="form-control end-time" >
         </div>
 
         <div class="event-info">
             <label class="form-label ">Location</label>
-            <input type="text" class="form-control" placeholder="Location">
+            <input type="text" class="form-control" placeholder="Mention Location and venue details" required>
+        </div>
+
+        <div class="event-info">
+            <label class="form-label ">Map</label>
+            <input type="text" class="form-control" placeholder="Map Goes Here" required>
         </div>
 
         <div class="event-info">
             <label class="form-label ">Price / Free</label>
-            <input type="text" class="form-control" placeholder="e.g. Free or 25 QAR">
+            <input type="text" class="form-control" placeholder="e.g. Free or 25 QAR" required>
         </div>
 
         <div class="event-info">
-            <label class="form-label, event-type">Event Type</label>
-            <select class="form-select">
+            <label class="form-label ">Attendees</label>
+            <input type="number" class="form-control max-attendees" placeholder="Max Number of Attendees" required>
+        </div>
+
+        <div class="event-info">
+            <label class="form-label ">Event Type</label>
+            <select class="form-select event-type" required>
                 <option selected disabled>Select Event Type</option>
                 <option>Academic</option>
                 <option>Sports</option>
@@ -110,7 +125,7 @@
 
         <div class="event-info">
             <label class="form-label ">Contact Details</label>
-            <input type="text" class="form-control" placeholder="Email / Phone Number">
+            <input type="text" class="form-control" placeholder="Email / Phone Number" required>
         </div>
 
         <button type="submit" class="submit-button" id="sumbitBtn">Create Event</button>
