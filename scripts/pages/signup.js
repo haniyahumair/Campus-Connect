@@ -43,6 +43,8 @@ function setupForm() {
     
     form.addEventListener('submit', async (e) => {
         e.preventDefault()
+        // Get the selected role from the radio button
+        selectedRole = document.querySelector('input[name="role"]:checked').value
         
         // Get form values
         const name = document.getElementById('name').value.trim()
@@ -60,7 +62,6 @@ function setupForm() {
             return
         }
         
-        // Prepare user data based on role
         let userData = {
             full_name: name,
             role: selectedRole,
@@ -73,8 +74,10 @@ function setupForm() {
             const major = document.getElementById('major').value.trim()
             const yearOfStudy = document.getElementById('year_of_study').value
             const university = document.getElementById('university').value.trim()
+            const bio = document.getElementById('bio').value.trim()
+            const avatarUrl = document.getElementById('avatar').dataset.uploadedUrl
             
-            if (!studentId || !major || !yearOfStudy || !university) {
+            if (!studentId || !major || !yearOfStudy || !university || !avatarUrl) {
                 alert('Please fill in all student fields')
                 return
             }
@@ -83,10 +86,13 @@ function setupForm() {
             userData.major = major
             userData.year_of_study = parseInt(yearOfStudy)
             userData.university = university
+            if (bio) userData.bio = bio
+            userData.avatar_url = avatarUrl
         } 
         
         else {
             const department = document.getElementById('department').value.trim()
+            const adminBio = document.getElementById('admin_bio').value.trim()
             
             if (!department) {
                 alert('Please enter your department/organization')
@@ -94,12 +100,18 @@ function setupForm() {
             }
             
             userData.department = department
+            if (adminBio) userData.bio = adminBio
         }
         
         // Disable submit button
-        const submitBtn = form.querySelector('.sign-up-btn')
+        const submitBtn = form.querySelector('.btn-submit') || form.querySelector('.sign-up-btn')
         submitBtn.disabled = true
-        submitBtn.value = 'Creating Account...'
+        const originalText = submitBtn.value || submitBtn.textContent
+        if (submitBtn.tagName === 'INPUT') {
+            submitBtn.value = 'Creating Account...'
+        } else {
+            submitBtn.textContent = 'Creating Account...'
+        }
         
         try {
             console.log('Starting signup...', userData)
@@ -118,7 +130,6 @@ function setupForm() {
             }
             
             console.log('User created:', authData.user.id)
-            //profile data append
             const { data: profileData, error: profileError } = await supabase
                 .from('profiles')
                 .insert([{
@@ -131,13 +142,32 @@ function setupForm() {
             console.log('Profile response:', profileData, profileError)
             
             if (profileError) throw profileError
-            
+            // SUCCESS
             if (selectedRole === 'admin') {
-                alert('✅ Admin account created! Please wait for approval before you can access all features.')
-            } 
-            setTimeout(() => { 
-                window.location.href = '/pages/login.html'
-            }, 5000);
+                showModal(
+                    'Admin Account Created!',
+                    'Your admin account has been created successfully. Please wait for approval before you can access all features.',
+                    'success',
+                    {
+                        autoClose: 3000,
+                        onClose: () => {
+                            window.location.href = '/pages/login.html'
+                        }
+                    }
+                )
+            } else {
+                showModal(
+                    'Welcome to Campus Connect!',
+                    'Your account has been created successfully. You can now explore events and connect with your campus community!',
+                    'success',
+                    {
+                        autoClose: 3000,
+                        onClose: () => {
+                            window.location.href = '/pages/login.html'
+                        }
+                    }
+                )
+            }
             
         } catch (error) {
             console.error('Signup error:', error)
@@ -163,7 +193,11 @@ function setupForm() {
             
             // Re-enable submit button
             submitBtn.disabled = false
-            submitBtn.value = 'Sign Up'
+            if (submitBtn.tagName === 'INPUT') {
+                submitBtn.value = originalText
+            } else {
+                submitBtn.textContent = originalText
+            }
         }
     })
 }
