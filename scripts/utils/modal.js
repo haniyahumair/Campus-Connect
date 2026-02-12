@@ -1,11 +1,9 @@
 export function showModal(title, message, type = 'success', options = {}) {
-    // Remove existing modal if any
     const existingModal = document.getElementById('customModal')
     if (existingModal) {
         existingModal.remove()
     }
 
-    // Create modal HTML
     const modal = document.createElement('div')
     modal.id = 'customModal'
     modal.className = 'modal-overlay'
@@ -20,7 +18,7 @@ export function showModal(title, message, type = 'success', options = {}) {
             <p class="modal-message">${message}</p>
             ${options.showButton !== false ? `
                 <button class="modal-btn" style="background: ${color};" onclick="closeModal()">
-                    ${options.buttonText || 'OK'}
+                    ${options.buttonText || 'Done'}
                 </button>
             ` : ''}
         </div>
@@ -46,8 +44,8 @@ export function showModal(title, message, type = 'success', options = {}) {
 
 function getIcon(type) {
     const icons = {
-        success: '../../assets/icons/Tick.png',
-        error: '../../assets/icons/Cross.png',
+        success: '<img src="/assets/icons/Tick.png" alt="Success" style="width: 100px; height: 100px;">',
+        error: '<img src="/assets/icons/Cross.png" alt="Error" style="width: 100px; height: 100px;">',
         warning: '⚠️',
         info: 'ℹ️',
         loading: '⏳'
@@ -57,7 +55,7 @@ function getIcon(type) {
 
 function getColor(type) {
     const colors = {
-        success: '#ffffff',  
+        success: '#000000',  
         error: '#dc3545',    
         warning: '#ffc107',  
         info: '#2563eb',     
@@ -77,6 +75,19 @@ window.closeModal = function() {
 //CSS
 const style = document.createElement('style')
 style.textContent = `
+    
+    :root{
+    --white: #ffffff;
+    --black: #000000;
+    --primary-grey: #f0f0f0;
+    --seconday-grey: #E9E9E9;
+    --primary-accent: #FF8A80;
+    --secondary-accent: #2EC4B6; 
+    --header-font: 'Fraunces', serif;
+    --subheader-font: 'Inter', sans-serif;
+    --text-font: 'Manrope', sans-serif;
+    }   
+
     .modal-overlay {
         position: fixed;
         top: 0;
@@ -103,35 +114,44 @@ style.textContent = `
     }
 
     .modal-icon {
-        font-size: 64px;
         margin-bottom: 20px;
         animation: scaleIn 0.5s ease-out;
-    }
+        display: flex;
+        justify-content: center;
+        align-items: center;
+}
+
+    .modal-icon img {
+        display: block;
+}
 
     .modal-title {
-        color: #333;
-        font-size: 28px;
+        color: #000000;
+        font-size: 2rem;
         margin-bottom: 15px;
         font-weight: 600;
+        font-family: var(--header-font);
     }
 
     .modal-message {
-        color: #666;
-        font-size: 16px;
+        color: grey;
+        font-size: 1.2rem;
         line-height: 1.6;
         margin-bottom: 30px;
+        font-family: var(--subheader-font);
     }
 
     .modal-btn {
         padding: 14px 40px;
         color: white;
         border: none;
-        border-radius: 8px;
+        border-radius: 12px;
         font-weight: 600;
         font-size: 16px;
         cursor: pointer;
         transition: all 0.3s ease;
         box-shadow: 0 4px 15px rgba(13, 115, 119, 0.3);
+        font-family: var(--text-font);
     }
 
     .modal-btn:hover {

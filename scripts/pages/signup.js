@@ -45,8 +45,6 @@ function setupForm() {
         e.preventDefault()
         // Get the selected role from the radio button
         selectedRole = document.querySelector('input[name="role"]:checked').value
-        
-        // Get form values
         const name = document.getElementById('name').value.trim()
         const email = document.getElementById('email').value.trim()
         const password = document.getElementById('password').value
