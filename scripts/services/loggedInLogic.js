@@ -1,4 +1,9 @@
-import { getAuth } from './auth.js';
+import { supabase } from './supabase.js';
+
+async function getLoginStatus() {
+  const { data: { session } } = await supabase.auth.getSession();
+  return Boolean(session);
+}
 //let isLoggedIn = true;
 
 
@@ -26,8 +31,20 @@ function checkLoginStatus() {
     if(loginBtn) loginBtn.style.display = 'inline-block';
   }
   
+  // fetch data straight from supabase profile table
   const viewDetailsBtn = document.querySelectorAll('.viewDetailBtn');
   const createEventBtn = document.querySelectorAll('.createEvent');
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('full_name')
+    .eq('id', session.user.id)
+    .single();
+  
+  localStorage.setItem("authUser", JSON.stringify({
+    id: session.user.id,
+    name: profile.full_name
+  }));
   
   if(viewDetailsBtn.length > 0){
     viewDetailsBtn.forEach(btn => { 
