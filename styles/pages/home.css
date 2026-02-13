@@ -315,7 +315,7 @@ background-color: var(--black);
     width: 370px;
     border-radius: 25px;
     background-color: var(--primary-grey);
-    border-top: 3px solid #FF8A80;
+    border-top: 3px solid var(--primary-accent);
 }
 
 .event-card {

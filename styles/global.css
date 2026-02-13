@@ -8,6 +8,8 @@
 :root{
     --white: #ffffff;
     --black: #000000;
+    --dark-grey: #666;
+    --light-grey: #ddd;
     --primary-grey: #f0f0f0;
     --seconday-grey: #E9E9E9;
     --primary-accent: #FF8A80;
@@ -278,6 +280,14 @@ footer .brand .logo {
     padding: 9px 12px ;
     border-radius: 10px;
     margin-top: auto;
+}
+
+.event-cards-container .event-card {
+    height: 550px;
+    width: 370px;
+    border-radius: 25px;
+    background-color: var(--primary-grey);
+    border-top: 3px solid var(--primary-accent);
 }
 
 /*Mobile layout*/

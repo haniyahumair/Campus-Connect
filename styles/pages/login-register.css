@@ -265,7 +265,7 @@ main{
     padding: 12px;
     margin-top: 15px;
     font-size: 14px;
-    color: black;
+    color: var(--black);
 }
 
 .form-group input,
@@ -368,7 +368,7 @@ main{
 }
 
 .student-only input{
-    color: black;
+    color: var(--black);
 }
 
 .student-only select{
@@ -384,7 +384,7 @@ main{
 
 .student-only textarea{
     background-color: transparent;
-    color: black;
+    color: var(--black);
     border: 1px solid var(--black);
     border-radius: 12px;
     padding: 10px 15px;
