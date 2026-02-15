@@ -73,9 +73,12 @@ function setupForm() {
             const yearOfStudy = document.getElementById('year_of_study').value
             const university = document.getElementById('university').value.trim()
             const bio = document.getElementById('bio').value.trim()
-            const avatarUrl = document.getElementById('avatar').dataset.uploadedUrl
+            const avatarFile = document.getElementById('avatar').files[0]
+
+            //need to implement file upload correctly with supabase storage, for now using default avatar 
+            //const avatarUrl = avatarFile ? await uploadAvatar(avatarFile) : null
             
-            if (!studentId || !major || !yearOfStudy || !university || !avatarUrl) {
+            if (!studentId || !major || !yearOfStudy || !university) {
                 alert('Please fill in all student fields')
                 return
             }
@@ -85,7 +88,7 @@ function setupForm() {
             userData.year_of_study = parseInt(yearOfStudy)
             userData.university = university
             if (bio) userData.bio = bio
-            userData.avatar_url = avatarUrl
+            userData.avatar_url = '/assets/Icons/userIcon.svg'
         } 
         
         else {
