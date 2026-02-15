@@ -114,31 +114,6 @@
     </div>
 </section>
 
-<!--Change based on logged in/ signed up user-->
-<script type="module">
-    import { getAuth, clearAuth } from './auth.js';
-
-    const authData = getAuth();
-    if (!authData || !authData.isAuthenticated) {
-        console.log('User not logged in');
-        alert('Please log in to access your profile.');
-        window.location.href = 'login.html';
-    }
-    else{
-        const currentUser = authData.user;
-        document.getElementById('userName').innerHTML = `${currentUser.name} <img src="assets/Icons/edit-icon.svg" class="edit-icon"  style="width: 17px; height: 17px; cursor: pointer; border: none; padding: 0;" onclick="editProfile()">`;
-        document.getElementById('userEmail').textContent = currentUser.email;
-    }
-
-    //sign out function
-    const signOutBtn = document.querySelector('.sign-out-btn');
-    signOutBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        clearAuth();
-        window.location.href = 'login.html';
-    });
-</script>
-
 <section class="my-upcoming-events-container">
    <div class="upcoming-events-header">
     <h4 class="fw-bold mb-4" style="font-family: var(--subheader-font); font-size: 2rem;">My Upcoming Events</h4>
@@ -314,6 +289,7 @@
 
     <!--Logic Links-->
     <script type="module" src="/scripts/services/loggedInLogic.js"></script>
+    <script src="/scripts/pages/profile.js"></script>
     <script src="/scripts/services/cardDetails.js"></script>
     <script type="module"  src="/scripts/pages/login.js"></script>
     <script type="module" src="/scripts/pages/signup.js"></script>
