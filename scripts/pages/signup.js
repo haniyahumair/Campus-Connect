@@ -8,6 +8,32 @@ document.addEventListener('DOMContentLoaded', () => {
     setupForm()
 })
 
+async function uploadAvatar(file) {
+    try {
+        const fileExt = file.name.split('.').pop()
+        const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`
+        
+        const { data, error } = await supabase.storage
+            .from('avatars')
+            .upload(fileName, file, {
+                cacheControl: '3600',
+                upsert: false
+            })
+        
+        if (error) throw error
+        
+        const { data: { publicUrl } } = supabase.storage
+            .from('avatars')
+            .getPublicUrl(fileName)
+        
+        return publicUrl
+        
+    } catch (error) {
+        console.error('Avatar upload error:', error)
+        return '/assets/Icons/user-Icon.svg'
+    }
+}
+
 function setupRoleToggle() {
     const roleRadios = document.querySelectorAll('input[name="role"]')
     const studentFields = document.getElementById('studentFields')
@@ -74,13 +100,16 @@ function setupForm() {
             const university = document.getElementById('university').value.trim()
             const bio = document.getElementById('bio').value.trim()
             const avatarFile = document.getElementById('avatar').files[0]
-
-            //need to implement file upload correctly with supabase storage, for now using default avatar 
-            //const avatarUrl = avatarFile ? await uploadAvatar(avatarFile) : null
             
             if (!studentId || !major || !yearOfStudy || !university) {
                 alert('Please fill in all student fields')
                 return
+            }
+            console.log('Avatar file:', avatarFile); 
+            // Upload avatar if provided, otherwise use default
+            let avatarUrl = '/assets/Icons/user-Icon.svg'
+            if (avatarFile) {
+                avatarUrl = await uploadAvatar(avatarFile)
             }
             
             userData.student_id = studentId
@@ -88,7 +117,7 @@ function setupForm() {
             userData.year_of_study = parseInt(yearOfStudy)
             userData.university = university
             if (bio) userData.bio = bio
-            userData.avatar_url = '/assets/Icons/userIcon.svg'
+            userData.avatar_url = avatarUrl
         } 
         
         else {
@@ -143,8 +172,9 @@ function setupForm() {
             console.log('Profile response:', profileData, profileError)
             
             if (profileError) throw profileError
-            // SUCCESS
+
             if (selectedRole === 'admin') {
+                submitBtn.textContent = 'Account Created!'
                 showModal(
                     'Admin Account Created!',
                     'Your admin account has been created successfully. Please wait for approval before you can access all features.',
@@ -157,12 +187,13 @@ function setupForm() {
                     }
                 )
             } else {
+                submitBtn.textContent = 'Account Created!'
                 showModal(
                     'Welcome to Campus Connect!',
                     'Your account has been created successfully. You can now explore events and connect with your campus community!',
                     'success',
                     {
-                        autoClose: 3000,
+                        autoClose: 20000,
                         onClose: () => {
                             window.location.href = '/pages/login.html'
                         }
@@ -172,8 +203,6 @@ function setupForm() {
             
         } catch (error) {
             console.error('Signup error:', error)
-            
-            // Show user-friendly error messages
             let errorMessage = 'Failed to create account. '
             
             if (error.message.includes('already registered') || error.message.includes('already been registered')) {
