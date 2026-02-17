@@ -193,7 +193,7 @@ function setupForm() {
                     'Your account has been created successfully. You can now explore events and connect with your campus community!',
                     'success',
                     {
-                        autoClose: 20000,
+                        autoClose: 3000,
                         onClose: () => {
                             window.location.href = '/pages/login.html'
                         }

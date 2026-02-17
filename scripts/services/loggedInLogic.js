@@ -52,7 +52,7 @@ async function checkLoginStatus() {
         if (isLoggedIn){
           window.location.href = `details.html?id=${eventId}`;
         } else {
-          window.location.href = 'login.html';
+          window.location.href = '/pages/login.html';
         }
       });
     });
@@ -63,9 +63,9 @@ async function checkLoginStatus() {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
         if (isLoggedIn){
-          window.location.href = 'create.html';
+          window.location.href = '/pages/create.html';
         } else { 
-          window.location.href = 'login.html';
+          window.location.href = '/pages/login.html';
         }
       });
     });
