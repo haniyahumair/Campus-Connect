@@ -5,9 +5,7 @@ async function getLoginStatus() {
   return Boolean(session);
 }
 //let isLoggedIn = true;
-
-
-function checkLoginStatus() {
+async function checkLoginStatus() {
   // retrieve user status from login/signup 
   const authData = getAuth();
   const isLoggedIn = authData.isAuthenticated;

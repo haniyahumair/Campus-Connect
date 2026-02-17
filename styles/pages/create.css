@@ -21,27 +21,53 @@ section{
     padding: 0 24px;
     margin-bottom: 15px;
 }
+
 .upload-area {
-    border: 1px solid var(--black);
+    border: 2px dashed var(--black);
     border-radius: 15px;
     background: repeating-linear-gradient(45deg, #f8f9fa, #f8f9fa 20px, #e9ecef 20px, #e9ecef 40px);
-    height: 500px;
+    height: 300px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     cursor: pointer;
     margin-bottom: 30px;
+    position: relative;
+    overflow: hidden;
 }
 
-.upload-area label{
+.upload-area label {
     font-size: 1.2rem;
     font-weight: 700;
     font-family: var(--subheader-font);
+    cursor: pointer;
+    z-index: 1;
 }
 
-.upload-area input{
-    translate: 30px 10px;
+.upload-area input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+/* Preview image styles */
+.upload-area .preview-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 13px;
+    z-index: 0;
+}
+
+.upload-area.has-image label {
+    display: none;
 }
 
 /*Form styling*/
