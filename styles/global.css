@@ -97,6 +97,11 @@ body{
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+#profileIcon,
+#cartIcon {
+  display: none;
+}
+
 /*Profile/Cart icons styling*/
 .icons a{ 
     margin: 0px 8px;

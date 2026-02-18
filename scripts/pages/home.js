@@ -1,8 +1,12 @@
 // imports
-import {getAuth, clearAuth, requireAuth} from './js/auth.js';
+import { createNavbar } from '../components/navbarComponent.js';
+import { createFooter } from '../components/footerComponent.js';
+
+document.querySelector('header').innerHTML = createNavbar();
+document.querySelector('footer').innerHTML = createFooter();
 
 // constants
-const btnLogin = document.querySelector('#btnLogin');
+/*const btnLogin = document.querySelector('#btnLogin');
 const navCreate = document.querySelector('#navCreate');
 const heroCreate = document.querySelector('#heroCreate');
 const heroBrowse = document.querySelector('#heroBrowse');
@@ -12,21 +16,21 @@ function init() {
   const auth = getAuth();
 
 // login/logout
-  if (auth.isAuthenticated) {
+ // if (auth.isAuthenticated) {
     btnLogin.textContent = 'Logout';
     btnLogin.onclick = () => {
       clearAuth();
       location.reload();
     };
-  } else {
-    btnLogin.textContent = 'Logout';
-    btnLogin.onclick = () => {
-      location.href = '/login.html';
-    };
-  }
+ // } else {
+ //   btnLogin.textContent = 'Logout';
+ //   btnLogin.onclick = () => {
+ //     location.href = '/login.html';
+ //   };
+ // }
 
   // Creat Event
-  navCreate?.addEventListener('click', (e) => {
+navCreate?.addEventListener('click', (e) => {
     e.preventDefault();
     requireAuth('/create-event.html');
   });
@@ -43,4 +47,4 @@ function init() {
 }
 
 // run
-init();
+init();*/

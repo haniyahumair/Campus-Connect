@@ -1,5 +1,10 @@
 import { supabase } from '../config/supabase.js'
 import { showModal } from '../utils/modal.js'
+import { createNavbar } from '../components/navbarComponent.js';
+import { createFooter } from '../components/footerComponent.js';
+
+document.querySelector('header').innerHTML = createNavbar();
+document.querySelector('footer').innerHTML = createFooter();
 
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector('.create-events-form');

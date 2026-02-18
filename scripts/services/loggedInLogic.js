@@ -1,14 +1,20 @@
-import { supabase } from './supabase.js';
+import { supabase } from '../config/supabase.js';
 
 async function getLoginStatus() {
   const { data: { session } } = await supabase.auth.getSession();
   return Boolean(session);
 }
-//let isLoggedIn = true;
+
+
 async function checkLoginStatus() {
   // retrieve user status from login/signup 
-  const authData = getAuth();
-  const isLoggedIn = authData.isAuthenticated;
+  const { data: { session } } = await supabase.auth.getSession();
+  const isLoggedIn = Boolean(session);
+  
+  // test login and user data retrieval
+  console.log("logged in", isLoggedIn);
+  console.log("user:", session?.user?.email);
+
   
   // UI elements to be shown based on whether the user is logged in or not
   const profileIcon = document.getElementById('profileIcon');

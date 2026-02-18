@@ -1,3 +1,9 @@
+import { createNavbar } from '../components/navbarComponent.js';
+import { createFooter } from '../components/footerComponent.js';
+
+document.querySelector('header').innerHTML = createNavbar();
+document.querySelector('footer').innerHTML = createFooter();
+
 const categoriesBtn = document.getElementById("categoriesBtn");
 const priceBtn = document.getElementById("priceBtn");
 const categoriesDropdown = document.getElementById("categoriesDropdown");

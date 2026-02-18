@@ -13,43 +13,7 @@
 </head>
 
 <body>
-    <header>
-    <nav class="navbar">
-        <!-- Brand -->
-        <div class="brand-name">
-            <img src="/assets/Icons/Logo.svg" alt="CampusConnect Logo" class="logo">
-            <p class="CampusConnect">Campus<b>Connect</b></p>
-        </div>
-
-        <!-- Nav Links -->
-        <ul class="navbar-nav">
-            <li>
-                <a class="nav-link active" href="../index.html">Home</a>
-            </li>
-            <li>
-                <a class="nav-link" href="/pages/events.html">Events</a>
-            </li>
-            <li>
-                <a class="nav-link" href="/pages/create.html">Create Event</a>
-            </li>
-        </ul>
-
-        <!--Icons shown when user is logged in-->
-        <div class="icons">
-            <a href="/pages/cart.html" class="cart-icon" id="cartIcon">
-                <img src="/assets/Icons/cart-Icon.svg" alt="Cart-Icon">
-            </a>
-
-            <a href="/pages/profile.html" class="profile-icon" id="profileIcon">
-                <img src="/assets/Icons/userIcon.svg" alt="User-Icon" style="width: 35px;">
-            </a>
-        </div>
-
-        <!-- Login Button shown when logged out-->
-        <a class="btn-primary" href="/pages/login.html" id="loginBtn">Login</a>
-
-    </nav>
-</header>
+    <header></header>
 
 
 <section class="profile-info-container">
@@ -59,239 +23,231 @@
         <p>Manage your account information and preferences</p>
     </div>
     <!-- Profile Grid -->
-    <div class="profile-grid">
-        <!-- Left Side - Profile Card -->
-        <div class="profile-main-card">
-            <div class="profile-avatar">
-                <img src="/assets/Icons/userIcon.svg" alt="Profile Picture" id="profileAvatar">
+    <div id="profileContent" style="display: none;">
+        <div class="profile-grid">
+            <!-- Left Side - Profile Card -->
+            <div class="profile-main-card">
+                <div class="profile-avatar">
+                    <img src="/assets/Icons/userIcon.svg" alt="Profile Picture" id="profileAvatar">
+                </div>
+                
+                <div class="profile-name" id="profileName">
+                    John Smith
+                    <img src="/assets/Icons/edit-icon.svg" class="edit-icon" onclick="editProfile()">
+                </div>
+                
+                <p class="profile-email" id="profileEmail">s01j23@abdn.ac.uk</p>
+                
+                <span class="profile-role-badge" id="profileRole">🎓 Student</span>
+                
+                <a href="/pages/login.html" class="sign-out-btn" id="signOutBtn">Sign Out</a>
             </div>
-            
-            <div class="profile-name" id="profileName">
-                John Smith
-                <img src="/assets/Icons/edit-icon.svg" class="edit-icon" onclick="editProfile()">
+    
+            <!-- Academic Info Side -->
+            <div class="academic-info-card">
+                <h2 class="card-title">Academic Information</h2>
+                
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">University</span>
+                        <span class="info-value" id="university">🎓 Qatar University</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Student ID</span>
+                        <span class="info-value" id="studentId">🆔 S012345</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Major</span>
+                        <span class="info-value" id="major">💼 Computer Science</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Year of Study</span>
+                        <span class="info-value" id="yearOfStudy">📅 Year 3</span>
+                    </div>
+                </div>
+                
+                <div class="bio-section">
+                    <span class="info-label">About Me</span>
+                    <p class="bio-text" id="bioText">
+                        Passionate about technology and campus events. Love connecting with fellow students and exploring new opportunities.
+                    </p>
+                </div>
             </div>
-            
-            <p class="profile-email" id="profileEmail">s01j23@abdn.ac.uk</p>
-            
-            <span class="profile-role-badge" id="profileRole">🎓 Student</span>
-            
-            <a href="/pages/login.html" class="sign-out-btn" id="signOutBtn">Sign Out</a>
         </div>
 
-        <!-- Academic Info Side -->
-        <div class="academic-info-card">
-            <h2 class="card-title">Academic Information</h2>
-            
-            <div class="info-grid">
-                <div class="info-item">
-                    <span class="info-label">University</span>
-                    <span class="info-value" id="university">🎓 Qatar University</span>
-                </div>
-                
-                <div class="info-item">
-                    <span class="info-label">Student ID</span>
-                    <span class="info-value" id="studentId">🆔 S012345</span>
-                </div>
-                
-                <div class="info-item">
-                    <span class="info-label">Major</span>
-                    <span class="info-value" id="major">💼 Computer Science</span>
-                </div>
-                
-                <div class="info-item">
-                    <span class="info-label">Year of Study</span>
-                    <span class="info-value" id="yearOfStudy">📅 Year 3</span>
-                </div>
+        <section class="my-upcoming-events-container">
+            <div class="upcoming-events-header" >
+             <h4 class="fw-bold mb-4" style="font-family: var(--subheader-font); font-size: 2rem;">My Upcoming Events</h4>
             </div>
-            
-            <div class="bio-section">
-                <span class="info-label">About Me</span>
-                <p class="bio-text" id="bioText">
-                    Passionate about technology and campus events. Love connecting with fellow students and exploring new opportunities.
-                </p>
-            </div>
-        </div>
+         
+             <div class="events-container">
+                 <div class="col-md-4">
+                     <div class="event-card shadow">
+                         <div class="event-price">
+                             <!-- <img src="/assets/Icons/Coin Stacked Icon.svg" alt="Coin-Icon"> -->
+                             <p class="price">💵 Free</p>
+                         </div>
+                         <img src="/assets/Images/football.jpg" class="img-fluid" />
+                         <div class="p-3">
+                             <h5 class="event-title">Football Championship Final</h5>
+                             <p class="event-description">Inter-university football championship finals - the ultimate showdown!</p>
+                             
+                             <div class="date-container">
+                                 <span class="date-emoji">📅</span>
+                                 <div class="date">
+                                     <span class="month">December</span>
+                                     <span class="day">12</span>
+                                     <span class="year">2025</span>
+                                 </div>
+                             </div>
+             
+                             <!-- Time Container -->
+                             <div class="time-container">
+                                 <span class="time-emoji">🕕</span>
+                                 <div class="time-details">
+                                     <span class="start-time">05:00 PM</span>
+                                     <span class="time-separator"> - </span>
+                                     <span class="end-time">08:00 PM</span>
+                                 </div>
+                             </div>
+             
+                             <div class="location-of-event">
+                                 <!-- <img src="/assets/Icons/Pin.svg" alt="Location-Icon"> -->
+                                 <span class="location-emoji">📍</span>
+                                 <p class="location">Qatar University Sports Complex</p>
+                             </div>
+                             
+                             <div class="type-of-event">
+                                 <button class="event-type">
+                                     <img src="/assets/Icons/Star 1.svg" alt="Star-Icon">
+                                     Sports
+                                 </button>
+                             </div>
+                             
+                             <a class="btn btn-dark w-100 viewDetailBtn" data-id="2">View Details</a>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="col-md-4">
+                     <div class="event-card shadow">
+                         <div class="event-price">
+                             <!-- <img src="/assets/Icons/Coin Stacked Icon.svg" alt="Coin-Icon"> -->
+                             <p class="price">💵 50 QAR</p>
+                         </div>
+                         <img src="/assets/Images/foc.jpg" class="img-fluid" />
+                         <div class="p-3">
+                             <h5 class="event-title">Festival Of Cultures</h5>
+                             <p class="event-description">Experience the world at our Festival of Cultures, celebrating the diverse traditions of our student community.</p>
+                             
+                             <div class="date-container">
+                                 <span class="date-emoji">📅</span>
+                                 <div class="date">
+                                     <span class="month">February</span>
+                                     <span class="day">6</span>
+                                     <span class="year">2026</span>
+                                 </div>
+                             </div>
+             
+                             <!-- Time Container -->
+                             <div class="time-container">
+                                 <span class="time-emoji">🕕</span>
+                                 <div class="time-details">
+                                     <span class="start-time">06:00 PM</span>
+                                     <span class="time-separator"> - </span>
+                                     <span class="end-time">11:00 PM</span>
+                                 </div>
+                             </div>
+                             
+                             <div class="location-of-event">
+                                 <!-- <img src="/assets/Icons/Pin.svg" alt="Location-Icon"> -->
+                                 <span class="location-emoji">📍</span>
+                                 <p class="location">University of Doha Science and Technology (UDST)</p>
+                             </div>
+                             
+                             <div class="type-of-event">
+                                 <button class="event-type">
+                                     <img src="/assets/Icons/Star 1.svg" alt="Star-Icon">
+                                     Festival
+                                 </button>
+                             </div>
+                             
+                             <a class="btn btn-dark w-100 viewDetailBtn" data-id="3">View Details</a>
+                         </div>
+                     </div>
+             </div>
+         </section>
+         
+         <section class="my-events-container">
+             <div class="my-events-header" >
+                 <h4 class="fw-bold mb-4" style="font-family: var(--subheader-font); font-size: 2rem;">My Created Events</h4>
+             </div>
+             
+             <div class="events-container">
+                 <div class="col-md-4">
+                     <div class="event-card shadow">
+                         <div class="event-price">
+                             <!-- <img src="/assets/Icons/Coin Stacked Icon.svg" alt="Coin-Icon"> -->
+                             <p class="price">💵 Free</p>
+                         </div>
+                         <img src="/assets/Images/IMG_6404.jpg" class="img-fluid" />
+                         <div class="p-3">
+                             <h5 class="event-title">AI in Action: Transforming Theory into Practice</h5>
+                             <p class="event-description">This session, delivered by Abdulrahman Hassan, is designed for those keen to explore practical applications of AI and bridge the gap between theory and real world impact.</p>
+                             
+                             <!-- Date Container -->
+                             <div class="date-container">
+                                 <span class="date-emoji">📅</span>
+                                 <div class="date">
+                                     <span class="month">November</span>
+                                     <span class="day">14</span>
+                                     <span class="year">2025</span>
+                                 </div>
+                             </div>
+             
+                             <!-- Time Container -->
+                             <div class="time-container">
+                                 <span class="time-emoji">🕕</span>
+                                 <div class="time-details">
+                                     <span class="start-time">04:00 PM</span>
+                                     <span class="time-separator"> - </span>
+                                     <span class="end-time">06:00 PM</span>
+                                 </div>
+                             </div>
+             
+                             <div class="location-of-event">
+                                 <!-- <img src="/assets/Icons/Pin.svg" alt="Location-Icon"> -->
+                                 <span class="location-emoji">📍</span>
+                                 <p class="location">BLDG 2, AFG College with the University of Aberdeen</p>
+                             </div>
+                             
+                             <div class="type-of-event">
+                                 <button class="event-type">
+                                     <img src="/assets/Icons/Star 1.svg" alt="Star-Icon">
+                                     Workshop
+                                 </button>
+                             </div>
+                             
+                             <a class="btn btn-dark w-100 viewDetailBtn" data-id="1">View Details</a>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         
+         </section>
     </div>
 </section>
 
-<section class="my-upcoming-events-container">
-   <div class="upcoming-events-header">
-    <h4 class="fw-bold mb-4" style="font-family: var(--subheader-font); font-size: 2rem;">My Upcoming Events</h4>
-   </div>
 
-    <div class="events-container">
-        <div class="col-md-4">
-            <div class="event-card shadow">
-                <div class="event-price">
-                    <!-- <img src="/assets/Icons/Coin Stacked Icon.svg" alt="Coin-Icon"> -->
-                    <p class="price">💵 Free</p>
-                </div>
-                <img src="/assets/Images/football.jpg" class="img-fluid" />
-                <div class="p-3">
-                    <h5 class="event-title">Football Championship Final</h5>
-                    <p class="event-description">Inter-university football championship finals - the ultimate showdown!</p>
-                    
-                    <div class="date-container">
-                        <span class="date-emoji">📅</span>
-                        <div class="date">
-                            <span class="month">December</span>
-                            <span class="day">12</span>
-                            <span class="year">2025</span>
-                        </div>
-                    </div>
-    
-                    <!-- Time Container -->
-                    <div class="time-container">
-                        <span class="time-emoji">🕕</span>
-                        <div class="time-details">
-                            <span class="start-time">05:00 PM</span>
-                            <span class="time-separator"> - </span>
-                            <span class="end-time">08:00 PM</span>
-                        </div>
-                    </div>
-    
-                    <div class="location-of-event">
-                        <!-- <img src="/assets/Icons/Pin.svg" alt="Location-Icon"> -->
-                        <span class="location-emoji">📍</span>
-                        <p class="location">Qatar University Sports Complex</p>
-                    </div>
-                    
-                    <div class="type-of-event">
-                        <button class="event-type">
-                            <img src="/assets/Icons/Star 1.svg" alt="Star-Icon">
-                            Sports
-                        </button>
-                    </div>
-                    
-                    <a class="btn btn-dark w-100 viewDetailBtn" data-id="2">View Details</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="event-card shadow">
-                <div class="event-price">
-                    <!-- <img src="/assets/Icons/Coin Stacked Icon.svg" alt="Coin-Icon"> -->
-                    <p class="price">💵 50 QAR</p>
-                </div>
-                <img src="/assets/Images/foc.jpg" class="img-fluid" />
-                <div class="p-3">
-                    <h5 class="event-title">Festival Of Cultures</h5>
-                    <p class="event-description">Experience the world at our Festival of Cultures, celebrating the diverse traditions of our student community.</p>
-                    
-                    <div class="date-container">
-                        <span class="date-emoji">📅</span>
-                        <div class="date">
-                            <span class="month">February</span>
-                            <span class="day">6</span>
-                            <span class="year">2026</span>
-                        </div>
-                    </div>
-    
-                    <!-- Time Container -->
-                    <div class="time-container">
-                        <span class="time-emoji">🕕</span>
-                        <div class="time-details">
-                            <span class="start-time">06:00 PM</span>
-                            <span class="time-separator"> - </span>
-                            <span class="end-time">11:00 PM</span>
-                        </div>
-                    </div>
-                    
-                    <div class="location-of-event">
-                        <!-- <img src="/assets/Icons/Pin.svg" alt="Location-Icon"> -->
-                        <span class="location-emoji">📍</span>
-                        <p class="location">University of Doha Science and Technology (UDST)</p>
-                    </div>
-                    
-                    <div class="type-of-event">
-                        <button class="event-type">
-                            <img src="/assets/Icons/Star 1.svg" alt="Star-Icon">
-                            Festival
-                        </button>
-                    </div>
-                    
-                    <a class="btn btn-dark w-100 viewDetailBtn" data-id="3">View Details</a>
-                </div>
-            </div>
-    </div>
-</section>
-
-<section class="my-events-container">
-    <div class="my-events-header">
-        <h4 class="fw-bold mb-4" style="font-family: var(--subheader-font); font-size: 2rem;">My Created Events</h4>
-    </div>
-    
-    <div class="events-container">
-        <div class="col-md-4">
-            <div class="event-card shadow">
-                <div class="event-price">
-                    <!-- <img src="/assets/Icons/Coin Stacked Icon.svg" alt="Coin-Icon"> -->
-                    <p class="price">💵 Free</p>
-                </div>
-                <img src="/assets/Images/IMG_6404.jpg" class="img-fluid" />
-                <div class="p-3">
-                    <h5 class="event-title">AI in Action: Transforming Theory into Practice</h5>
-                    <p class="event-description">This session, delivered by Abdulrahman Hassan, is designed for those keen to explore practical applications of AI and bridge the gap between theory and real world impact.</p>
-                    
-                    <!-- Date Container -->
-                    <div class="date-container">
-                        <span class="date-emoji">📅</span>
-                        <div class="date">
-                            <span class="month">November</span>
-                            <span class="day">14</span>
-                            <span class="year">2025</span>
-                        </div>
-                    </div>
-    
-                    <!-- Time Container -->
-                    <div class="time-container">
-                        <span class="time-emoji">🕕</span>
-                        <div class="time-details">
-                            <span class="start-time">04:00 PM</span>
-                            <span class="time-separator"> - </span>
-                            <span class="end-time">06:00 PM</span>
-                        </div>
-                    </div>
-    
-                    <div class="location-of-event">
-                        <!-- <img src="/assets/Icons/Pin.svg" alt="Location-Icon"> -->
-                        <span class="location-emoji">📍</span>
-                        <p class="location">BLDG 2, AFG College with the University of Aberdeen</p>
-                    </div>
-                    
-                    <div class="type-of-event">
-                        <button class="event-type">
-                            <img src="/assets/Icons/Star 1.svg" alt="Star-Icon">
-                            Workshop
-                        </button>
-                    </div>
-                    
-                    <a class="btn btn-dark w-100 viewDetailBtn" data-id="1">View Details</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</section>
-
-<footer class="bg-white py-4 text-center shadow-sm">
-    <div class="brand">
-        <img src="/assets/Icons/Logo.svg" alt="CampusConnect Logo" class="logo">
-        <p class="company-name">Campus<b>Connect</b></p>
-    </div>
-    <div class="footer-links">
-        <a href="/pages/create.html">Create Event</a>
-        <a href="/pages/events.html">Events</a>
-        <a href="#">Contact Us</a>
-    </div>
-</footer>
+<footer class="bg-white py-4 text-center shadow-sm"></footer>
 
 
     <!--Logic Links-->
     <script type="module" src="/scripts/services/loggedInLogic.js"></script>
-    <script src="/scripts/pages/profile.js"></script>
-    <script src="/scripts/services/cardDetails.js"></script>
-    <script type="module"  src="/scripts/pages/login.js"></script>
-    <script type="module" src="/scripts/pages/signup.js"></script>
+    <script type="module" src="/scripts/pages/profile.js"></script>
+    <script type="module" src="/scripts/components/footerComponent.js"></script>
+    <script type="module" src="/scripts/components/navbarComponent.js"></script>
 </body>
 </html>

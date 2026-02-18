@@ -48,7 +48,7 @@ function getIcon(type) {
         error: '<img src="/assets/icons/Cross.png" alt="Error" style="width: 100px; height: 100px;">',
         warning: '⚠️',
         info: 'ℹ️',
-        loading: '⏳'
+        loading: '<img src="/assets/icons/Loading.svg" alt="Loading" style="width: 100px; height: 100px; animation: spin 1s linear infinite;">'
     }
     return icons[type] || icons.info
 }

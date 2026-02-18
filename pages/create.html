@@ -12,43 +12,7 @@
 <body>
 
 
-    <header>
-        <nav class="navbar">
-            <!-- Brand -->
-            <div class="brand-name">
-                <img src="/assets/Icons/Logo.svg" alt="CampusConnect Logo" class="logo">
-                <p class="CampusConnect">Campus<b>Connect</b></p>
-            </div>
-    
-            <!-- Nav Links -->
-            <ul class="navbar-nav">
-                <li>
-                    <a class="nav-link active" href="/pages/index.html">Home</a>
-                </li>
-                <li>
-                    <a class="nav-link" href="/pages/events.html">Events</a>
-                </li>
-                <li>
-                    <a class="nav-link" href="/pages/create.html">Create Event</a>
-                </li>
-            </ul>
-
-            <!--Icons shown when user is logged in-->
-            <div class="icons">
-                <a href="/pages/cart.html" class="cart-icon" id="cartIcon">
-                    <img src="/assets/Icons/cart-Icon.svg" alt="Cart-Icon">
-                </a>
-
-                <a href="/pages/profile.html" class="profile-icon" id="profileIcon">
-                    <img src="/assets/Icons/userIcon.svg" alt="User-Icon" style="width: 35px;">
-                </a>
-            </div>
-    
-            <!-- Login Button shown when logged out-->
-            <a class="btn-primary" href="login.html" id="loginBtn">Login</a>
-
-        </nav>
-    </header>
+    <header></header>
 
     <section class="hero">
         <h2 class="text-center ">Create <span class="accent-text">Event’s</span></h2>
@@ -134,24 +98,12 @@
     
 
 
-<footer class="bg-white py-4 text-center shadow-sm">
-    <div class="brand">
-        <img src="/assets/Icons/Logo.svg" alt="CampusConnect Logo" class="logo">
-        <p class="company-name">Campus<b>Connect</b></p>
-    </div>
-    <div class="footer-links">
-        <a href="/pages/login.html">Create Event</a>
-        <a href="/pages/events.html">Events</a>
-        <a href="/pages/contact.html">Contact Us</a>
-    </div>
-</footer>
+<footer class="bg-white py-4 text-center shadow-sm"></footer>
 
 <!--Logic Links-->
     <script type="module" src="/scripts/pages/createEvent.js"></script>    
     <!--<script type="module" src="/scripts/services/loggedInLogic.js"></script>-->
-    <script src="/scripts/services/cardDetails.js"></script>
-   <!--<script type="module"  src="/scripts/pages/login.js"></script>-->
-    <!--<script type="module" src="/scripts/pages/signup.js"></script>-->
-    <!--<script type="module" src="/scripts/services/eventsDatabase.js"></script>-->
+    <script type="module" src="/scripts/components/footerComponent.js"></script>
+    <script type="module" src="/scripts/components/navbarComponent.js"></script>
 </body>
 </html>

@@ -178,27 +178,10 @@ section{
     line-height: 1.6;
     font-size: 0.9rem;
 }
-
-/* Responsive */
-@media (max-width: 768px) {
-    .profile-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .info-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
 /*Upcoming events styling*/
-.my-upcoming-events-container{
+section .my-upcoming-events-container{
     flex-direction: row;
 }
-/* Event Cards Styling */
 
 .my-upcoming-events-container .events-container{
     background-color: var(--white);
@@ -207,6 +190,10 @@ section{
     justify-content: start;
     flex-direction: row;
     overflow: hidden;
+}
+
+.my-upcoming-events-container .events-container, h4 {
+    font-family: var(--subheader-font);
 }
 
 .events-container .event-card {

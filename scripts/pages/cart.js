@@ -1,3 +1,8 @@
+import { createNavbar } from '../components/navbarComponent.js';
+import { createFooter } from '../components/footerComponent.js';
+
+document.querySelector('header').innerHTML = createNavbar();
+document.querySelector('footer').innerHTML = createFooter();
 // helpers
 const safe = el => el !== null && el !== undefined;
 const qs = sel => document.querySelector(sel);
