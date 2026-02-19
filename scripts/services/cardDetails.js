@@ -5,8 +5,6 @@ import { createFooter } from '../components/footerComponent.js';
 document.querySelector('header').innerHTML = createNavbar();
 document.querySelector('footer').innerHTML = createFooter();
 
-const container = document.getElementById("eventCardsContainer");
-
 const exampleEvents = [
   {
     id: 1,
@@ -111,6 +109,17 @@ const exampleEvents = [
   }
 ];
 
-exampleEvents.forEach(event => {
-  container.insertAdjacentHTML("beforeend", createEventCard(event));
-});
+const container = [
+  document.getElementById("eventCardsContainer"),
+  document.getElementById("upcomingEventsContainer"),
+  document.getElementById("createdEventsContainer")
+];
+
+
+container.forEach((container) => {
+  if (container) {
+    exampleEvents.forEach(event => {
+      container.insertAdjacentHTML("beforeend", createEventCard(event));
+    });
+  }
+});  

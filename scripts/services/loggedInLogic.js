@@ -1,10 +1,9 @@
 import { supabase } from '../config/supabase.js';
 
-async function getLoginStatus() {
+/*async function getLoginStatus() {
   const { data: { session } } = await supabase.auth.getSession();
   return Boolean(session);
-}
-
+}*/
 
 async function checkLoginStatus() {
   // retrieve user status from login/signup 
@@ -13,9 +12,8 @@ async function checkLoginStatus() {
   
   // test login and user data retrieval
   console.log("logged in", isLoggedIn);
-  console.log("user:", session?.user?.email);
+  console.log("User:", session?.user?.email);
 
-  
   // UI elements to be shown based on whether the user is logged in or not
   const profileIcon = document.getElementById('profileIcon');
   const cartIcon = document.getElementById('cartIcon');
@@ -24,11 +22,13 @@ async function checkLoginStatus() {
   
   // navigation bar visibility logic
   if (isLoggedIn) {
+    /*testing*/ console.log("User is logged in, showing profile and cart icons.");
     if(profileIcon) profileIcon.style.display = 'inline-block';
     if(cartIcon) cartIcon.style.display = 'inline-block';
     if(loginBtn) loginBtn.style.display = 'none';
     if(signOutBtn) signOutBtn.style.display = 'inline-block';
   } else {
+    /*testing*/console.log("User is not logged in, hiding profile and cart icons.");
     if(profileIcon) profileIcon.style.display = 'none';
     if(cartIcon) cartIcon.style.display = 'none';
     if(signOutBtn) signOutBtn.style.display = 'none';
@@ -36,19 +36,18 @@ async function checkLoginStatus() {
   }
   
   // fetch data straight from supabase profile table
-  const viewDetailsBtn = document.querySelectorAll('.viewDetailBtn');
-  const createEventBtn = document.querySelectorAll('.createEvent');
-
   const { data: profile } = await supabase
     .from('profiles')
     .select('full_name')
     .eq('id', session.user.id)
     .single();
   
-  localStorage.setItem("authUser", JSON.stringify({
+  /*localStorage.setItem("authUser", JSON.stringify({
     id: session.user.id,
     name: profile.full_name
-  }));
+  }));*/
+  const viewDetailsBtn = document.querySelectorAll('.viewDetailBtn');
+  const createEventBtn = document.querySelectorAll('.createEvent');
   
   if(viewDetailsBtn.length > 0){
     viewDetailsBtn.forEach(btn => { 

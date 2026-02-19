@@ -7,7 +7,7 @@ export function createFooter() {
         <div class="footer-links">
             <a href="/scripts/pages/login.js">Create Event</a>
             <a href="/pages/events.html">Events</a>
-            <a href="#">Contact Us</a>
+            <a href="/pages/contact.html">Contact Us</a>
         </div>
         `;
 }
