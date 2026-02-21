@@ -44,11 +44,11 @@ export function showModal(title, message, type = 'success', options = {}) {
 
 function getIcon(type) {
     const icons = {
-        success: '<img src="/assets/icons/Tick.png" alt="Success" style="width: 100px; height: 100px;">',
-        error: '<img src="/assets/icons/Cross.png" alt="Error" style="width: 100px; height: 100px;">',
+        success: '<img src="/assets/Icons/Tick.png" alt="Success" style="width: 100px; height: 100px;">',
+        error: '<img src="/assets/Icons/Cross.png" alt="Error" style="width: 100px; height: 100px;">',
         warning: '⚠️',
         info: 'ℹ️',
-        loading: '<img src="/assets/icons/Loading.svg" alt="Loading" style="width: 100px; height: 100px; animation: spin 1s linear infinite;">'
+        loading: '<img src="/assets/Icons/Loading.svg" alt="Loading" style="width: 100px; height: 100px; animation: spin 1s linear infinite;">'
     }
     return icons[type] || icons.info
 }
