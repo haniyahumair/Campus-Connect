@@ -4,6 +4,11 @@ export function createEventCard(event) {
             <div class="event-price">
                 <p class="price">💵 ${event.price}</p>
             </div>
+
+            <div class="save-event">
+                <img src="${event.saveEvent}" class="before-heart-icon">
+            </div>
+
             <img src="${event.image}" class="img-fluid" />
             <div class="p-3">
                 <h5 class="event-title">${event.title}</h5>

@@ -156,7 +156,7 @@ body{
     padding: 0 10px;
     position: absolute;
     top: 20px;
-    right: 20px;
+    left: 20px;
     z-index: 10;
 }
 
@@ -170,11 +170,26 @@ body{
     font-weight: 500;
     font-size: 0.9rem;
     margin: 0;
-    padding: 4px 12px;
+    padding: 4px 8px;
     color: var(--black);
     display: block;
 }
 
+.save-event{
+    z-index: 999;
+    position: absolute;
+    background-color: var(--white);
+    border-radius: 50px;
+    padding: 3px 5px;
+    right: 20px;
+    top: 15px;
+    cursor: pointer;
+}
+
+.save-event img{
+    width: 30px;
+    height: 30px;
+}
 /* EVENT IMAGE */
 .event-card .img-fluid {
     width: 100%;
