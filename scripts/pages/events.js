@@ -1,5 +1,6 @@
 import { createNavbar } from '../components/navbarComponent.js';
 import { createFooter } from '../components/footerComponent.js';
+import { supabase } from '../services/supabase.js';
 
 document.querySelector('header').innerHTML = createNavbar();
 document.querySelector('footer').innerHTML = createFooter();
@@ -11,6 +12,38 @@ const priceDropdown = document.getElementById("priceDropdown");
 const dateDropdown = document.getElementById("dateDropdown");
 const dateBtn = document.getElementById('dateBtn')
 const eventCards = document.querySelectorAll(".event-card");
+
+let eventCards = [];
+
+// load events from Supabase
+async function loadEvents() {
+    const { data: events, error } = await supabase
+        .from("events")
+        .select("*");
+    
+    if (error) {
+        console.error("Error loading events:", error);
+        return;
+    }
+    
+    const container = document.getElementById("eventCardsContainer");
+    container.innerHTML = "";
+    
+    events.forEach(event => {
+        container.innerHTML += `
+            <div class="event-card">
+            <p class="event-type">${event.category}</p>
+            <h3 class="event-title">${event.title}</h3>
+            <p class="price">${event.price === 0 ? "Free" : "Paid"}</p>
+            <p class="month">${event.month}</p> <p class="day">${event.day}</p>
+            <p class="year">${event.year}</p>
+            <button class="viewDetailBtn" data-id="${event.id}">View Details</button>
+        </div>
+        `;
+    });
+
+    eventCards = document.querySelectorAll(".event-card');
+}
 
 // Toggle Dropdowns
 function toggleDropdown(button, dropdown) {
@@ -124,3 +157,4 @@ document.addEventListener("click", (e) => {
         document.querySelectorAll(".dropdown-menu-custom").forEach(menu => menu.classList.remove("show"));
     }
 });
+document.addEventListener("DOMContentLoaded", loadEvents);
