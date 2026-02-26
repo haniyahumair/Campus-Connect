@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CampusConnect — Admin</title>
+
+</head>
+
+<body>
+
+  <!--Sidebar-->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon"><img src="/assets/Icons/Logo.svg" alt=""></div>
+      <div class="logo-text">
+        <strong>CampusConnect</strong>
+        <span>Admin Portal</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section-label">Review</div>
+    <div class="nav-item active" id="navPending" onclick="showPanel('pending', this)">
+      <span class="nav-icon">⏳</span>
+      Pending Events
+      <span class="nav-badge" id="pendingCount">3</span>
+    </div>
+
+    <div class="sidebar-section-label">Manage</div>
+    <div class="nav-item" id="navAll" onclick="showPanel('all', this)">
+      <span class="nav-icon">📅</span>
+      All Events
+      <span class="nav-badge gray" id="allCount">5</span>
+    </div>
+
+    <div class="sidebar-section-label">Overview</div>
+    <div class="nav-item" id="navStats" onclick="showPanel('stats', this)">
+      <span class="nav-icon">📊</span>
+      Stats & Attendance
+    </div>
+
+    <div class="sidebar-bottom">
+      <button class="ai-sidebar-btn" onclick="toggleAI()">
+        ✦ AI Assistant
+      </button>
+    </div>
+  </aside>
+
+  <!--dashboard-->
+  <div class="main">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="page-title" id="page-title">Pending Events</div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-search">
+          <span>🔍</span> Search events...
+        </div>
+        <button class="topbar-icon-btn" title="Notifications">🔔</button>
+        <button class="refresh-btn" onclick="loadAll()">↻ Refresh</button>
+        <button class="ai-top-btn" onclick="toggleAI()">✦ Ask AI</button>
+        <div class="avatar">A</div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+      <!--pending panel-->
+      <div id="pendingPanel" class="panel active">
+
+        <!-- Stats row -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-card-top">
+              <div class="stat-card-label">Pending Review</div>
+              <div class="stat-card-icon" style="background:#fff4ee;">⏳</div>
+            </div>
+            <div class="stat-card-value" id="statsPending">3</div>
+            <div class="stat-card-sub">
+              <span class="stat-delta delta-warn">needs attention</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-top">
+              <div class="stat-card-label">Approved Events</div>
+              <div class="stat-card-icon" style="background:#f0fdf4;">✅</div>
+            </div>
+            <div class="stat-card-value" id="statsApproved">2</div>
+            <div class="stat-card-sub">
+              <span class="stat-delta delta-up">↑ live on platform</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-top">
+              <div class="stat-card-label">Total Registrations</div>
+              <div class="stat-card-icon" style="background:#f5f3ff;">👥</div>
+            </div>
+            <div class="stat-card-value" id="statsRegistered">735</div>
+            <div class="stat-card-sub">across all events</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-top">
+              <div class="stat-card-label">Avg Fill Rate</div>
+              <div class="stat-card-icon" style="background:#fff4ee;">📈</div>
+            </div>
+            <div class="stat-card-value" id="statsFilled">72%</div>
+            <div class="stat-card-sub">
+              <span class="stat-delta delta-up">of capacity used</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pending table -->
+        <div class="table-card">
+          <div class="table-header">
+            <div class="table-title">⏳ Awaiting Approval</div>
+            <div class="table-controls">
+              <button class="ctrl-btn">⬇ Export</button>
+              <div class="search-ctrl">
+                <span>🔍</span>
+                <input placeholder="Search pending events..." />
+              </div>
+            </div>
+          </div>
+
+          <div class="table-scroll-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Event</th>
+                  <th>Category</th>
+                  <th>Date</th>
+                  <th>Location</th>
+                  <th>Contact</th>
+                  <th>Price</th>
+                  <th style="min-width:220px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="pending-tbody">
+                <!-- JS will populate this — demo rows shown below -->
+                <tr data-search="spring campus fair fair main quad">
+                  <td>
+                    <div class="cell-title">Spring Campus Fair</div>
+                    <div class="cell-sub">Submitted Feb 20, 2026</div>
+                  </td>
+                  <td>Fair</td>
+                  <td>Mar 15, 2026</td>
+                  <td>Main Quad</td>
+                  <td style="color:var(--muted);font-size:12px;"><a href="/cdn-cgi/l/email-protection"
+                      class="__cf_email__"
+                      data-cfemail="463536342f282120272f340625272b36333568232233">[email&#160;protected]</a></td>
+                  <td><span class="badge badge-free">Free</span></td>
+                  <td>
+                    <div class="row-actions">
+                      <button class="row-btn" onclick="openModal('1')">View</button>
+                      <button class="row-btn approve" onclick="quickApprove('1')">✓ Approve</button>
+                      <button class="row-btn reject" onclick="quickReject('1')">✕ Reject</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-search="tech talk ai talk lecture hall">
+                  <td>
+                    <div class="cell-title">Tech Talk: AI in 2026</div>
+                    <div class="cell-sub">Submitted Feb 21, 2026</div>
+                  </td>
+                  <td>Talk</td>
+                  <td>Mar 20, 2026</td>
+                  <td>Lecture Hall A</td>
+                  <td style="color:var(--muted);font-size:12px;"><a href="/cdn-cgi/l/email-protection"
+                      class="__cf_email__" data-cfemail="f48091979cb4979599848187da919081">[email&#160;protected]</a>
+                  </td>
+                  <td><span class="badge badge-paid">Free</span></td>
+                  <td>
+                    <div class="row-actions">
+                      <button class="row-btn" onclick="openModal('2')">View</button>
+                      <button class="row-btn approve" onclick="quickApprove('2')">✓ Approve</button>
+                      <button class="row-btn reject" onclick="quickReject('2')">✕ Reject</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-search="off-campus concert music downtown">
+                  <td>
+                    <div class="cell-title">Off-Campus Concert</div>
+                    <div class="cell-sub">Submitted Feb 19, 2026</div>
+                  </td>
+                  <td>Music</td>
+                  <td>Mar 25, 2026</td>
+                  <td>Downtown Venue</td>
+                  <td style="color:var(--muted);font-size:12px;"><a href="/cdn-cgi/l/email-protection"
+                      class="__cf_email__" data-cfemail="fd90888e949ebd9e9c908d888ed3989988">[email&#160;protected]</a>
+                  </td>
+                  <td><span class="badge badge-paid">25 QAR</span></td>
+                  <td>
+                    <div class="row-actions">
+                      <button class="row-btn" onclick="openModal('5')">View</button>
+                      <button class="row-btn approve" onclick="quickApprove('5')">✓ Approve</button>
+                      <button class="row-btn reject" onclick="quickReject('5')">✕ Reject</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- /table-scroll-wrap -->
+          <div class="pagination">
+            <span>Showing 3 of 3 pending events</span>
+            <div class="page-btns">
+              <button class="page-btn">‹</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">›</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- All events -->
+      <div id="allEventsPanel" class="panel">
+
+        <div class="table-card">
+          <div class="table-header">
+            <div class="table-title">All Events</div>
+            <div class="table-controls">
+              <button class="ctrl-btn">🔽 Filter</button>
+              <button class="ctrl-btn">↕ Sort</button>
+              <select class="ctrl-select" id="status-filter" onchange="applyAllFilters()">
+                <option value="">All statuses</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+              </select>
+              <div class="search-ctrl">
+                <span>🔍</span>
+                <input id="all-search" placeholder="Search..." oninput="applyAllFilters()" />
+              </div>
+              <button class="btn btn-primary" style="font-size:12.5px;padding:5px 12px;">⬇ Export</button>
+            </div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Category</th>
+                <th>Date / Time</th>
+                <th>Location</th>
+                <th>Attendance</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Active</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="allTBody">
+              <tr data-search="spring campus fair fair pending">
+                <td>
+                  <div class="cell-title">Spring Campus Fair</div>
+                  <div class="cell-sub">org: usr_abc123</div>
+                </td>
+                <td>Fair</td>
+                <td>Mar 15 · 10:00</td>
+                <td>Main Quad</td>
+                <td>
+                  <div class="att-wrap">
+                    <div class="att-bar">
+                      <div class="att-fill" style="width:62%"></div>
+                    </div>
+                    <span class="att-label">312/500</span>
+                  </div>
+                </td>
+                <td><span class="badge badge-free">Free</span></td>
+                <td><span class="badge badge-pending">pending</span></td>
+                <td><span class="badge badge-active">Active</span></td>
+                <td><button class="row-btn" onclick="openModal('1')">View</button></td>
+              </tr>
+              <tr data-search="tech talk ai talk pending">
+                <td>
+                  <div class="cell-title">Tech Talk: AI in 2026</div>
+                  <div class="cell-sub">org: usr_def456</div>
+                </td>
+                <td>Talk</td>
+                <td>Mar 20 · 14:00</td>
+                <td>Lecture Hall A</td>
+                <td>
+                  <div class="att-wrap">
+                    <div class="att-bar">
+                      <div class="att-fill high" style="width:99%"></div>
+                    </div>
+                    <span class="att-label">198/200</span>
+                  </div>
+                </td>
+                <td><span class="badge badge-paid">Free</span></td>
+                <td><span class="badge badge-pending">pending</span></td>
+                <td><span class="badge badge-active">Active</span></td>
+                <td><button class="row-btn" onclick="openModal('2')">View</button></td>
+              </tr>
+              <tr data-search="freshman welcome night social approved">
+                <td>
+                  <div class="cell-title">Freshman Welcome Night</div>
+                  <div class="cell-sub">org: usr_ghi789</div>
+                </td>
+                <td>Social</td>
+                <td>Mar 5 · 18:00</td>
+                <td>Student Union</td>
+                <td>
+                  <div class="att-wrap">
+                    <div class="att-bar">
+                      <div class="att-fill" style="width:50%"></div>
+                    </div>
+                    <span class="att-label">150/300</span>
+                  </div>
+                </td>
+                <td><span class="badge badge-free">Free</span></td>
+                <td><span class="badge badge-approved">approved</span></td>
+                <td><span class="badge badge-active">Active</span></td>
+                <td><button class="row-btn" onclick="openModal('3')">View</button></td>
+              </tr>
+              <tr data-search="photography workshop approved">
+                <td>
+                  <div class="cell-title">Photography Workshop</div>
+                  <div class="cell-sub">org: usr_jkl012</div>
+                </td>
+                <td>Workshop</td>
+                <td>Apr 2 · 13:00</td>
+                <td>Arts Building</td>
+                <td>
+                  <div class="att-wrap">
+                    <div class="att-bar">
+                      <div class="att-fill full" style="width:100%"></div>
+                    </div>
+                    <span class="att-label">30/30</span>
+                  </div>
+                </td>
+                <td><span class="badge badge-paid">10 QAR</span></td>
+                <td><span class="badge badge-approved">approved</span></td>
+                <td><span class="badge badge-active">Active</span></td>
+                <td><button class="row-btn" onclick="openModal('4')">View</button></td>
+              </tr>
+              <tr data-search="off-campus concert music rejected">
+                <td>
+                  <div class="cell-title">Off-Campus Concert</div>
+                  <div class="cell-sub">org: usr_mno345</div>
+                </td>
+                <td>Music</td>
+                <td>Mar 25 · 20:00</td>
+                <td>Downtown Venue</td>
+                <td>
+                  <div class="att-wrap">
+                    <div class="att-bar">
+                      <div class="att-fill" style="width:5%"></div>
+                    </div>
+                    <span class="att-label">45/1000</span>
+                  </div>
+                </td>
+                <td><span class="badge badge-paid">25 QAR</span></td>
+                <td><span class="badge badge-rejected">rejected</span></td>
+                <td><span class="badge badge-inactive">Inactive</span></td>
+                <td><button class="row-btn" onclick="openModal('5')">View</button></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="pagination">
+            <span>Showing 5 of 5 events</span>
+            <div class="page-btns">
+              <button class="page-btn">‹</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">›</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--Stats panel-->
+      <div id="panelStats" class="panel">
+        <!--Same stats info at the top-->
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-card-top">
+              <div class="stat-card-label">Pending Review</div>
+              <div class="stat-card-icon" style="background:#fff4ee;">⏳</div>
+            </div>
+            <div class="stat-card-value">3</div>
+            <div class="stat-card-sub"><span class="stat-delta delta-warn">needs attention</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-top">
+              <div class="stat-card-label">Approved Events</div>
+              <div class="stat-card-icon" style="background:#f0fdf4;">✅</div>
+            </div>
+            <div class="stat-card-value">2</div>
+            <div class="stat-card-sub"><span class="stat-delta delta-up">↑ live on platform</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-top">
+              <div class="stat-card-label">Total Registrations</div>
+              <div class="stat-card-icon" style="background:#f5f3ff;">👥</div>
+            </div>
+            <div class="stat-card-value">735</div>
+            <div class="stat-card-sub">across all events</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-top">
+              <div class="stat-card-label">Avg Fill Rate</div>
+              <div class="stat-card-icon" style="background:#fff4ee;">📈</div>
+            </div>
+            <div class="stat-card-value">72%</div>
+            <div class="stat-card-sub"><span class="stat-delta delta-up">of capacity used</span></div>
+          </div>
+        </div>
+        <!--Stats table - shows the attendance-->
+        <div class="table-card">
+          <div class="table-header">
+            <div class="table-title">Attendance by Event</div>
+            <button class="btn btn-outline" style="font-size:12.5px;padding:5px 12px;">⬇ Export</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Registered</th>
+                <th>Capacity</th>
+                <th>Fill Rate</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="stats-tbody">
+              <tr>
+                <td>
+                  <div class="cell-title">Spring Campus Fair</div>
+                </td>
+                <td>Fair</td>
+                <td>Mar 15, 2026</td>
+                <td>312</td>
+                <td>500</td>
+                <td>
+                  <div class="att-wrap">
+                    <div class="att-bar">
+                      <div class="att-fill" style="width:62%"></div>
+                    </div><span class="att-label">62%</span>
+                  </div>
+                </td>
+                <td><span class="badge badge-pending">pending</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="cell-title">Tech Talk: AI in 2026</div>
+                </td>
+                <td>Talk</td>
+                <td>Mar 20, 2026</td>
+                <td>198</td>
+                <td>200</td>
+                <td>
+                  <div class="att-wrap">
+                    <div class="att-bar">
+                      <div class="att-fill high" style="width:99%"></div>
+                    </div><span class="att-label">99%</span>
+                  </div>
+                </td>
+                <td><span class="badge badge-pending">pending</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="cell-title">Freshman Welcome Night</div>
+                </td>
+                <td>Social</td>
+                <td>Mar 5, 2026</td>
+                <td>150</td>
+                <td>300</td>
+                <td>
+                  <div class="att-wrap">
+                    <div class="att-bar">
+                      <div class="att-fill" style="width:50%"></div>
+                    </div><span class="att-label">50%</span>
+                  </div>
+                </td>
+                <td><span class="badge badge-approved">approved</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="cell-title">Photography Workshop</div>
+                </td>
+                <td>Workshop</td>
+                <td>Apr 2, 2026</td>
+                <td>30</td>
+                <td>30</td>
+                <td>
+                  <div class="att-wrap">
+                    <div class="att-bar">
+                      <div class="att-fill full" style="width:100%"></div>
+                    </div><span class="att-label">100%</span>
+                  </div>
+                </td>
+                <td><span class="badge badge-approved">approved</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="cell-title">Off-Campus Concert</div>
+                </td>
+                <td>Music</td>
+                <td>Mar 25, 2026</td>
+                <td>45</td>
+                <td>1000</td>
+                <td>
+                  <div class="att-wrap">
+                    <div class="att-bar">
+                      <div class="att-fill" style="width:5%"></div>
+                    </div><span class="att-label">5%</span>
+                  </div>
+                </td>
+                <td><span class="badge badge-rejected">rejected</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!--View events detail-->
+  <div class="modal-overlay" id="eventsDetailModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title" id="modalTitle">Event Title</div>
+          <div class="modal-subtitle" id="modalSubtitle">Submitted by organizer</div>
+          <div style="margin-top:6px" id="modalStatus"></div>
+        </div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-img-wrap" id="modalImg">No image provided</div>
+        <div class="detail-desc"><label>Description</label>
+          <p id="m-desc">—</p>
+        </div>
+        <div class="detail-grid">
+          <div class="detail-field"><label>Date</label><span id="modalDate">—</span></div>
+          <div class="detail-field"><label>Time</label><span id="modalTime">—</span></div>
+          <div class="detail-field"><label>Location</label><span id="modalLocation">—</span></div>
+          <div class="detail-field"><label>Address</label><span id="modalAddress">—</span></div>
+          <div class="detail-field"><label>Venue Details</label><span id="modalVenue">—</span></div>
+          <div class="detail-field"><label>Category</label><span id="modalCategory">—</span></div>
+          <div class="detail-field"><label>Price</label><span id="modalPrice">—</span></div>
+          <div class="detail-field"><label>Capacity</label><span id="modalMaxAttendees">—</span></div>
+          <div class="detail-field"><label>Registered</label><span id="modalRegistered">—</span></div>
+          <div class="detail-field"><label>Contact</label><span id="modalContact">—</span></div>
+          <div class="detail-field"><label>User ID</label><span id="modalUserID"
+              style="font-size:11px;word-break:break-all;">—</span></div>
+          <div class="detail-field"><label>Submitted</label><span id="modalCreated">—</span></div>
+        </div>
+      </div>
+      <div class="modal-footer" id="modalFooter">
+        <button class="approve-btn" onclick="doApprove()">✓ Approve</button>
+        <button class="reject-btn" onclick="openRejectModal()">✕ Reject</button>
+        <button class="close-btn" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!--Rejected events-->
+  <div class="modal-overlay" id="rejectModal">
+    <div class="reason-card">
+      <h3>Reject Event</h3>
+      <p>Optionally add a reason that will be visible to the organizer.</p>
+      <textarea class="reason-ta" id="rejectReason"
+        placeholder="e.g. Off-campus venue not permitted, missing details..."></textarea>
+      <!--serve for notification if event is rejected-->
+      <div class="reason-actions">
+        <button class="confirm-reject-btn" style="padding:9px 16px;" onclick="confirmReject()">Confirm Reject</button>
+        <button class="cancel-reject-btn" style="padding:9px 16px;border:1px solid var(--border);"
+          onclick="closeRejectModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!--AI Chat-->
+  <div class="overlay" id="overlay" onclick="toggleAI()"></div>
+  <div class="ai-panel" id="ai-panel">
+    <div class="ai-header">
+      <div class="ai-header-left">
+        <div class="ai-orb">✦</div>
+        <div>
+          <div class="ai-title">AI Assistant</div>
+          <div class="ai-subtitle">Powered by Claude</div>
+        </div>
+      </div>
+      <button class="ai-close" onclick="toggleAI()">✕</button>
+    </div>
+    <div class="ai-msgs" id="ai-msgs">
+      <div class="msg msg-ai">Hey! I'm your CampusConnect admin assistant. Ask me about pending events, attendance
+        trends, or anything in your dashboard.</div>
+    </div>
+    <div class="ai-chips">
+      <div class="chip" onclick="chipAsk(this)">Summarize pending events</div>
+      <div class="chip" onclick="chipAsk(this)">Which events are nearly full?</div>
+      <div class="chip" onclick="chipAsk(this)">Overall attendance stats</div>
+      <div class="chip" onclick="chipAsk(this)">Any red flags?</div>
+    </div>
+</body>

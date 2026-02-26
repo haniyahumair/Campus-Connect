@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
+
+:root{
+    --white: #ffffff;
+    --black: #000000;
+    --dark-grey: #666;
+    --light-grey: #ddd;
+    --primary-grey: #f0f0f0;
+    --seconday-grey: #E9E9E9;
+    --primary-accent: #FF8A80;
+    --secondary-accent: #2EC4B6; 
+    --header-font: 'Fraunces', serif;
+    --subheader-font: 'Inter', sans-serif;
+    --text-font: 'Manrope', sans-serif;
+}
