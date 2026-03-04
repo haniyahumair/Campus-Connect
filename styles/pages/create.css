@@ -117,4 +117,5 @@ section{
     color: var(--white);
     border: none;
     font-size: 1rem;
+    cursor: pointer;
 }

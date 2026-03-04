@@ -1,13 +1,16 @@
 import { supabase } from '../config/supabase.js'
 import { createNavbar } from '../components/navbarComponent.js';
 import { createFooter } from '../components/footerComponent.js';
-import { showModal} from '../utils/modal.js';
+import { createEventCard } from '../components/eventCardsComponents.js';
+import { showModal } from '../utils/modal.js';
 
 document.querySelector('header').innerHTML = createNavbar();
 document.querySelector('footer').innerHTML = createFooter();
 
 document.addEventListener('DOMContentLoaded', () => {
-    loadUserProfile()
+    loadUserProfile();
+    loadCreatedEvents();
+    loadUpcomingEvents();
 })
 
 async function loadUserProfile() {
@@ -56,6 +59,101 @@ async function loadUserProfile() {
         alert('Failed to load profile. Please try again later.')
     }
 }
+
+async function loadCreatedEvents() { 
+    const { data: { user } } = await supabase.auth.getUser();
+    const { data: events, error } = await supabase
+        .from("events")
+        .select("*")
+        .eq("org_id", user.id);
+
+    if (error || !events || events.length === 0){
+        container.innerHTML = `
+            <div class="empty-state">
+                <p>😔 Nothing to see here!</p>
+                <p>You haven't created for any events yet.</p>
+                <a href="/pages/create.html" class="btn btn-dark">Create Events</a>
+            </div>
+        `;        
+        return;
+    } 
+
+    const container = document.getElementById("createdEventsContainer");
+    container.innerHTML = "";
+    events.forEach(event => {
+        const date = new Date(event.date);
+        const mappedEvent = {
+            id: event.id,
+            title: event.title,
+            description: event.description,
+            location: event.location,
+            price: event.price ?? "Free",
+            image: event.img_url ?? event.image ?? "/assets/default-event.jpg",
+            month: date.toLocaleString('default', { month: 'long' }),
+            day: date.getDate(),
+            year: date.getFullYear(),
+            start: event.start_time ?? event.start,
+            end: event.end_time ?? event.end,
+            attendees: event.current_registrations ?? 0,
+            capacity: event.max_capacity ?? 100,
+            type: event.category ?? event.type,
+            saveEvent: "/assets/Icons/Heart outline peach.svg"
+        };
+        container.innerHTML += createEventCard(mappedEvent);
+    });
+}
+
+async function loadUpcomingEvents() {
+    const { data: { user } } = await supabase.auth.getUser();
+    const { data: registrations, error } = await supabase
+        .from("registration")
+        .select("*, events(*)")
+        .eq("user_id", user.id);
+
+    if (error || !registrations || registrations.length === 0 || events.length === 0){
+        container.innerHTML = `
+            <div class="empty-state">
+                <p>😔 Nothing to see here!</p>
+                <p>You haven't registered for any events yet.</p>
+                <a href="/pages/events.html" class="btn btn-dark">Browse Events</a>
+            </div>
+        `;
+        return;
+    };
+
+    const container = document.getElementById("upcomingEventsContainer");
+    container.innerHTML = "";
+    registrations.forEach(reg => {
+        const event = reg.events; // 👈 pull the joined event
+        const date = new Date(event.date);
+        const mappedEvent = {
+            id: event.id,
+            title: event.title,
+            description: event.description,
+            location: event.location,
+            price: event.price ?? "Free",
+            image: event.img_url ?? event.image ?? "/assets/default-event.jpg",
+            month: date.toLocaleString('default', { month: 'long' }),
+            day: date.getDate(),
+            year: date.getFullYear(),
+            start: event.start_time ?? event.start,
+            end: event.end_time ?? event.end,
+            attendees: event.current_registrations ?? 0,
+            capacity: event.max_capacity ?? 100,
+            type: event.category ?? event.type,
+            saveEvent: "/assets/Icons/Heart outline peach.svg"
+        };
+        container.innerHTML += createEventCard(mappedEvent);
+    });
+}
+
+//event details page 
+document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("viewDetailBtn")) {
+        const eventId = e.target.dataset.id;
+        window.location.href = `/pages/details.html?id=${eventId}`; 
+    }
+});
 
 const signOutBtn = document.getElementById('signOutBtn')
 

@@ -14,83 +14,47 @@
 <body>
     <header></header>
 
-<section class="event-details-container">
-    <div class="event-details">
-        <div class="event-image">
-            <div class="price-info">
-                <img src="/assets/Icons/Coin Stacked Icon.svg" alt="Coin-Icon">
-                <p class="price">Free</p>
+    <section class="event-details-container">
+        <div class="event-details">
+            <div class="event-image">
+                <div class="price-info">
+                    <!--<img src="/assets/Icons/Coin Stacked Icon.svg" alt="Coin-Icon">-->
+                    <p class="price"></p>
+                </div>
+                <img src="" class="image" alt="Event Image">
             </div>
-            <img src="/assets/Images/football.jpg" class="image" alt="Football Event" >
-        </div>
-
-        <div class="card-body">
-            <div class="header">
-                <h2 class="event-title">Football Championship Finals</h2>
-                <div class="detail-buttons">
-                    <button class="event-type">
-                        <img src="/assets/Icons/Star 1.svg" alt="Star-Icon">
-                        Workshop
-                    </button>
-
-                    <button class="share-button">
-                        <img src="/assets/Icons/Share Icon.svg" alt="Share-Icon">
-                        Share
-                    </button>
-                    
-                    <script>
-                        //share button logic
-                        const shareButton = document.querySelector('.share-button');
-                    
-                        shareButton.addEventListener('click', () => {
-                            const currentURL = window.location.href;
-                            console.log(currentURL); 
-                    
-                            navigator.clipboard.writeText(currentURL)
-                                .then(() => alert('URL copied to clipboard!'))
-                                .catch(err => console.error('Failed to copy URL:', err));
-                        });
-                    </script>
+            <div class="card-body">
+                <div class="header">
+                    <h2 class="event-title"></h2>
+                    <div class="detail-buttons">
+                        <button class="event-type">
+                            <img src="/assets/Icons/Star 1.svg" alt="Star-Icon">
+                            <span class="type-text"></span>
+                        </button>
+                        <button class="share-button">
+                            <img src="/assets/Icons/Share Icon.svg" alt="Share-Icon">
+                            Share
+                        </button>
+                    </div>
+                </div>
+                <div class="about">
+                    <h5 class="heading">About Event</h5>
+                    <p class="description"></p>
+                </div>
+                <div class="details">
+                    <h5 class="heading">Event Details</h5>
+                    <p class="date"><strong>📅 Date:</strong> <span class="date-text"></span></p>
+                    <p class="time"><strong>🕕 Time:</strong> <span class="time-text"></span></p>
+                    <p class="location"><strong>📍 Location:</strong> <span class="location-text"></span></p>
+                    <hr>
+                    <p class="contact-email"><strong>📧 Contact Email:</strong> <span class="email-text"></span></p>
+                </div>
+                <div class="cart-button">
+                    <button class="cart-btn" id="cartBtn">Add to Cart</button>
                 </div>
             </div>
-
-            <div class="about">
-                <h5 class="heading">About Event</h5>
-                <p>Witness the ultimate showdown! The top university football teams compete for the championship trophy. Cheer for your team in this electrifying finale of the inter-university league.</p>
-
-                <p><strong>What to expect:</strong></p>
-                <ul>
-                    <li>Professional commentary</li>
-                    <li>Halftime entertainment</li>
-                    <li>Food trucks & refreshments</li>
-                    <li>Trophy ceremony</li>
-                    <li>Team meet & greet after match</li>
-                </ul>
-            </div>
-
-            <div class="details">
-                <h5 class="heading">Event Details</h5>
-                <p class="date"><strong>
-                    <!--<img src="/assets/Icons/Calendar.svg" alt="Calendar-icon" style="width: 18px; height: 18px; transform: translateY(3px);">-->
-                    📅 Date:</strong> Friday, December 12, 2025</p>
-                <p class="time"><strong>
-                    <!--<img src="/assets/Icons/clock-icon.svg" alt="Clock-icon" style="width: 18px; height: 18px; transform: translateY(3px);">-->
-                    🕕 Time:</strong> 05:00 PM</p>
-                <p class="location"><strong>
-                    <img src="/assets/Icons/Pin.svg" alt="Pin-icon" style="width: 18px; height: 18px; transform: translateY(3px);">
-                    Location:</strong> Qatar University Sports Complex</p>
-                <hr class="">
-                <p class="contact-email"><strong>
-                    <!--<img src="/assets/Icons/mail-icon.svg" alt="Mail-icon" style="width: 18px; height: 18px; transform: translateY(3px);">-->
-                    📧 Contact Email:</strong> sports@qu.edu.qa</p>
-            </div>
-
-            <div class="cart-button">
-                <button class="cart-btn"  id="cartBtn" onclick="">Add to Cart</button>
-            </div>
         </div>
-    </div>
-</section>
+    </section>
 
 <footer class="bg-white py-4 text-center shadow-sm"></footer>
 
@@ -98,5 +62,6 @@
     <script type="module" src="/scripts/services/cardDetails.js"></script>
     <script type="module" src="/scripts/components/footerComponent.js"></script>
     <script type="module" src="/scripts/components/navbarComponent.js"></script>
+    <script type="module" src="/scripts/services/eventsDatabase.js"></script>
 </body>
 </html>
