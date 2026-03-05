@@ -1,0 +1,9 @@
+# Ignore the secret keys file
+scripts/config/env.js
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore node modules (if you ever use them)
+node_modules/
