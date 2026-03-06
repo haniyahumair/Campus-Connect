@@ -118,4 +118,5 @@
     padding: 12px 18px;
     font-size: 1rem;
     font-family: var(--subheader-font);
+    cursor: pointer;
 }

@@ -1,77 +1,154 @@
+import { supabase } from '../config/supabase.js'
 import { createNavbar } from '../components/navbarComponent.js';
 import { createFooter } from '../components/footerComponent.js';
+import { showModal } from '../utils/modal.js'
 
 document.querySelector('header').innerHTML = createNavbar();
 document.querySelector('footer').innerHTML = createFooter();
-// helpers
-const safe = el => el !== null && el !== undefined;
-const qs = sel => document.querySelector(sel);
-const qsa = sel => Array.from(document.querySelectorAll(sel));
 
-// remove item logic
-window.removeItem = function removeItem(itemId) {
-    const el = document.getElementById(itemId);
-    if (!safe(el)) return;
-    
-    el.remove();
-};
-
-// quantity button logic
-function wireQuantityButtons() {
-    const qtyButtons = qsa('.qty-btn'); // matches cart.html 
-    if (!qtyButtons.length) return;
-    
-    qtyButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const change = parseInt(btn.getAttribute('data-change')) || 0;
-            const container = btn.closest('.quantity-control');
-            if (!container) return;
-            
-            const quantitySpan = container.querySelector('.quantity');
-            const hiddenInput = container.querySelector('input[type="hidden"]');
-            
-            let current = parseInt(quantitySpan.textContent) || 1;
-            current = Math.max(1, current + change);
-            
-            quantitySpan.textContent = current;
-            if (hiddenInput) hiddenInput.value = current;
-        });
-    });
-}
-
-// checkout form logic 
-function wireCheckout() {
-    const form = qs('#checkoutForm') || qs('form.checkout-form');
-    if (!safe(form)) return;
-
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        alert('Checkout was successful! Your events have been added to your profile.');
-        window.location.href = 'profile.html';
-
-        // gather form data if needed
-        const fd = new FormData(form);
-        const entries = {};
-        fd.forEach((value, key) => {
-            entries[key] = value;
-        });
-    });
-}
-
-//if price is not free then show alert message on checkout
-const priceElement = document.getElementById('.item-price');
-if (priceElement && priceElement.textContent.trim().toLowerCase() !== 'free') {
-    const checkoutButton = document.getElementById('checkoutButton');   
-    if (checkoutButton) {
-        checkoutButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            alert('Please select free event. Payment methods are not supported yet.');
-        });
-    }
-}
-
-document.addEventListener('DOMContentLoaded',  () => {
-    wireQuantityButtons();
-    wireCheckout();
+document.addEventListener('DOMContentLoaded', () => {
+    loadCart();        
 });
+
+let currentUserId = null;
+
+async function loadCart() {
+    const { data: { user } } = await supabase.auth.getUser();
+    currentUserId = user.id;
+
+    const { data: cartItems, error } = await supabase
+        .from('cart')
+        .select('*, events(*)')
+        .eq('user_id', user.id);
+
+    const container = document.getElementById("cartContainer");
+    container.innerHTML = '';
+
+    if (error || !cartItems || cartItems.length === 0) {
+        showModal(
+            'Failed to load Cart!',
+            'Please try again!.',
+            'error',
+            {
+                autoClose: 3000,
+                onClose: () => {
+                    window.location.href = '/pages/events.html'
+                }
+            }
+        )
+    }
+
+    function formatTime(time) {
+        if (!time) return '';
+        const [hours, minutes] = time.split(':');
+        const hour = parseInt(hours);
+        const ampm = hour >= 12 ? 'PM' : 'AM';
+        const formattedHour = hour % 12 || 12;
+        return `${formattedHour}:${minutes} ${ampm}`;
+    }
+
+    cartItems.forEach(item => {
+        const event = item.events;
+        const formattedDate = new Date(event.date).toLocaleDateString('default', {
+            month: 'short', day: 'numeric', year: 'numeric'
+        });
+        container.innerHTML += `
+        <div class="cart-item" data-id="${event.id}">
+            <div class="item-image">
+                <img src="${event.img_url}" />
+            </div>
+            <div class="item-details">
+                <h5>${event.title}</h5>
+                <p class="about">${event.description}</p>
+                <div class="date-time-container">
+                    <p class="date">📅 ${formattedDate}</p>
+                    <div class="time">
+                        <p class="start-time">${formatTime(event.start_time)}</p>  
+                        <p class="end-time">${formatTime(event.end_time)}</p>  
+                    </div>    
+                </div> 
+                <p class="location">📍${event.location}</p>
+                <div class="type-of-event">
+                    <button class="event-type">
+                        <img src="/assets/Icons/Star 1.svg" alt="Star-Icon">
+                        ${event.category}
+                    </button>
+                </div>
+            </div>
+            <hr>
+            <div class="item-actions">
+                <p class="item-price">${event.price === 0 ? 'Free' : '💵 ' + event.price}</p>
+                <div class="quantity-control">
+                    <button class="qty-btn" data-change="-1">−</button>
+                    <span class="quantity">${item.quantity}</span>
+                    <button class="qty-btn" data-change="1">+</button>
+                </div>
+                <button class="remove-btn" data-id="${event.id}">✖ Remove</button>
+            </div>
+        </div>`;
+    });
+
+    container.addEventListener('click', (e) => {
+        if (e.target.classList.contains('remove-btn')) {
+            const eventId = e.target.dataset.id;
+            removeFromCart(eventId);
+        }
+
+        if (e.target.classList.contains('qty-btn')) {
+            const cartItem = e.target.closest('.cart-item');
+            const eventId = cartItem.dataset.id;
+            const quantitySpan = cartItem.querySelector('.quantity');
+            let currentQty = parseInt(quantitySpan.textContent);
+            const change = parseInt(e.target.dataset.change);
+            const newQty = currentQty + change;
+
+            if (newQty < 1) return;
+            updateQuantity(eventId, newQty);
+        }
+    });
+}
+
+async function removeFromCart(eventId) {
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    const { error } = await supabase
+        .from('cart')
+        .delete()
+        .eq('user_id', currentUserId)
+        .eq('event_id', eventId);
+
+    if (error) {
+        console.error('Error removing from cart:', error);
+        return;
+    }
+
+    loadCart();
+}
+
+async function updateQuantity(eventId, newQuantity) {
+    console.log('currentUserId:', currentUserId);
+    const { data: { user } } = await supabase.auth.getUser();
+
+    const { error } = await supabase
+        .from('cart')
+        .update({ quantity: newQuantity })
+        .eq('user_id', currentUserId)
+        .eq('event_id', eventId);
+
+    if (error) {
+        console.log(error)
+        showModal(
+            'Failed to update!',
+            'Please try again!.',
+            'error',
+            {
+                autoClose: 3000,
+                onClose: () => {
+                    window.location.href = '/pages/cart.html'
+                }
+            }
+        )
+    }
+
+    loadCart();
+}

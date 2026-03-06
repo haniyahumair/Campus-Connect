@@ -13,78 +13,46 @@
 
 <section class="cart-container">
     <h2 class="cart-title">Cart</h2>
-    <form id="checkoutForm" action="checkout.html" method="POST">
-        <div id="cartContainer">
-            <!-- Cart Item 1 -->
-            <div class="cart-item" id="item1">
-                <div class="item-image">
-                    <img src="/assets/Images/IMG_6404.jpg" alt="AI In Action">
+    <div class="cart-layout">
+        <div class="cart-left">
+            <form id="checkoutForm">
+                <div id="cartContainer"></div>
+            </form>
+        </div>
+        <div class="cart-right">
+            <div class="order-summary">
+                <h5>Order Summary</h5>
+                <hr>
+                <div class="summary-row">
+                    <span>Cart Total:</span>
+                    <span id="cartTotal" style="font-weight: 700;">QAR 0.00</span>
                 </div>
-                <div class="item-details">
-                    <h5>AI In Action: Theory in Practice</h5>
-                    <p class="date-time">November 14, 2025, 4:00 PM</p>
-                    <p class="location">BLDG 2, AFG College with the University of Aberdeen</p>
-                    <div class="type-of-event">
-                        <button class="event-type">
-                            <img src="/assets/Icons/Star 1.svg" alt="Star-Icon">
-                            Workshop
-                        </button>
-                    </div>
-                </div>
-                <div class="item-actions">
-                    <p class="item-price">Free</p>
-                    <div class="quantity-control">
-                        <button class="qty-btn" data-change="-1">−</button>
-                        <span class="quantity">1</span>
-                        <input type="hidden" name="item1_quantity" value="1">
-                        <button class="qty-btn" data-change="1">+</button>
-                    </div>
-                    <button class="remove-btn" onclick="removeItem('item1')">✖ Remove</button>
-                </div>
-            </div>
-
-            <!-- Cart Item 2 -->
-            <div class="cart-item" id="item2">
-                <div class="item-image">
-                    <img src="/assets/Images/football.jpg" alt="Football Championship Finals">
-                </div>
-                <div class="item-details">
-                    <h5>Football Championship Finals</h5>
-                    <p class="date-time">December 12 2025, 5:00 PM</p>
-                    <p class="location">Qatar University Sports Complex</p>
-                    <div class="type-of-event">
-                        <button class="event-type">
-                            <img src="/assets/Icons/Star 1.svg" alt="Star-Icon">
-                            Sports
-                        </button>
-                    </div>
-                </div>
-                <div class="item-actions" style="transform: translateX(60px);">
-                    <p class="item-price">Free</p>
-                    <div class="quantity-control">
-                        <button class="qty-btn" data-change="-1">−</button>
-                        <span class="quantity">1</span>
-                        <input type="hidden" name="item2_quantity" value="1">
-                        <button class="qty-btn" data-change="1">+</button>
-                    </div>
-                    <button class="remove-btn" onclick="removeItem('item2')">✖ Remove</button>
+                <hr>
+                <label class="terms-label">
+                    <input type="checkbox" id="termsCheck">
+                    I agree to <a href="#" >Terms & Conditions</a>
+                </label>
+                <div class="payment-options">
+                    <p class="payment-title">Pay With</p>
+                    <button id="apple-pay-button">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" 
+                             alt="Apple Pay" 
+                             height="24"
+                             class="apple-pay-fallback">
+                    </button>
+                    <button class="paypal-btn">
+                        <img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png" alt="PayPal">
+                    </button>
+                    <button class="payment-btn card">💳 Credit / Debit Card</button>
                 </div>
             </div>
         </div>
-        <div class="checkout-button">
-            <button class="btn-checkout" id="checkoutBtn">Proceed To Checkout</button>
-        </div>
-    </form>
+    </div>
 </section>
 
 <footer class="bg-white py-4 text-center shadow-sm"></footer>
 
     <script type="module" src="/scripts/services/loggedInLogic.js"></script>
-    <script src="/scripts/services/cardDetails.js"></script>
-    <script type="module"  src="/scripts/pages/login.js"></script>
-    <script type="module" src="/scripts/pages/signup.js"></script>
     <script type="module"  src="/scripts/pages/cart.js"></script>
-    <script type="module" src="/scripts/components/footerComponent.js"></script>
-    <script type="module" src="/scripts/components/navbarComponent.js"></script>
 </body>
 </html>

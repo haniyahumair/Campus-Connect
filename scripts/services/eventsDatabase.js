@@ -1,15 +1,16 @@
 import { supabase } from "../config/supabase.js";
 import { createNavbar } from "../components/navbarComponent.js";
 import { createFooter } from "../components/footerComponent.js";
+import { showModal } from "../utils/modal.js";
 
 document.querySelector('header').innerHTML = createNavbar();
 document.querySelector('footer').innerHTML = createFooter();
 
+// 👇 declare once, both functions use it
+const params = new URLSearchParams(window.location.search);
+const eventId = params.get("id");
 
 async function loadEventDetails() {
-    const params = new URLSearchParams(window.location.search);
-    const eventId = params.get("id"); 
-
     const { data: event, error } = await supabase
         .from("events")
         .select("*")
@@ -20,8 +21,6 @@ async function loadEventDetails() {
         console.error("Error loading event details:", error);
         return;
     }
-
-    console.log("Event details:", event);
 
     document.querySelector('.event-title').textContent = event.title;
     document.querySelector('.image').src = event.img_url;
@@ -34,9 +33,64 @@ async function loadEventDetails() {
     document.querySelector('.email-text').textContent = event.contact_details;
 }
 
+async function addToCart() {
+    try {
+        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        if (!user || authError) {
+            window.location.href = '/pages/login.html';
+            return;
+        }
+
+        const { data: existing } = await supabase
+            .from('cart')
+            .select('*')
+            .eq('user_id', user.id)
+            .eq('event_id', eventId)
+            .single();
+
+        if (existing) {
+            alert('Already in cart!');
+            return;
+        }
+
+        const { error } = await supabase.from('cart').insert({
+            user_id: user.id,
+            event_id: eventId,
+            quantity: 1
+        });
+
+        if (error) throw error;
+        showModal(
+            'Succesfully added to Cart!',
+            'You will now be redirected to your Cart!ß',
+            'success',
+            {
+                autoClose: 3000,
+                onClose: () => {
+                    window.location.href = '/pages/cart.html'
+                }
+            }
+        )
+
+    } catch (error) {
+        console.error('Error adding to cart:', error);
+        showModal(
+            'Failed to add event to Cart!',
+            'Please try again!.',
+            'error',
+            {
+                autoClose: 3000,
+                onClose: () => {
+                    window.location.href = '/pages/events.html'
+                }
+            }
+        )
+    }
+}
+
 document.addEventListener("DOMContentLoaded", loadEventDetails);
 
-//share button 
+// share button
 const shareButton = document.querySelector('.share-button');
 shareButton.addEventListener('click', () => {
     const currentURL = window.location.href;
@@ -44,3 +98,6 @@ shareButton.addEventListener('click', () => {
         .then(() => alert('URL copied to clipboard!'))
         .catch(err => console.error('Failed to copy URL:', err));
 });
+
+// cart button
+document.getElementById('cartBtn').addEventListener('click', addToCart);
