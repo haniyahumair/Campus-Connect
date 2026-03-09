@@ -51,4 +51,59 @@ window.loadALL = async function () {
   populateAll(data);
 };
 
+// populate table
+function populatePending(events) {
+  const tbody = document.getElementById("pending-tbody");
+  const pending = events.filter(e => e.status === "pending");
+  tbody.innerHTML = "";
+  pending.forEach(event => {
+    tbody.innerHTML += `
+      <tr>
+        <td>
+          <div class="cell-title">${event.title}</div>
+          <div class="cell-sub">Submitted ${event.created_at}</div>
+        </td> 
+        <td>${event.category}</td>
+        <td>${event.date}</td>
+        <td>${event.location}</td>
+        <td>${event.contact}</td>
+        <td>${event.price}</td>
+        <td> 
+          <div class="row-actions">
+            <button class="row-btn" onclick="openModal('${event.id}')">View</button>
+            <button class="row-btn approve" onclick="quickApprove('${event.id}')">✓ Approve</button>
+            <button class="row-btn reject" onclick="quickReject('${event.id}')">✕ Reject</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+// approve event
+window.quickApprove = async function(eventId) {
+  const { error } = await supabase
+    .from("events")
+    .update({ status: "approved" })
+    .eq("id", eventId);
+  if (error) {
+    console.error(error);
+    return;
+  }
+  
+  loadAll();
+};
+//reject event
+window.quickReject = async function(eventId) {
+  const { error } = await supabase
+    .from("events")
+    .update({ status: "rejected" })
+    .eq("id", eventId);
+  if (error) {
+    console.error(error);
+    return;
+  }
+  
+  loadAll();
+};
     
