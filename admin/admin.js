@@ -4,7 +4,7 @@
 //approve reject buttons is the main focus on functionlity -- make those work and connect it with being displayed on the campusconnect websiet (ill help!!)
 // ill add a notification feature on campusconnect so we need to deliver that notification and get back here when a new event is added in the pending/waiting approval queue somehow - through supaabse user and admin ids most likely -- whatever the easiset way is 
 
-import { supabase } from "../services/supabase.js";
+import { supabase } from "../scripts/config/supabase.js";
 
 let currentEventId = null;
 
@@ -38,17 +38,22 @@ window.showPanel = function(panel, element) {
 // load events from supabase
 window.loadALL = async function () {
   
-  const ( data, error } = await supabase
+  const { data, error } = await supabase
          .from ("events")
          .select("*");
 
   if (error) {
-    console.error(error);
+    console.error("Supabase error: ", error);
     return;
   }
 
-  populatePending(data);
-  populateAll(data);
+  if (data) {
+    populatePending(data);
+    // Ensure this function exists or comment it out if not yet built
+    if (typeof populateAll === "function") {
+        populateAll(data);
+    }
+  }
 };
 
 // populate table
