@@ -34,8 +34,7 @@ body{
     flex-direction: column;
     padding: 16px 10px;
     gap: 2px;
-    border-right: 1px solid #ddd;
-    font-family: "Manrope", sans-serif;
+    font-family: var(--text-font);
     box-sizing: border-box;
     position: fixed;
     left: 0;
@@ -54,7 +53,7 @@ body{
     border-radius: 12px;
     
   }
-   
+  
   .logo-text {
     display: flex;
     flex-direction: column;
@@ -63,7 +62,7 @@ body{
    
   .logo-text strong {
     font-family: var(--subheader-font);
-    font-size: 14px;
+    font-size: 0.9rem;
     font-weight: 700;
     color: var(--black);
     letter-spacing: -0.01em;
@@ -71,8 +70,8 @@ body{
    
   .logo-text span {
     font-family: var(--subheader-font);
-    font-size: 10.5px;
-    color: #666;
+    font-size: 0.875rem;
+    color: var(--dark-grey);
     font-weight: 400;
     margin-top: 2px;
   }
@@ -94,7 +93,7 @@ body{
     gap: 12px; 
     padding: 9px 12px;
     border-radius: 12px;
-    font-size: 13.5px;
+    font-size: 0.9rem;
     font-weight: 500;
     color: var(--dark-grey);
     cursor: pointer;
@@ -119,13 +118,13 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 20px;
-    height: 20px;
-    padding: 0 6px;
-    border-radius: 99px;
-    font-size: 11px;
-    background: #E0E0E0; 
-    color: #666;
+    width: 14px;
+    height: 14px;
+    padding: 5px 6px;
+    border-radius: 25px;
+    font-size: 0.8rem;
+    background: var(--light-grey); 
+    color: var(--dark-grey);
   }
 
   .sidebar-bottom {
@@ -142,7 +141,7 @@ body{
     background: #ffbdb73e;
     color: var(--primary-accent);
     font-family: var(--subheader-font);
-    font-size: 13px;
+    font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
     display: flex;
@@ -179,6 +178,7 @@ body{
     background-color: var(--white);
     margin-top: 10px;
     border-radius: 12px;
+    margin-bottom: 15px;
   }
    
   /*  Topbar  */
@@ -213,7 +213,7 @@ body{
     border: 1px solid var(--light-grey);
     border-radius: 10px;
     padding: 9px 16px;
-    font-size: 13.5px;
+    font-size: 0.9rem;
     color: var(--dark-grey);
     width: 220px;
   }
@@ -223,7 +223,7 @@ body{
     outline: none;
     background: transparent;
     font-family: var(--text-font);
-    font-size: 13px;
+    font-size: 0.9rem;
     color: var(--dark-grey);
     width: 100%;
   }
@@ -236,7 +236,7 @@ body{
     border-radius: 10px;
     border: 1px solid var(--light-grey);
     background: var(--white);
-    font-size: 16px;
+    font-size: 0.975rem;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -252,7 +252,7 @@ body{
     border: 1px solid var(--light-grey);
     background: var(--white);
     font-family: var(--text-font);
-    font-size: 13px;
+    font-size: 0.875rem;
     font-weight: 550;
     color: var(--dark-grey);
     cursor: pointer;
@@ -267,7 +267,7 @@ body{
     border: none;
     background: var(--black);
     font-family: var(--subheader-font);
-    font-size: 13px;
+    font-size: 0.875rem;
     font-weight: 550;
     color: var(--white);
     cursor: pointer;
@@ -278,18 +278,17 @@ body{
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: #000;
-    color: #fff;
+    background: var(--black);
+    color: var(--white);
     font-family: "Inter", sans-serif;
-    font-size: 13px;
+    font-size: 0.9rem;
     font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
   }
-   
-  /* Content */
+  
   .content {
     padding: 0 40px 40px;
     flex: 1;
@@ -329,7 +328,7 @@ body{
     align-items: center;
     justify-content: center;
     margin-bottom: 30px;
-    font-size: 22px;
+    font-size: 1.1rem;
   }
    
   .stat-card-icon img {
@@ -357,18 +356,14 @@ body{
     text-align: center;
   }
    
-  .stat-delta { font-size: 11.5px; font-weight: 600; }
-  .delta-up   { color: #22c55e; }
-  .delta-warn { color: #f59e0b; }
-  .delta-down { color: #ef4444; }
-   
-  /* ── Table card ────────────────────────────────────────── */
+  /* Table card */
   .table-card {
-    background: #fff;
-    border: 1px solid #f0f0f0;
+    background: var(--white);
+    border: 1px solid var(--primary-grey);
     border-radius: 20px;
     overflow: hidden;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
+    margin-top: 20px;
   }
    
   .table-header {
@@ -376,14 +371,14 @@ body{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #f8f8f8;
+    border-bottom: 1px solid var(--primary-grey);
   }
    
   .table-title {
-    font-family: "Fraunces", serif;
-    font-size: 18px;
+    font-family: var(--subheader-font);
+    font-size: 1rem;
     font-weight: 700;
-    color: #000;
+    color: var(--black);
     letter-spacing: -0.01em;
   }
    
@@ -396,26 +391,26 @@ body{
   .ctrl-btn {
     padding: 7px 13px;
     border-radius: 8px;
-    border: 1px solid #e0e0e0;
-    background: #fff;
-    font-family: "Manrope", sans-serif;
-    font-size: 12.5px;
+    border: 1px solid var(--seconday-grey);
+    background: var(--white);
+    font-family: var(--text-font);
+    font-size: 0.8rem;
     font-weight: 500;
-    color: #555;
+    color: var(--dark-grey);
     cursor: pointer;
     transition: background 0.15s;
   }
    
-  .ctrl-btn:hover { background: #f5f5f5; }
+  .ctrl-btn:hover { background: var(--seconday-grey); }
    
   .ctrl-select {
     padding: 7px 10px;
     border-radius: 8px;
-    border: 1px solid #e0e0e0;
-    background: #fff;
-    font-family: "Manrope", sans-serif;
-    font-size: 12.5px;
-    color: #555;
+    border: 1px solid var(--seconday-grey);
+    background: var(--white);
+    font-family: var(--text-font);
+    font-size: 0.8rem;
+    color: var(--dark-grey);
     outline: none;
     cursor: pointer;
   }
@@ -424,85 +419,85 @@ body{
     display: flex;
     align-items: center;
     gap: 7px;
-    background: #f7f7f7;
-    border: 1px solid #e9e9e9;
+    background: var(--white);
+    border: 1px solid var(--seconday-grey);
     border-radius: 10px;
     padding: 7px 14px;
-    font-size: 13px;
-    color: #aaa;
+    font-size: 0.875rem;
+    color: var(--dark-grey);
   }
    
   .search-ctrl input {
     border: none;
     background: transparent;
     outline: none;
-    font-family: "Manrope", sans-serif;
-    font-size: 13px;
-    color: #333;
+    font-family: var(--subheader-font);
+    font-size: 0.875rem;
+    color: var(--black);
     width: 160px;
   }
    
-  .search-ctrl input::placeholder { color: #bbb; }
+  .search-ctrl input::placeholder { color: var(--dark-grey); }
    
-  /* ── Table ─────────────────────────────────────────────── */
+  /* Table */
   .table-scroll-wrap { overflow-x: auto; }
    
   table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    font-family: "Manrope", sans-serif;
+    font-family: var(--text-font);
   }
    
   th {
-    background: #fafafa;
+    background: var(--primary-grey);
     padding: 12px 24px;
-    font-family: "Inter", sans-serif;
-    font-size: 11px;
+    font-family: var(--subheader-font);
+    font-size: 0.7rem;
     font-weight: 600;
-    color: #aaa;
+    color: var(--dark-grey);
     text-transform: uppercase;
     letter-spacing: 0.06em;
     text-align: left;
     white-space: nowrap;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--seconday-grey);
   }
    
   td {
     padding: 15px 24px;
-    font-size: 13.5px;
-    color: #333;
-    border-bottom: 1px solid #f8f8f8;
+    font-size: 0.9rem;
+    color: var(--dark-grey);
+    border-bottom: 1px solid var(--seconday-grey);
     vertical-align: middle;
   }
    
   tbody tr:last-child td { border-bottom: none; }
   tbody tr:hover { background: #fafafa; }
    
-  .cell-title { font-weight: 600; color: #111; font-size: 13.5px; margin-bottom: 2px; }
-  .cell-sub   { font-size: 11.5px; color: #aaa; }
+  .cell-title { font-weight: 600; color: var(--black); font-size: 0.975rem; margin-bottom: 2px; width: 170px;}
+  .cell-sub   { font-size: 0.775rem; color: var(--dark-grey); }
    
-  /* ── Badges ────────────────────────────────────────────── */
+  /* Badges */
   .badge {
     display: inline-flex;
     align-items: center;
     padding: 4px 12px;
     border-radius: 8px;
-    font-size: 12px;
+    font-size: 0.825rem;
     font-weight: 600;
-    font-family: "Inter", sans-serif;
+    font-family: var(--subheader-font);
     white-space: nowrap;
   }
    
-  .badge-free     { background: #f0fdf4; color: #16a34a; }
-  .badge-paid     { background: #fff7ed; color: #c2410c; }
+  .badge-free     { background: var(--seconday-grey); color: var(--dark-grey); }
+  .badge-paid     { background: #ffbdb73e; color: var(--primary-accent); }
   .badge-pending  { background: #fff4ee; color: #ea580c; }
   .badge-approved { background: #f0fdf4; color: #15803d; }
   .badge-rejected { background: #fef2f2; color: #dc2626; }
   .badge-active   { background: #f0fdf4; color: #15803d; }
   .badge-inactive { background: #f5f5f5; color: #888; }
    
-  /* ── Row actions ───────────────────────────────────────── */
+  /* Row actions */
   .row-actions {
     display: flex;
     align-items: center;
@@ -512,60 +507,47 @@ body{
   .row-btn {
     padding: 6px 13px;
     border-radius: 8px;
-    border: 1px solid #e0e0e0;
-    background: #fff;
-    font-family: "Manrope", sans-serif;
-    font-size: 12px;
+    border: 1px solid var(--seconday-grey);
+    background: var(--white);
+    font-family: var(--text-font);
+    font-size: 0.8rem;
     font-weight: 600;
-    color: #444;
+    color: var(--dark-grey);
     cursor: pointer;
     transition: background 0.15s, border-color 0.15s;
     white-space: nowrap;
   }
    
-  .row-btn:hover { background: #f5f5f5; }
-   
   .row-btn.approve {
-    background: #ff8a80;
-    color: #fff;
-    border-color: #ff8a80;
+    background: var(--primary-accent);
+    color: var(--white);
+    border-color: var(--primary-accent);
   }
    
-  .row-btn.approve:hover {
-    background: #ff6b5e;
-    border-color: #ff6b5e;
-  }
-   
-  .row-btn.reject:hover {
-    background: #fef2f2;
-    border-color: #fca5a5;
-    color: #dc2626;
-  }
-   
-  /* ── Attendance bar ────────────────────────────────────── */
+  /* Attendance bar */
   .att-wrap  { display: flex; align-items: center; gap: 8px; }
    
   .att-bar {
     flex: 1;
     height: 6px;
-    background: #f0f0f0;
+    background: var(--primary-grey);
     border-radius: 99px;
     overflow: hidden;
     min-width: 60px;
   }
    
-  .att-fill       { height: 100%; background: #ff8a80; border-radius: 99px; }
+  .att-fill       { height: 100%; background: var(--primary-accent); border-radius: 99px; }
   .att-fill.high  { background: #f59e0b; }
   .att-fill.full  { background: #22c55e; }
    
   .att-label {
     font-size: 12px;
-    color: #888;
+    color: var(--dark-grey);
     white-space: nowrap;
-    font-family: "Inter", sans-serif;
+    font-family: var(--subheader-font);
   }
    
-  /* ── Pagination ────────────────────────────────────────── */
+  /* Pagination */
   .pagination {
     display: flex;
     align-items: center;
@@ -573,8 +555,8 @@ body{
     padding: 14px 24px;
     border-top: 1px solid #f0f0f0;
     font-size: 12.5px;
-    color: #aaa;
-    font-family: "Inter", sans-serif;
+    color: var(--dark-grey);
+    font-family: var(--subheader-font);
   }
    
   .page-btns { display: flex; gap: 4px; }
@@ -583,27 +565,26 @@ body{
     width: 30px;
     height: 30px;
     border-radius: 8px;
-    border: 1px solid #e0e0e0;
-    background: #fff;
-    font-size: 13px;
-    color: #555;
+    border: 1px solid var(--seconday-grey);
+    background: var(--white);
+    font-size: 0.8rem;
+    color: var(--dark-grey);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: "Inter", sans-serif;
+    font-family: var(--subheader-font);
     transition: background 0.15s;
   }
+
+  .page-btn.active { background: var(--black); color: var(--white); border-color: var(--black); }
    
-  .page-btn:hover  { background: #f5f5f5; }
-  .page-btn.active { background: #000; color: #fff; border-color: #000; }
-   
-  /* ── General buttons ───────────────────────────────────── */
+  /* General buttons */
   .btn {
     padding: 8px 16px;
     border-radius: 9px;
-    font-family: "Manrope", sans-serif;
-    font-size: 13px;
+    font-family: var(--text-font);
+    font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
     border: none;
@@ -615,9 +596,7 @@ body{
   .btn-outline        { background: transparent; color: #333; border: 1px solid #ddd; }
   .btn-outline:hover  { background: #f5f5f5; }
    
-  /* ============================================================
-     MODALS
-     ============================================================ */
+  /* MODALS */
    
   .modal-overlay {
     display: none;
