@@ -12,7 +12,6 @@ const categoriesDropdown = document.getElementById("categoriesDropdown");
 const priceDropdown = document.getElementById("priceDropdown");
 const dateDropdown = document.getElementById("dateDropdown");
 const dateBtn = document.getElementById('dateBtn');
-const eventCards = document.querySelectorAll(".event-card");
 
 let eventCardsArray = [];
 
@@ -87,7 +86,7 @@ if (categoriesDropdown) {
             const selectedItem = option.textContent.trim();
             categoriesBtn.textContent = selectedItem;
             
-            eventCards.forEach(card => {
+            eventCardsArray.forEach(card => {
                 const eventTypeBtn = card.querySelector('.event-type');
                 const eventType = eventTypeBtn.textContent.trim();
 
@@ -113,7 +112,7 @@ if (priceDropdown) {
         option.addEventListener("click", () => {
             const filter = option.dataset.filter;
             priceBtn.textContent = `${option.textContent}`;
-            eventCards.forEach(card => {
+            eventCardsArray.forEach(card => {
                 const cardPrice = card.querySelector(".price");
                 const priceText = cardPrice.textContent.trim().toLowerCase();
                 
@@ -138,7 +137,7 @@ if (dateDropdown) {
         const dayInput = document.getElementById('dayInput').value.trim();
         const yearInput = document.getElementById('yearInput').value.trim();
         
-        eventCards.forEach(card => {
+        eventCardsArray.forEach(card => {
             const month = card.querySelector('.month').textContent;
             const day = card.querySelector('.day').textContent;
             const year = card.querySelector('.year').textContent;
@@ -163,7 +162,7 @@ const searchInput = document.querySelector('.form-control');
 if (searchInput) {
     searchInput.addEventListener('input', () => {
         const searchTerm = searchInput.value.toLowerCase();
-        eventCards.forEach(card => {
+        eventCardsArray.forEach(card => {
             const title = card.querySelector('.event-title').textContent.toLowerCase();
             card.classList.remove('hidden');
             if (!title.includes(searchTerm)) {
