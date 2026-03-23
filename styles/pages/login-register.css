@@ -219,7 +219,15 @@ main{
     text-align: center;
     transition: all 0.3s ease;
     background: var(--white);
+    /* display: flex;
+    flex-direction: row; */
 }
+
+/* .role-card-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+} */
 
 .role-option input[type="radio"]:checked + .role-card {
     border-color: grey;

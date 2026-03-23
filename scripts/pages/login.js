@@ -19,28 +19,48 @@ form?.addEventListener('submit', async (e) => {
     try {
         console.log('Attempting login for:', email);
 
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email,
-            password
-        });
-
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
 
-        console.log('Login successful!');
-        console.log('User:', data.user.email);
-        console.log('User ID:', data.user.id);
+        console.log('Login successful! User:', data.user.email);
 
-        showModal(
-            'Welcome back to Campus Connect!',
-            'Start exploring to find more events!',
-            'success',
-            {
-                autoClose: 3000,
-                onClose: () => {
-                    window.location.href = '/pages/profile.html';
+        // Fetch role from database — don't trust the radio button
+        const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', data.user.id)
+            .single();
+
+        if (profileError) throw profileError;
+
+        const role = profile?.role;
+        console.log('Role from DB:', role);
+
+        if (role === 'admin') {
+            showModal(
+                'Welcome back, Admin!',
+                'You can now manage events and view stats!',
+                'success',
+                {
+                    autoClose: 3000,
+                    onClose: () => {
+                        window.location.href = '/admin/index.html';
+                    }
                 }
-            }
-        )
+            );
+        } else {
+            showModal(
+                'Welcome back to Campus Connect!',
+                'Start exploring to find more events!',
+                'success',
+                {
+                    autoClose: 3000,
+                    onClose: () => {
+                        window.location.href = '/pages/profile.html';
+                    }
+                }
+            );
+        }
 
     } catch (error) {
         console.error('Login error:', error.message);
