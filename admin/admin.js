@@ -82,29 +82,63 @@ function populatePending(events) {
   });
 }
 
-// approve event
+//aprove events with notification
 window.quickApprove = async function (eventId) {
+  // ✅ fetch event first to get student id and title
+  const { data: event, error: fetchError } = await supabase
+    .from("events")
+    .select("title, org_id")
+    .eq("id", eventId)
+    .single();
+
+  if (fetchError) { console.error(fetchError); return; }
+
+  // update status
   const { error } = await supabase
     .from("events")
     .update({ status: "approved" })
     .eq("id", eventId);
-  if (error) {
-    console.error(error);
-    return;
-  }
+
+  if (error) { console.error(error); return; }
+
+  //send notification to student
+  await supabase.from("notifications").insert({
+    user_id: event.org_id,
+    event_id: eventId,
+    message: `Your event "${event.title}" was approved! Check it out on the events page.`,
+    is_read: false,
+  });
 
   loadAll();
 };
-//reject event
+
 window.quickReject = async function (eventId) {
+  //ask for rejection reason
+  const reason = prompt("Enter rejection reason:");
+  if (!reason) return;
+
+  const { data: event, error: fetchError } = await supabase
+    .from("events")
+    .select("title, org_id")
+    .eq("id", eventId)
+    .single();
+
+  if (fetchError) { console.error(fetchError); return; }
+
   const { error } = await supabase
     .from("events")
-    .update({ status: "rejected" })
+    .update({ status: "rejected", rejection_reason: reason })
     .eq("id", eventId);
-  if (error) {
-    console.error(error);
-    return;
-  }
+
+  if (error) { console.error(error); return; }
+
+  //send notification to student
+  await supabase.from("notifications").insert({
+    user_id: event.org_id,
+    event_id: eventId,
+    message: `Your event "${event.title}" was not approved. Reason: ${reason}. Please try again.`,
+    is_read: false,
+  });
 
   loadAll();
 };

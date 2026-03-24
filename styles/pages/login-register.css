@@ -394,6 +394,7 @@ textarea{
     background-color: transparent;
     color: var(--black);
     border: 1px solid var(--black);
+    font-family: var(--text-font);
     border-radius: 12px;
     padding: 10px 15px;
     font-size: 0.9rem;

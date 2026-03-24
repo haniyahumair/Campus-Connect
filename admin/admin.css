@@ -677,7 +677,6 @@ tbody tr:hover {
 }
 
 /* MODALS */
-
 .modal-overlay {
   display: none;
   position: fixed;
@@ -949,10 +948,7 @@ tbody tr:hover {
   background: #f5f5f5;
 }
 
-/* ============================================================
-     AI PANEL
-     ============================================================ */
-
+/* AI Panel */
 .overlay {
   display: none;
   position: fixed;
