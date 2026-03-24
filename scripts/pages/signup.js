@@ -6,6 +6,8 @@ async function uploadAvatar(file) {
         const fileExt = file.name.split('.').pop()
         const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`
 
+        console.log('Uploading file:', fileName) 
+
         const { data, error } = await supabase.storage
             .from('avatars')
             .upload(fileName, file, {
@@ -13,13 +15,15 @@ async function uploadAvatar(file) {
                 upsert: false
             })
 
+        console.log('Upload result:', data, error)
+
         if (error) throw error
 
         const { data: { publicUrl } } = supabase.storage
             .from('avatars')
             .getPublicUrl(fileName)
-        
-        console.log('Avatar URL:', publicUrl) 
+
+        console.log('Public URL:', publicUrl) 
         return publicUrl
 
     } catch (error) {

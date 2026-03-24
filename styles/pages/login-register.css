@@ -390,7 +390,7 @@ main{
     font-size: 0.9rem;
 }
 
-.student-only textarea{
+textarea{
     background-color: transparent;
     color: var(--black);
     border: 1px solid var(--black);

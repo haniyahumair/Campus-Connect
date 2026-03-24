@@ -88,18 +88,19 @@ async function loadCreatedEvents() {
     .select("*")
     .eq("org_id", user.id);
 
+  const container = document.getElementById("createdEventsContainer"); // ← move to top
+
   if (error || !events || events.length === 0) {
     container.innerHTML = `
-            <div class="empty-state">
-                <p>😔 Nothing to see here!</p>
-                <p>You haven't created for any events yet.</p>
-                <a href="/pages/create.html" class="btn btn-dark">Create Events</a>
+            <div class="empty-state" style="text-align: center; padding: 40px; background: #f9f9f9; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'Inter', 'sans-serif';">
+                <h3>Nothing to see here! 😔</h3>
+                <p style="font-size: 0.875rem;">You haven't created any events yet.</p>
+                <a href="/pages/create.html" class="btn btn-dark" style="text-decoration: none; color: black; margin-top: 15px; border: 2px solid #FF8A80; padding: 12px 15px; border-radius: 35px; font-size: 0.875rem">Create Events</a>
             </div>
         `;
     return;
   }
 
-  const container = document.getElementById("createdEventsContainer");
   container.innerHTML = "";
   events.forEach((event) => {
     const date = new Date(event.date);
@@ -123,6 +124,8 @@ async function loadCreatedEvents() {
     container.innerHTML += createEventCard(mappedEvent);
   });
 }
+
+//empty registrated events logic here
 
 async function loadUpcomingEvents() {
   const {

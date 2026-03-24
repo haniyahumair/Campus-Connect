@@ -44,7 +44,7 @@
     </div>
 
     <div class="sidebar-bottom">
-      <button class="ai-sidebar-btn" onclick="toggleAI()">✦ AI Assistant</button>
+      <button class="ai-sidebar-btn">✦ AI Assistant</button>
     </div>
   </aside>
 
@@ -63,7 +63,7 @@
         </div>
         <button class="topbar-icon-btn" title="Notifications">🔔</button>
         <button class="refresh-btn" onclick="loadAll()">Refresh</button>
-        <button class="ai-top-btn" onclick="toggleAI()">Ask AI</button>
+        <button class="ai-top-btn">Ask AI</button>
         <div class="avatar">A</div>
       </div>
     </header>
@@ -587,10 +587,8 @@
   <!-- /rejectModal -->
 
 
-  <!-- ================================================
-       AI CHAT PANEL
-  ================================================ -->
-  <div class="overlay" id="overlay" onclick="toggleAI()"></div>
+<!-- AI CHAT PANEL -->
+  <div class="overlay" id="overlay"></div>
 
   <div class="ai-panel" id="ai-panel">
 
@@ -602,10 +600,10 @@
           <div class="ai-subtitle">Powered by Claude</div>
         </div>
       </div>
-      <button class="ai-close" onclick="toggleAI()">✕</button>
+      <button class="ai-close">✕</button>
     </div>
 
-    <div class="ai-msgs" id="ai-msgs">
+    <div class="ai-msgs" id="aiMsg">
       <div class="msg msg-ai">
         Hey! I'm your CampusConnect admin assistant. Ask me about pending events,
         attendance trends, or anything in your dashboard.
@@ -621,7 +619,7 @@
 
     <div class="ai-input-row">
       <input class="ai-input" type="text" placeholder="Ask anything..." id="ai-input" />
-      <button class="ai-send-btn" onclick="sendAI()">➤</button>
+      <button class="ai-send-btn">➤</button>
     </div>
 
   </div>
@@ -629,6 +627,7 @@
 
 
   <script type="module" src="admin.js"></script>
+  <script type="module" src="ai.js"></script>
 
 </body>
 </html>

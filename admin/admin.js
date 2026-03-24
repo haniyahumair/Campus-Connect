@@ -1,5 +1,5 @@
 import { supabase } from "../scripts/config/supabase.js";
-
+import { initChatbot } from "./ai.js";
 let currentEventId = null;
 async function initAdminPage() {
   const { data: { user } } = await supabase.auth.getUser()
@@ -52,7 +52,6 @@ window.showPanel = function (panel, element) {
     document.getElementById("page-title").textContent = "Stats & Attendance";
   }
 };
-
 
 // populate table
 function populatePending(events) {
@@ -109,3 +108,39 @@ window.quickReject = async function (eventId) {
 
   loadAll();
 };
+
+// Initialize the chatbot
+initChatbot();
+
+
+// AI chatbot overlay view
+const chatBotSidebar = document.querySelector(".ai-sidebar-btn");
+const askAiBtn = document.querySelector(".ai-top-btn");
+const chatBotOverlay = document.getElementById("overlay");
+const closeAiBtn = document.querySelector(".ai-close");
+const aiChips = document.querySelectorAll(".ai-chips .chip");
+
+function toggleAI() {
+  const aiPanel = document.getElementById("ai-panel");
+  aiPanel.classList.toggle("open");
+  chatBotOverlay.classList.toggle("open");
+
+  closeAiBtn.style.display = aiPanel.classList.contains("open") ? "block" : "none";
+}
+
+// Event listeners to toggle the AI panel
+chatBotSidebar.addEventListener("click", toggleAI);
+askAiBtn.addEventListener("click", toggleAI);
+closeAiBtn.addEventListener("click", toggleAI);
+chatBotOverlay.addEventListener("click", toggleAI);
+
+// Add event listeners for AI chips
+aiChips.forEach((chip) => {
+  chip.addEventListener("click", () => {
+    const chipText = chip.textContent.trim();
+    document.getElementById("ai-input").value = chipText;
+    sendAI(); // Trigger the sendAI function
+  });
+});
+
+console.log(chatBotSidebar, askAiBtn, closeAiBtn);
