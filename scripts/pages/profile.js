@@ -3,6 +3,7 @@ import { createNavbar } from "../components/navbarComponent.js";
 import { createFooter } from "../components/footerComponent.js";
 import { createEventCard } from "../components/eventCardsComponents.js";
 import { showModal } from "../utils/modal.js";
+import { getWishlist, toggleWishlist } from "../services/wishlist.js";
 
 document.querySelector("header").innerHTML = createNavbar();
 document.querySelector("footer").innerHTML = createFooter();
@@ -11,22 +12,34 @@ document.addEventListener("DOMContentLoaded", () => {
   loadUserProfile();
   loadCreatedEvents();
   loadUpcomingEvents();
+  loadSavedEvents();
 });
 
-async function loadUserProfile() {
-  showModal(
-    "Loading...",
-    "Please wait while we load your profile.",
-    "loading",
-    {
-      showButton: false,
-    }
-  );
+async function attachWishlistHandlers(container, user, savedEventIds, onToggle) {
+  container.querySelectorAll(".event-card").forEach(card => {
+    const eventId = card.querySelector(".viewDetailBtn").dataset.id;
+    const heartIcon = card.querySelector(".save-event img");
 
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
+    if (savedEventIds.has(String(eventId))) {
+      heartIcon.src = "/assets/Icons/Heart filled peach.svg";
+    }
+
+    card.querySelector(".save-event").addEventListener("click", async (e) => {
+      e.stopPropagation();
+      console.log(`Save button clicked — event ID: ${eventId}, user: ${user?.id ?? "not logged in"}`);
+      await toggleWishlist(user, eventId, heartIcon);
+      console.log(`toggleWishlist completed for event ID: ${eventId}`);
+      if (onToggle) onToggle();
+    });
+  });
+}
+
+async function loadUserProfile() {
+  showModal("Loading...", "Please wait while we load your profile.", "loading", {
+    showButton: false,
+  });
+
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
 
   if (!user || authError) {
     alert("You must be logged in to view your profile.");
@@ -43,7 +56,7 @@ async function loadUserProfile() {
 
     if (error) throw error;
 
-    if (profile?.role === "admin") {
+    if (profile?.is_admin) {
       window.location.href = "/admin/index.html";
       return;
     }
@@ -51,56 +64,47 @@ async function loadUserProfile() {
     document.getElementById("profileName").textContent = profile.full_name;
     document.getElementById("profileEmail").textContent = profile.email;
     document.getElementById("profileRole").textContent = `🎓 ${profile.role}`;
-    document.getElementById(
-      "university"
-    ).textContent = `🏫 ${profile.university}`;
-    document.getElementById(
-      "studentId"
-    ).textContent = `🆔 ${profile.student_id}`;
+    document.getElementById("university").textContent = `🏫 ${profile.university}`;
+    document.getElementById("studentId").textContent = `🆔 ${profile.student_id}`;
     document.getElementById("major").textContent = `📚 ${profile.major}`;
-    document.getElementById(
-      "yearOfStudy"
-    ).textContent = `📅 Year ${profile.year_of_study}`;
-    document.getElementById("bioText").textContent =
-      profile.bio || "No bio available.";
+    document.getElementById("yearOfStudy").textContent = `📅 Year ${profile.year_of_study}`;
+    document.getElementById("bioText").textContent = profile.bio || "No bio available.";
+
     const avatar = document.getElementById("profileAvatar");
-    avatar.src = profile.avatar_url || "/assets/Icons/user-Icon.svg";
-    avatar.onerror = () => {
-      avatar.src = "/assets/Icons/userIcon.svg"; // fallback icon
-    };
+    avatar.src = profile.avatar_url || "/assets/Icons/userIcon.svg";
+    avatar.onerror = () => { avatar.src = "/assets/Icons/userIcon.svg"; };
 
     closeModal();
     document.getElementById("profileContent").style.display = "block";
-    document.querySelector(".upcoming-events-header").style.display = "block";
-    document.querySelector(".my-events-header").style.display = "block";
+
   } catch (error) {
     console.error("Error loading profile:", error);
     alert("Failed to load profile. Please try again later.");
   }
+
+
 }
 
 async function loadCreatedEvents() {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
   const { data: events, error } = await supabase
     .from("events")
     .select("*")
     .eq("org_id", user.id);
 
-  const container = document.getElementById("createdEventsContainer"); // ← move to top
+  const container = document.getElementById("createdEventsContainer");
 
   if (error || !events || events.length === 0) {
     container.innerHTML = `
-            <div class="empty-state" style="text-align: center; padding: 40px; background: #f9f9f9; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'Inter', 'sans-serif';">
-                <h3>Nothing to see here! 😔</h3>
-                <p style="font-size: 0.875rem;">You haven't created any events yet.</p>
-                <a href="/pages/create.html" class="btn btn-dark" style="text-decoration: none; color: black; margin-top: 15px; border: 2px solid #FF8A80; padding: 12px 15px; border-radius: 35px; font-size: 0.875rem">Create Events</a>
-            </div>
-        `;
+      <div class="empty-state" style="text-align:center;padding:40px;background:#f9f9f9;border-radius:8px;display:flex;flex-direction:column;align-items:center;font-family:'Inter',sans-serif;">
+        <h3>Nothing to see here!</h3>
+        <p style="font-size:0.875rem; font-family: var(--text-font);">You haven't created any events yet.</p>
+        <a href="/pages/create.html" style="text-decoration:none;color:black;margin-top:15px;border:2px solid #FF8A80;padding:12px 15px;border-radius:35px;font-size:0.875rem">Create Events</a>
+      </div>`;
     return;
   }
 
+  document.getElementById("createdCount").textContent = events.length;
   container.innerHTML = "";
   events.forEach((event) => {
     const date = new Date(event.date);
@@ -123,39 +127,34 @@ async function loadCreatedEvents() {
     };
     container.innerHTML += createEventCard(mappedEvent);
   });
+
+  const savedEvents = await getWishlist(user);
+  const savedEventIds = new Set(savedEvents.map(s => String(s.event_id)));
+  await attachWishlistHandlers(container, user, savedEventIds);
 }
 
-//empty registrated events logic here
-
 async function loadUpcomingEvents() {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const container = document.getElementById("upcomingEventsContainer");
+  const { data: { user } } = await supabase.auth.getUser();
   const { data: registrations, error } = await supabase
     .from("registration")
     .select("*, events(*)")
     .eq("user_id", user.id);
 
-  if (
-    error ||
-    !registrations ||
-    registrations.length === 0 ||
-    events.length === 0
-  ) {
+  if (error || !registrations || registrations.length === 0) {
     container.innerHTML = `
-            <div class="empty-state">
-                <p>😔 Nothing to see here!</p>
-                <p>You haven't registered for any events yet.</p>
-                <a href="/pages/events.html" class="btn btn-dark">Browse Events</a>
-            </div>
-        `;
+      <div class="empty-state" style="text-align:center;padding:40px;background:#f9f9f9;border-radius:8px;display:flex;flex-direction:column;align-items:center;font-family:'Inter',sans-serif;">
+        <h3>Nothing to see here!</h3>
+        <p style="font-size:0.875rem; font-family: var(--text-font);; ">You haven't registered for any events yet.</p>
+        <a href="/pages/events.html" style="text-decoration:none;color:black;margin-top:15px;border:2px solid #FF8A80;padding:12px 15px;border-radius:35px;font-size:0.875rem">Browse Events</a>
+      </div>`;
     return;
   }
 
-  const container = document.getElementById("upcomingEventsContainer");
+  document.getElementById("upcomingCount").textContent = registrations.length;
   container.innerHTML = "";
   registrations.forEach((reg) => {
-    const event = reg.events; // 👈 pull the joined event
+    const event = reg.events;
     const date = new Date(event.date);
     const mappedEvent = {
       id: event.id,
@@ -176,9 +175,60 @@ async function loadUpcomingEvents() {
     };
     container.innerHTML += createEventCard(mappedEvent);
   });
+
+  const savedEvents = await getWishlist(user);
+  const savedEventIds = new Set(savedEvents.map(s => String(s.event_id)));
+  await attachWishlistHandlers(container, user, savedEventIds);
 }
 
-//event details page
+async function loadSavedEvents() {
+  const container = document.getElementById("savedEventsContainer");
+  const { data: { user } } = await supabase.auth.getUser();
+  const { data: saved, error } = await supabase
+    .from("wishlist")
+    .select("*, events(*)")
+    .eq("user_id", user.id);
+
+  if (error || !saved || saved.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state" style="text-align:center;padding:40px;background:#f9f9f9;border-radius:8px;display:flex;flex-direction:column;align-items:center;font-family:'Inter',sans-serif;">
+        <h3>No saved events yet!</h3>
+        <p style="font-size:0.875rem; font-family: var(--text-font);">Browse events and hit the heart to save them here.</p>
+        <a href="/pages/events.html" style="text-decoration:none;color:black;margin-top:15px;border:2px solid #FF8A80;padding:12px 15px;border-radius:35px;font-size:0.875rem font-family:'Inter',sans-serif">Browse Events</a>
+      </div>`;
+    return;
+  }
+
+  document.getElementById("savedCount").textContent = saved.length;
+  container.innerHTML = "";
+  saved.forEach((row) => {
+    const event = row.events;
+    const date = new Date(event.date);
+    const mappedEvent = {
+      id: event.id,
+      title: event.title,
+      description: event.description,
+      location: event.location,
+      price: event.price ?? "Free",
+      image: event.img_url ?? event.image ?? "/assets/default-event.jpg",
+      month: date.toLocaleString("default", { month: "long" }),
+      day: date.getDate(),
+      year: date.getFullYear(),
+      start: event.start_time ?? event.start,
+      end: event.end_time ?? event.end,
+      attendees: event.current_registrations ?? 0,
+      capacity: event.max_capacity ?? 100,
+      type: event.category ?? event.type,
+      saveEvent: "/assets/Icons/Heart filled peach.svg",
+    };
+    container.innerHTML += createEventCard(mappedEvent);
+  });
+
+  // All events here are already saved — mark all as filled and reload tab on un-heart
+  const savedEventIds = new Set(saved.map(s => String(s.event_id)));
+  await attachWishlistHandlers(container, user, savedEventIds, () => loadSavedEvents());
+}
+
 document.addEventListener("click", (e) => {
   if (e.target.classList.contains("viewDetailBtn")) {
     const eventId = e.target.dataset.id;
@@ -186,14 +236,10 @@ document.addEventListener("click", (e) => {
   }
 });
 
-const signOutBtn = document.getElementById("signOutBtn");
-
-signOutBtn.addEventListener("click", async (e) => {
+document.getElementById("signOutBtn").addEventListener("click", async (e) => {
   e.preventDefault();
-
   try {
     const { error } = await supabase.auth.signOut();
-
     if (error) throw error;
     window.location.href = "/pages/login.html";
   } catch (error) {
@@ -201,3 +247,10 @@ signOutBtn.addEventListener("click", async (e) => {
     alert("Failed to sign out. Please try again.");
   }
 });
+
+window.switchTab = function(tab, el) {
+  document.querySelectorAll(".events-tab").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+  el.classList.add("active");
+  document.getElementById(`tab-${tab}`).classList.add("active");
+}

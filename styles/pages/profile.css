@@ -170,7 +170,7 @@ section{
 .bio-section {
     margin-top: 20px;
     padding-top: 20px;
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid var(--light-grey);
 }
 
 .bio-text {
@@ -178,50 +178,70 @@ section{
     line-height: 1.6;
     font-size: 0.9rem;
 }
-/*Upcoming events and my events styling*/
-.my-upcoming-events-container,
-.my-events-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 40px;
-}
 
-.my-upcoming-events-container .events-container,
-.my-events-container .events-container {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  overflow-x: auto;
-  padding-bottom: 15px;
-  scroll-snap-type: x mandatory;
-}
-
-/* prevent cards from shrinking */
-.my-upcoming-events-container .event-card,
-.my-events-container .event-card {
-  flex-shrink: 0;
-  scroll-snap-align: start;
-}
-
-/* hide default scrollbar on Firefox */
-.my-upcoming-events-container .events-container,
-.my-events-container .events-container {
-  scrollbar-width: thin;
-}
-
-/* style it on Chrome/Safari */
-.my-upcoming-events-container .events-container::-webkit-scrollbar,
-.my-events-container .events-container::-webkit-scrollbar {
-  height: 3px;
-}
-
-.my-upcoming-events-container .events-container::-webkit-scrollbar-track,
-.my-events-container .events-container::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.my-upcoming-events-container .events-container::-webkit-scrollbar-thumb,
-.my-events-container .events-container::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-}
+/* Event tabs container styling */
+.events-tabs-container {
+    margin-top: 40px;
+  }
+  
+  .events-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1.5px solid var(--seconday-grey);
+    margin-bottom: 1.5rem;
+  }
+  
+  .events-tab {
+    padding: 10px 24px;
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--dark-grey);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1.5px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--subheader-font);
+  }
+  
+  .events-tab:hover {
+    color: var(--black);
+  }
+  
+  .events-tab.active {
+    color: var(--primary-accent);
+    border-bottom: 2px solid var(--primary-accent);
+    font-weight: 600;
+  }
+  
+  .tab-count {
+    display: inline-block;
+    background: var(--seconday-grey);
+    color: var(--dark-grey);
+    font-size: 0.750rem;
+    padding: 1px 7px;
+    border-radius: 20px;
+    margin-left: 6px;
+    font-weight: 400;
+  }
+  
+  .events-tab.active .tab-count {
+    background: #ffbdb73e;
+    color: var(--primary-accent);
+  }
+  
+  .tab-panel {
+    display: none;
+  }
+  
+  .tab-panel.active {
+    display: block;
+  }
+  
+  .tab-panel .events-container {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    padding-bottom: 15px;
+  }

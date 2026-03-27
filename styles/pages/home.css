@@ -350,19 +350,19 @@ background-color: var(--black);
 
 /* Individual testimonial card */
 .testimonials-item {
-    background: white;
-    width: 500px;
-    height: auto;
-    border-radius: 15px;
-    padding: 1.8rem;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    background: var(--white);
+    width: 370px;
+    border-radius: 14px;
+    padding: 1.5rem;
+    border: 0.5px solid rgba(0,0,0,0.1);
+    border-top: 3px solid var(--primary-accent);
     text-align: left;
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .testimonials-item:hover {
     transform: translateY(-3px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
 }
 
 .info {
@@ -373,23 +373,24 @@ background-color: var(--black);
 }
 
 .student-avatar {
-    width: 55px;
-    height: 55px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    background: var(--primary-accent);
-    color: white;
+    background: var(--white);
+    color: var(--primary-accent);
+    border: 1.5px solid #e8c4bb;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
-    font-size: 1.2rem;
+    font-weight: 500;
+    font-size: 0.9rem;
     flex-shrink: 0;
 }
 
 .text-box h3 {
     margin: 0;
     font-size: 1.1rem;
-    color: black;
+    color: var(--black);
 }
 
 .text-box span {
@@ -400,12 +401,18 @@ background-color: var(--black);
 }
 
 .testimonials-item p {
-    color: black;
-    line-height: 1.6;
+    color: var(--dark-grey);
+    line-height: 1.65;
     font-style: italic;
-    margin: 1.2rem 0;
-    font-size: 0.95rem;
+    font-size: 0.875rem;
 }
+
+.t-divider {
+    height: 0.5px;
+    background: rgba(0,0,0,0.08);
+    margin: 1rem 0;
+}
+
 /* Animation */
 @keyframes slideHorizontal {
     0% {
@@ -428,13 +435,14 @@ background-color: var(--black);
 
 .testimonials-content::before {
     left: 0;
-    background: linear-gradient(to right, #f8f9fa, transparent);
+    background: linear-gradient(to right, #f7f7f7, transparent);
 }
 
 .testimonials-content::after {
     right: 0;
-    background: linear-gradient(to left, #f8f9fa, transparent);
+    background: linear-gradient(to left, #f7f7f7, transparent);
 }
+
 @media (max-width: 768px) {
     .testimonials-item {
         flex: 0 0 280px;

@@ -1,10 +1,6 @@
 import { supabase } from "../config/supabase.js";
 import { initNotifications } from "./notifications.js";
 
-/*async function getLoginStatus() {
-  const { data: { session } } = await supabase.auth.getSession();
-  return Boolean(session);
-}*/
 
 async function checkLoginStatus() {
   // retrieve user status from login/signup
@@ -46,9 +42,16 @@ async function checkLoginStatus() {
   // fetch data straight from supabase profile table
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name", "avatar_url")
+    .select("full_name", "avatar_url", "is_admin")
     .eq("id", session.user.id)
     .single();
+
+    //if user is admin, redir
+    if (profile?.is_admin) {
+      console.log("User is admin, redirecting to admin dashboard.");
+      window.location.href = "/admin/index.html";
+      return;
+    }
 
     const avatarImg = document.getElementById("userAvatar");
     if (avatarImg) {
@@ -58,13 +61,9 @@ async function checkLoginStatus() {
         const name = profile?.full_name || "User";
         avatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=ff8b80&color=fff&rounded=true&size=35`;
       }
-      avatarImg.style.display = "block"; // ✅ show only after src is set
+      avatarImg.style.display = "block";
     }
 
-  /*localStorage.setItem("authUser", JSON.stringify({
-    id: session.user.id,
-    name: profile.full_name
-  }));*/
   const viewDetailsBtn = document.querySelectorAll(".viewDetailBtn");
   const createEventBtn = document.querySelectorAll(".createEvent");
 

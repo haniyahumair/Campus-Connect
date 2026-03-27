@@ -2,11 +2,11 @@ import { supabase } from "../config/supabase.js";
 import { createNavbar } from "../components/navbarComponent.js";
 import { createFooter } from "../components/footerComponent.js";
 import { showModal } from "../utils/modal.js";
+import { getWishlist, toggleWishlist } from "./wishlist.js";
 
 document.querySelector('header').innerHTML = createNavbar();
 document.querySelector('footer').innerHTML = createFooter();
 
-// 👇 declare once, both functions use it
 const params = new URLSearchParams(window.location.search);
 const eventId = params.get("id");
 
@@ -31,6 +31,24 @@ async function loadEventDetails() {
     document.querySelector('.time-text').textContent = event.start_time;
     document.querySelector('.location-text').textContent = event.location;
     document.querySelector('.email-text').textContent = event.contact_details;
+
+    //wishlist
+    const { data: { user } } = await supabase.auth.getUser();
+    const heartIcon = document.querySelector('.details-pg img');
+    if (user) {
+        const savedEvents = await getWishlist(user);
+        const isSaved = savedEvents.some(e => e.event_id === event.id);
+        heartIcon.src = isSaved ? "/assets/Icons/Heart filled peach.svg" : "/assets/Icons/Heart outline peach.svg";
+        console.log(`Details page wishlist loaded — event ${event.id} is ${isSaved ? "saved" : "not saved"}`);
+    } else {
+        console.log("No user logged in — skipping wishlist pre-fill on details page");
+    }
+
+    document.querySelector('.save-event').addEventListener('click', async () => {
+        console.log(`Save button clicked — event ID: ${event.id}, user: ${user?.id ?? "not logged in"}`);
+        await toggleWishlist(user, event.id, heartIcon);
+        console.log(`toggleWishlist completed for event ID: ${event.id}`);
+    });
 }
 
 async function addToCart() {

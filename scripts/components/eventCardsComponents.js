@@ -5,9 +5,9 @@ export function createEventCard(event) {
                 <p class="price">💵 ${event.price}</p>
             </div>
 
-            <div class="save-event">
+            <button class="save-event">
                 <img src="${event.saveEvent}" class="before-heart-icon">
-            </div>
+            </button>
 
             <img src="${event.image}" class="img-fluid" />
             <div class="p-3">

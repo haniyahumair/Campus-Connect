@@ -2,6 +2,7 @@ import { createNavbar } from '../components/navbarComponent.js';
 import { createFooter } from '../components/footerComponent.js';
 import { supabase } from '../config/supabase.js'
 import { createEventCard } from '../components/eventCardsComponents.js';
+import { getWishlist, toggleWishlist } from '../services/wishlist.js';
 
 document.querySelector('header').innerHTML = createNavbar();
 document.querySelector('footer').innerHTML = createFooter();
@@ -18,53 +19,84 @@ let eventCardsArray = [];
 // load events from Supabase
 async function loadEvents() {
     const { data: events, error } = await supabase
-        .from("events")
-        .select("*");
-
-        console.log("Events data:", events); 
-        console.log("Error:", error);        
-    
+      .from("events")
+      .select("*");
+  
+    console.log("Events data:", events);
+    console.log("Error:", error);
+  
     if (error) {
-        console.error("Error loading events:", error);
-        return;
+      console.error("Error loading events:", error);
+      return;
     }
-    
+  
     const container = document.getElementById("eventCardsContainer");
     container.innerHTML = "";
-
+  
     events.forEach(event => {
-        const date = new Date(event.date)
-        const mappedEvent = {
-            id: event.id,
-            title: event.title,
-            description: event.description,
-            location: event.location,
-            price: event.price ?? "Free",
-            image: event.img_url ?? event.image ?? "/assets/default-event.jpg",
-            month: date.toLocaleString('default', { month: 'long' }),
-            day: date.getDate(),                                       
-            year: date.getFullYear(),                                  
-            start: event.start_time ?? event.start,
-            end: event.end_time ?? event.end,
-            attendees: event.current_registrations ?? 0,
-            capacity: event.max_capacity ?? 100,
-            type: event.category ?? event.type,
-            saveEvent: "/assets/Icons/Heart outline peach.svg" 
-        };
-        container.innerHTML += createEventCard(mappedEvent);
+      const date = new Date(event.date);
+      const mappedEvent = {
+        id: event.id,
+        title: event.title,
+        description: event.description,
+        location: event.location,
+        price: event.price ?? "Free",
+        image: event.img_url ?? event.image ?? "/assets/default-event.jpg",
+        month: date.toLocaleString('default', { month: 'long' }),
+        day: date.getDate(),
+        year: date.getFullYear(),
+        start: event.start_time ?? event.start,
+        end: event.end_time ?? event.end,
+        attendees: event.current_registrations ?? 0,
+        capacity: event.max_capacity ?? 100,
+        type: event.category ?? event.type,
+        saveEvent: "/assets/Icons/Heart outline peach.svg"
+      };
+      container.innerHTML += createEventCard(mappedEvent);
+    });
+  
+    eventCardsArray = document.querySelectorAll(".event-card");
+
+    // Wishlist: mark saved events and attach toggle handlers
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+        const savedEvents = await getWishlist(user);
+        const savedEventIds = new Set(savedEvents.map(s => String(s.event_id)));
+        console.log("Wishlist loaded. Saved event IDs:", [...savedEventIds]);
+
+        eventCardsArray.forEach(card => {
+            const eventId = card.querySelector(".viewDetailBtn").dataset.id;
+            const heartIcon = card.querySelector(".save-event img");
+            if (savedEventIds.has(String(eventId))) {
+                heartIcon.src = "/assets/Icons/Heart filled peach.svg";
+                console.log(`Event ${eventId} is in wishlist — heart filled`);
+            }
+        });
+    } else {
+        console.log("No user logged in — skipping wishlist pre-fill");
+    }
+
+    document.querySelectorAll(".save-event").forEach(btn => {
+        btn.addEventListener("click", async (e) => {
+            e.stopPropagation();
+            const card = btn.closest(".event-card");
+            const eventId = card.querySelector(".viewDetailBtn").dataset.id;
+            const heartIcon = btn.querySelector("img");
+            const { data: { user: currentUser } } = await supabase.auth.getUser();
+            console.log(`Save button clicked — event ID: ${eventId}, user: ${currentUser?.id ?? "not logged in"}`);
+            await toggleWishlist(currentUser, eventId, heartIcon);
+            console.log(`toggleWishlist completed for event ID: ${eventId}`);
+        });
     });
 
-    eventCardsArray = document.querySelectorAll(".event-card"); 
-}
-
-//event details page 
+// view event details
 document.addEventListener("click", (e) => {
     if (e.target.classList.contains("viewDetailBtn")) {
-        const eventId = e.target.dataset.id;
-        window.location.href = `/pages/details.html?id=${eventId}`; 
+      const eventId = e.target.dataset.id;
+      window.location.href = `/pages/details.html?id=${eventId}`;
     }
-});
-
+  });
+}
 // Toggle Dropdowns
 function toggleDropdown(button, dropdown) {
     const isVisible = dropdown.classList.contains("show");
@@ -177,4 +209,5 @@ document.addEventListener("click", (e) => {
         document.querySelectorAll(".dropdown-menu-custom").forEach(menu => menu.classList.remove("show"));
     }
 });
+
 document.addEventListener("DOMContentLoaded", loadEvents);

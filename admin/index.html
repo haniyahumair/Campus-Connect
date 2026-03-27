@@ -61,10 +61,27 @@
           <span>🔍</span>
           <input type="text" placeholder="Search events by name..." />
         </div>
-        <button class="topbar-icon-btn" title="Notifications">🔔</button>
-        <button class="refresh-btn" onclick="loadAll()">Refresh</button>
+        <button class="topbar-icon-btn" id="notificationBtn" title="Notifications">🔔</button>
+        <!-- notification dropdown -->
+        <div class="notif-dropdown" id="notifDropdown" style="display:none;">
+          <div class="notif-header">Notifications</div>
+          <div class="notif-list" id="notifList">
+            <p class="notif-empty">No notifications yet</p>
+          </div>
+        </div>
+
+        <button class="refresh-btn" id="refreshBtn">Refresh</button>
         <button class="ai-top-btn">Ask AI</button>
-        <div class="avatar">A</div>
+        <div class="avatar"></div>
+
+        <!-- avatar dropdwon -->
+        <div class="avatar-dropdown" id="avatarDropdown" style="display: none;">
+          <div class="dropdown-item">Profile</div>
+          <div class="dropdown-item">Settings</div>
+          <hr class="dropdown-divider" />
+          <div class="dropdown-item" id="logOutBtn">Logout</div>
+        </div>
+
       </div>
     </header>
 
@@ -116,7 +133,7 @@
             <h2 class="table-title">⌛ Awaiting Approval</h2>
             <div class="table-controls">
               <button class="ctrl-btn">⬇ Export</button>
-              <div class="search-ctrl">
+              <div class="search-ctrl" id="searchBarPending">
                 <span>🔍</span>
                 <input type="text" placeholder="Search pending events..." />
               </div>
@@ -226,7 +243,7 @@
                 <option value="approved">Approved</option>
                 <option value="rejected">Rejected</option>
               </select>
-              <div class="search-ctrl">
+              <div class="search-ctrl" id="searchBarAll">
                 <span>🔍</span>
                 <input type="text" id="all-search" placeholder="Search..." oninput="applyAllFilters()" />
               </div>

@@ -1,6 +1,8 @@
 import { supabase } from "../scripts/config/supabase.js";
 import { initChatbot } from "./ai.js";
+
 let currentEventId = null;
+
 async function initAdminPage() {
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -20,7 +22,7 @@ async function initAdminPage() {
       return
   }
 
-  loadAll()
+  // loadAll()
 }
 
 // sidebar functionality (panel switching)
@@ -53,6 +55,91 @@ window.showPanel = function (panel, element) {
   }
 };
 
+//notification dropdown
+const notificationBtn = document.getElementById("notificationBtn");
+const notificationDropdown = document.getElementById("notifDropdown");
+
+notificationBtn.addEventListener("click", () => {
+  notificationDropdown.style.display =
+    notificationDropdown.style.display === "block" ? "none" : "block";
+});
+
+window.addEventListener("click", (e) => {
+  if (
+    !notificationBtn.contains(e.target) &&
+    !notificationDropdown.contains(e.target)
+  ) {
+    notificationDropdown.style.display = "none";
+  }
+});
+
+//refresh button
+const refreshBtn = document.getElementById("refreshBtn");
+refreshBtn.addEventListener("click", () => {
+  // loadAll();
+  location.reload();
+});
+
+//avatar dropdown
+const avatarBtn = document.querySelector(".avatar");
+const avatarDropdown = document.getElementById("avatarDropdown");
+
+avatarBtn.addEventListener("click", () => {
+  avatarDropdown.style.display =
+    avatarDropdown.style.display === "block" ? "none" : "block";
+});
+
+window.addEventListener("click", (e) => {
+  if (!avatarBtn.contains(e.target) && !avatarDropdown.contains(e.target)) {
+    avatarDropdown.style.display = "none";
+  }
+});
+
+//avatar initial based on name from supabase
+async function setAvatarInitial() {
+  const { data: { user }, error } = await supabase.auth.getUser();
+  if (error) {
+    console.error("Error fetching user:", error);
+    return;
+  }
+  if (!user) {
+    console.error("No user found");
+    return;
+  }
+
+  if (user.is_admin === false) {
+    console.error("User is not an admin");
+    window.location.href = '/pages/login.html';
+    return;
+  }
+
+  const { data: profile, error: profileError } = await supabase
+    .from('profiles')
+    .select('full_name')
+    .eq('id', user.id)
+    .single();
+
+  if (profileError) {
+    console.error("Error fetching profile:", profileError);
+    return;
+  }
+
+  if (!profile?.full_name) {
+    console.error("Profile full_name not found.");
+    return;
+  }
+
+  const initial = profile.full_name.charAt(0).toUpperCase();
+  const avatarElement = document.querySelector(".avatar");
+  if (!avatarElement) {
+    console.error("Avatar element not found in the DOM.");
+    return;
+  }
+  avatarElement.textContent = initial;
+}
+
+setAvatarInitial();
+
 // populate table
 function populatePending(events) {
   const tbody = document.getElementById("pending-tbody");
@@ -82,9 +169,44 @@ function populatePending(events) {
   });
 }
 
+//search feature in pending table
+const searchBarPending = document.getElementById("searchBarPending").querySelector("input");
+
+searchBarPending.addEventListener("input", () => {
+  const query = searchBarPending.value.toLowerCase();
+  document.querySelectorAll("#pending-tbody tr").forEach((row) => {
+    const title = row.querySelector(".cell-title").textContent.toLowerCase();
+    const category = row.children[1].textContent.toLowerCase();
+    const location = row.children[3].textContent.toLowerCase();
+    if (title.includes(query) || category.includes(query) || location.includes(query)) {
+      row.style.display = "";
+    } else {
+      row.style.display = "none";
+    }
+  });
+});
+
+//search feature in all events table
+const searchBarAll = document.getElementById("searchBarAll").querySelector("input");
+
+searchBarAll.addEventListener("input", () => {
+  const query = searchBarAll.value.toLowerCase();
+  document.querySelectorAll("#all-tbody tr").forEach((row) => {
+    const title = row.querySelector(".cell-title").textContent.toLowerCase();
+    const category = row.children[1].textContent.toLowerCase();
+    const location = row.children[3].textContent.toLowerCase();
+    if (title.includes(query) || category.includes(query) || location.includes(query)) {
+      row.style.display = "";
+    } else {
+      row.style.display = "none";
+    }
+  });
+});
+
+
 //aprove events with notification
 window.quickApprove = async function (eventId) {
-  // ✅ fetch event first to get student id and title
+  // fetch event first to get student id and title
   const { data: event, error: fetchError } = await supabase
     .from("events")
     .select("title, org_id")
@@ -109,7 +231,7 @@ window.quickApprove = async function (eventId) {
     is_read: false,
   });
 
-  loadAll();
+  // loadAll();
 };
 
 window.quickReject = async function (eventId) {
@@ -140,7 +262,7 @@ window.quickReject = async function (eventId) {
     is_read: false,
   });
 
-  loadAll();
+  // loadAll();
 };
 
 // Initialize the chatbot
@@ -178,3 +300,17 @@ aiChips.forEach((chip) => {
 });
 
 console.log(chatBotSidebar, askAiBtn, closeAiBtn);
+
+//signout 
+const logOutBtn = document.getElementById("logOutBtn");
+
+logOutBtn.addEventListener("click", async () => {
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    console.error("Error signing out:", error);
+  } else {
+    window.location.href = '/pages/login.html';
+  }
+});
+
+initAdminPage();

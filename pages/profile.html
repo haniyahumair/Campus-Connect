@@ -76,21 +76,30 @@
             </div>
         </div>
 
-        <section class="my-upcoming-events-container">
-            <div class="upcoming-events-header" >
-             <h4 class="fw-bold mb-4" style="font-family: var(--subheader-font); font-size: 2rem;">My Upcoming Events</h4>
+        <div class="events-tabs-container">
+            <div class="events-tabs">
+              <button class="events-tab active" onclick="switchTab('upcoming', this)">
+                Upcoming <span class="tab-count" id="upcomingCount">0</span>
+              </button>
+              <button class="events-tab" onclick="switchTab('created', this)">
+                Created <span class="tab-count" id="createdCount">0</span>
+              </button>
+              <button class="events-tab" onclick="switchTab('saved', this)">
+                Saved <span class="tab-count" id="savedCount">0</span>
+              </button>
             </div>
-         
-             <div class="events-container" id="upcomingEventsContainer"></div>
-         </section>
-         
-         <section class="my-events-container">
-             <div class="my-events-header" >
-                 <h4 class="fw-bold mb-4" style="font-family: var(--subheader-font); font-size: 2rem;">My Created Events</h4>
-             </div>
-             
-             <div class="events-container" id="createdEventsContainer"></div>     
-         </section>
+          
+            <div class="tab-panel active" id="tab-upcoming">
+              <div class="events-container" id="upcomingEventsContainer"></div>
+            </div>
+            <div class="tab-panel" id="tab-created">
+              <div class="events-container" id="createdEventsContainer"></div>
+            </div>
+            <div class="tab-panel" id="tab-saved">
+              <div class="events-container" id="savedEventsContainer"></div>
+            </div>
+          </div>
+          
     </div>
 </section>
 
