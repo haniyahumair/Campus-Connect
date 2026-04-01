@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 let currentUserId = null;
 
 async function loadCart() {
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
     
     if (userError || !user) {
         console.warn("User not logged in");
@@ -31,18 +31,14 @@ async function loadCart() {
     const container = document.getElementById("cartContainer");
     container.innerHTML = '';
 
-    if (error || !cartItems || cartItems.length === 0) {
-        showModal(
-            'Failed to load Cart!',
-            'Please try again!.',
-            'error',
-            {
-                autoClose: 3000,
-                onClose: () => {
-                    window.location.href = '/pages/events.html'
-                }
-            }
-        )
+    if (error) {
+        console.error("Cart error:", error);
+        showModal('Failed to load Cart!', 'Please try again!', 'error');
+        return;
+    }
+    if (!cartItems || cartItems.length === 0) {
+        container.innerHTML = "<p>Your cart is empty </p>";
+        return;
     }
 
     function formatTime(time) {
@@ -56,6 +52,12 @@ async function loadCart() {
 
     cartItems.forEach(item => {
         const event = item.events;
+        
+        if (!event) {
+            console.warn("Missing event data:", item);
+            return;
+        }
+        
         const formattedDate = new Date(event.date).toLocaleDateString('default', {
             month: 'short', day: 'numeric', year: 'numeric'
         });
@@ -94,6 +96,7 @@ async function loadCart() {
             </div>
         </div>`;
     });
+}
 
 async function removeFromCart(eventId) {
     const { data: { user } } = await supabase.auth.getUser();
@@ -128,11 +131,6 @@ async function updateQuantity(eventId, newQuantity) {
         return;
     }
     
-    if (!cartItems || cartItems.length === 0) {
-        container.innerHTML = "<p>Your cart is empty</p>";
-        return;
-    }
-
     loadCart();
 }
 
