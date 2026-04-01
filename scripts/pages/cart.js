@@ -88,12 +88,6 @@ async function loadCart() {
         </div>`;
     });
 
-    container.addEventListener('click', (e) => {
-        if (e.target.classList.contains('remove-btn')) {
-            const eventId = e.target.dataset.id;
-            removeFromCart(eventId);
-        }
-
         if (e.target.classList.contains('qty-btn')) {
             const cartItem = e.target.closest('.cart-item');
             const eventId = cartItem.dataset.id;
@@ -136,19 +130,37 @@ async function updateQuantity(eventId, newQuantity) {
         .eq('event_id', eventId);
 
     if (error) {
-        console.log(error)
-        showModal(
-            'Failed to update!',
-            'Please try again!.',
-            'error',
-            {
-                autoClose: 3000,
-                onClose: () => {
-                    window.location.href = '/pages/cart.html'
-                }
-            }
-        )
+        console.error("Cart error:", error);
+        showModal('Failed to load Cart!', 'Please try again!', 'error');
+        return;
+    }
+    
+    if (!cartItems || cartItems.length === 0) {
+        container.innerHTML = "<p>Your cart is empty</p>";
+        return;
     }
 
     loadCart();
 }
+
+document.getElementById("cartContainer").addEventListener('click', (e) => {
+    
+    if (e.target.classList.contains('remove-btn')) {
+        const eventId = e.target.dataset.id;
+        removeFromCart(eventId);
+    }
+    
+    if (e.target.classList.contains('qty-btn')) {
+        const cartItem = e.target.closest('.cart-item');
+        const eventId = cartItem.dataset.id;
+        const quantitySpan = cartItem.querySelector('.quantity');
+        
+        let currentQty = parseInt(quantitySpan.textContent);
+        const change = parseInt(e.target.dataset.change);
+        const newQty = currentQty + change;
+        
+        if (newQty < 1) return;
+        
+        updateQuantity(eventId, newQty);
+    }
+});
