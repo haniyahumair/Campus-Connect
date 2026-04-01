@@ -14,6 +14,13 @@ let currentUserId = null;
 
 async function loadCart() {
     const { data: { user } } = await supabase.auth.getUser();
+    
+    if (userError || !user) {
+        console.warn("User not logged in");
+        window.location.href = "/pages/login.html";
+        return;
+    }
+    
     currentUserId = user.id;
 
     const { data: cartItems, error } = await supabase
@@ -87,20 +94,6 @@ async function loadCart() {
             </div>
         </div>`;
     });
-
-        if (e.target.classList.contains('qty-btn')) {
-            const cartItem = e.target.closest('.cart-item');
-            const eventId = cartItem.dataset.id;
-            const quantitySpan = cartItem.querySelector('.quantity');
-            let currentQty = parseInt(quantitySpan.textContent);
-            const change = parseInt(e.target.dataset.change);
-            const newQty = currentQty + change;
-
-            if (newQty < 1) return;
-            updateQuantity(eventId, newQty);
-        }
-    });
-}
 
 async function removeFromCart(eventId) {
     const { data: { user } } = await supabase.auth.getUser();
