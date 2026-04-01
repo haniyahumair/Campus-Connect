@@ -23,6 +23,17 @@ async function initAdminPage() {
   }
 
   // loadAll()
+async function loadAll() {
+  const { data: events, error } = await supabase
+    .from("events")
+    .select("*");
+  
+  if (error) {
+    console.error(error);
+    return;
+  }
+  
+  populatePending(events);
 }
 
 // sidebar functionality (panel switching)
@@ -314,3 +325,4 @@ logOutBtn.addEventListener("click", async () => {
 });
 
 initAdminPage();
+document.addEventListener("DOMContentLoaded", initAdminPage);
