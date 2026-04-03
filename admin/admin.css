@@ -561,12 +561,14 @@ th {
 }
 
 td {
-  padding: 15px 24px;
+  padding: 12px 18px;
   font-size: 0.9rem;
   color: var(--dark-grey);
   border-bottom: 1px solid var(--seconday-grey);
   vertical-align: middle;
+  width: max-content;
 }
+
 
 tbody tr:last-child td {
   border-bottom: none;
@@ -786,6 +788,7 @@ tbody tr:hover {
 
 .modal-header {
   display: flex;
+  background-color: var(--primary-accent);
   justify-content: space-between;
   align-items: flex-start;
   padding: 24px 28px 18px;
@@ -794,15 +797,17 @@ tbody tr:hover {
 
 .modal-title {
   font-family: var(--header-font);
-  font-size: 1.7rem;
+  font-size: 1.8rem;
   font-weight: 700;
-  color: var(--black);
+  color: var(--white);
 }
 
 .modal-subtitle {
   font-size: 0.8rem;
-  color: var(--dark-grey);
+  color: var(--primary-grey);
   margin-top: 3px;
+  font-family: var(--text-font);
+  font-style: italic;
 }
 
 .modal-close {
@@ -810,10 +815,10 @@ tbody tr:hover {
   height: 30px;
   border-radius: 8px;
   border: 1px solid var(--seconday-grey);
-  background: var(--white);
+  background: var(--primary-accent);
   cursor: pointer;
-  font-size: 14px;
-  color: var(--dark-grey);
+  font-size: 1.3rem;
+  color: var(--white);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -821,19 +826,20 @@ tbody tr:hover {
 }
 
 .modal-close:hover {
-  background: var(--primary-accent);
-  color: var(--white);
+  background: var(--white);
+  color: var(--dark-grey);
 }
 
 .modal-body {
   padding: 24px 28px;
   overflow-y: auto;
   flex: 1;
+  font-family: var(--text-font);
 }
 
 .modal-img-wrap {
   width: 100%;
-  height: 180px;
+  height: 280px;
   background: var(--primary-grey);
   border-radius: 12px;
   display: flex;
@@ -854,7 +860,7 @@ tbody tr:hover {
 .detail-desc label {
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--light-grey);
+  color: var(--dark-grey);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   font-family: var(--subheader-font);
@@ -863,6 +869,7 @@ tbody tr:hover {
 .detail-desc p {
   font-size: 0.875rem;
   color: var(--dark-grey);
+  opacity: 0.8;
   margin-top: 6px;
   line-height: 1.6;
 }
@@ -878,7 +885,7 @@ tbody tr:hover {
   display: block;
   font-size: 0.795rem;
   font-weight: 600;
-  color: var(--light-grey);
+  color: var(--dark-grey);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   font-family: var(--subheader-font);
@@ -888,10 +895,12 @@ tbody tr:hover {
 .detail-field span {
   font-size: 0.875rem;
   color: var(--black);
+  opacity: 0.7;
 }
 
 .modal-footer {
   display: flex;
+  justify-content: center;
   gap: 10px;
   padding: 18px 28px;
   border-top: 1px solid var(--primary-grey);
@@ -910,10 +919,6 @@ tbody tr:hover {
   transition: background 0.15s;
 }
 
-.approve-btn:hover {
-  background: #ff6b5e;
-}
-
 .reject-btn {
   padding: 10px 20px;
   border-radius: 10px;
@@ -929,32 +934,14 @@ tbody tr:hover {
 
 .reject-btn:hover {
   background: var(--primary-grey);
-  color: #dc2626;
-  border-color: var(--primary-accent);
-}
-
-.close-btn {
-  margin-left: auto;
-  padding: 10px 20px;
-  border-radius: 10px;
-  border: 1px solid var(--seconday-grey);
-  background: var(--white);
-  color: var(--dark-grey);
-  font-family: var(--text-font);
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-.close-btn:hover {
-  background: var(--light-grey);
+  color: var(--black);
+  border-color: var(--dark-grey);
 }
 
 /* Reject reason modal */
 .reason-card {
   background: var(--white);
-  border-radius: 20px;
+  border-radius: 14px;
   padding: 28px;
   width: 460px;
   max-width: 95vw;
@@ -963,23 +950,24 @@ tbody tr:hover {
 
 .reason-card h3 {
   font-family: var(--header-font);
-  font-size: 1rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: var(--black);
   margin-bottom: 8px;
 }
 
 .reason-card p {
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   color: var(--dark-grey);
   margin-bottom: 16px;
+  font-family: var(--text-font);
 }
 
 .reason-ta {
-  width: 100%;
+  width: 92%;
   height: 110px;
   border-radius: 10px;
-  border: 1px solid var(--secondary-accent);
+  border: 1px solid var(--seconday-grey);
   padding: 12px 14px;
   font-family: var(--text-font);
   font-size: 0.875rem;
@@ -1001,6 +989,7 @@ tbody tr:hover {
 
 .confirm-reject-btn {
   border-radius: 10px;
+  padding: 12px 15px;
   border: none;
   background: var(--primary-accent);
   color: var(--white);
@@ -1008,15 +997,12 @@ tbody tr:hover {
   font-size: 0.875rem;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.15s;
-}
-
-.confirm-reject-btn:hover {
-  background: #ff6b5e;
 }
 
 .cancel-reject-btn {
   border-radius: 10px;
+  border: 1px solid var(--seconday-grey);
+  padding: 12px 15px;
   background: var(--white);
   color: var(--dark-grey);
   font-family: var(--text-font);
@@ -1028,6 +1014,7 @@ tbody tr:hover {
 
 .cancel-reject-btn:hover {
   background: var(--primary-grey);
+  color: var(--black);
 }
 
 /* AI Panel */

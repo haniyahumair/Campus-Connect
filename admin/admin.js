@@ -22,307 +22,590 @@ async function initAdminPage() {
       return
   }
 
-  // loadAll()
-async function loadAll() {
-  const { data: events, error } = await supabase
-    .from("events")
-    .select("*");
+  loadAll();
+
+  //load event
+    async function loadAll() {
+    // Fetch pending events
+    const { data: pendingData, error: pendingError } = await supabase
+      .from("events")
+      .select("*")
+      .eq("event_status", "pending");
   
-  if (error) {
-    console.error(error);
-    return;
-  }
+    if (pendingError) {
+      console.error("Error fetching pending events:", pendingError);
+      return;
+    }
   
-  populatePending(events);
-}
+    // Update pending events count and populate pending table
+    const pendingCount = pendingData.length;
+    const sideBar = document.getElementById("navPending");
+    const statCards = document.getElementById("statsPending");
+    if (sideBar) {
+      sideBar.innerHTML = `<span class="nav-icon">⏳</span> Pending Events <span class="nav-badge" id="pendingCount">${pendingCount}</span>`
+    }
 
-// sidebar functionality (panel switching)
-window.showPanel = function (panel, element) {
-  // remove active class from panels
-  document
-    .querySelectorAll(".panel")
-    .forEach((p) => p.classList.remove("active"));
+    if (statCards) {
+      statCards.innerHTML = pendingCount;
+    }
+  
+    populatePending(pendingData);
+  
+    // Fetch all events
+    const { data: allEvents, error: allError } = await supabase
+      .from("events")
+      .select("*");
+  
+    if (allError) {
+      console.error("Error fetching all events:", allError);
+      return;
+    }
+  
+    // Update stat cards and sidebar counts
+    const allEventsCount = allEvents.length;
+    const approvedEvents = allEvents.filter(event => event.event_status === "approved");
+    const totalRegisteredCount = allEvents.reduce((total, event) => total + event.current_registration, 0);
+    const avgFillRate = allEvents.reduce((total, event) => total + (event.max_capacity > 0 ? (event.current_registration / event.max_capacity) : 0), 0) / allEvents.length * 100;
+    const approvedEventsStatCard = document.getElementById("statsApproved");
+    const allEventsSidebar = document.getElementById("allCount");
+    const registeredStatsCard = document.getElementById("statsRegistered");
+    const avgFillRateCard = document.getElementById("statsFilled");
+    
+    
+    if (approvedEventsStatCard) {
+      approvedEventsStatCard.textContent = approvedEvents.length;
+    }
 
-  // removes active class from sidebar items
-  document
-    .querySelectorAll(".nav-item")
-    .forEach((n) => n.classList.remove("active"));
+    if(allEventsSidebar){
+      allEventsSidebar.textContent = allEventsCount;
+    }
 
-  if (element) element.classList.add("active");
+    if(registeredStatsCard){
+      registeredStatsCard.textContent = totalRegisteredCount;
+    }
 
-  if (panel === "pending") {
-    document.getElementById("pendingPanel").classList.add("active");
-    document.getElementById("page-title").textContent = "Pending Events";
+    if(avgFillRateCard){
+      avgFillRateCard.textContent = `${avgFillRate.toFixed(2)}%`;
+    }
+  
+    // Populate all events table and stats table & view
+    populateAll(allEvents);
+    statusBar(allEvents);
   }
 
-  if (panel === "all") {
-    document.getElementById("allEventsPanel").classList.add("active");
-    document.getElementById("page-title").textContent = "All Events";
-  }
+  // sidebar functionality (panel switching)
+  window.showPanel = function (panel, element) {
+    // remove active class from panels
+    document
+      .querySelectorAll(".panel")
+      .forEach((p) => p.classList.remove("active"));
 
-  if (panel === "stats") {
-    document.getElementById("panelStats").classList.add("active");
-    document.getElementById("page-title").textContent = "Stats & Attendance";
-  }
-};
+    // removes active class from sidebar items
+    document
+      .querySelectorAll(".nav-item")
+      .forEach((n) => n.classList.remove("active"));
 
-//notification dropdown
-const notificationBtn = document.getElementById("notificationBtn");
-const notificationDropdown = document.getElementById("notifDropdown");
+    if (element) element.classList.add("active");
 
-notificationBtn.addEventListener("click", () => {
-  notificationDropdown.style.display =
-    notificationDropdown.style.display === "block" ? "none" : "block";
-});
+    if (panel === "pending") {
+      document.getElementById("pendingPanel").classList.add("active");
+      document.getElementById("page-title").textContent = "Pending Events";
+    }
 
-window.addEventListener("click", (e) => {
-  if (
-    !notificationBtn.contains(e.target) &&
-    !notificationDropdown.contains(e.target)
-  ) {
-    notificationDropdown.style.display = "none";
-  }
-});
+    if (panel === "all") {
+      document.getElementById("allEventsPanel").classList.add("active");
+      document.getElementById("page-title").textContent = "All Events";
+    }
 
-//refresh button
-const refreshBtn = document.getElementById("refreshBtn");
-refreshBtn.addEventListener("click", () => {
-  // loadAll();
-  location.reload();
-});
+    if (panel === "stats") {
+      document.getElementById("panelStats").classList.add("active");
+      document.getElementById("page-title").textContent = "Stats & Attendance";
+    }
+  };
 
-//avatar dropdown
-const avatarBtn = document.querySelector(".avatar");
-const avatarDropdown = document.getElementById("avatarDropdown");
+  //notification dropdown
+  const notificationBtn = document.getElementById("notificationBtn");
+  const notificationDropdown = document.getElementById("notifDropdown");
 
-avatarBtn.addEventListener("click", () => {
-  avatarDropdown.style.display =
-    avatarDropdown.style.display === "block" ? "none" : "block";
-});
-
-window.addEventListener("click", (e) => {
-  if (!avatarBtn.contains(e.target) && !avatarDropdown.contains(e.target)) {
-    avatarDropdown.style.display = "none";
-  }
-});
-
-//avatar initial based on name from supabase
-async function setAvatarInitial() {
-  const { data: { user }, error } = await supabase.auth.getUser();
-  if (error) {
-    console.error("Error fetching user:", error);
-    return;
-  }
-  if (!user) {
-    console.error("No user found");
-    return;
-  }
-
-  if (user.is_admin === false) {
-    console.error("User is not an admin");
-    window.location.href = '/pages/login.html';
-    return;
-  }
-
-  const { data: profile, error: profileError } = await supabase
-    .from('profiles')
-    .select('full_name')
-    .eq('id', user.id)
-    .single();
-
-  if (profileError) {
-    console.error("Error fetching profile:", profileError);
-    return;
-  }
-
-  if (!profile?.full_name) {
-    console.error("Profile full_name not found.");
-    return;
-  }
-
-  const initial = profile.full_name.charAt(0).toUpperCase();
-  const avatarElement = document.querySelector(".avatar");
-  if (!avatarElement) {
-    console.error("Avatar element not found in the DOM.");
-    return;
-  }
-  avatarElement.textContent = initial;
-}
-
-setAvatarInitial();
-
-// populate table
-function populatePending(events) {
-  const tbody = document.getElementById("pending-tbody");
-  const pending = events.filter((e) => e.status === "pending");
-  tbody.innerHTML = "";
-  pending.forEach((event) => {
-    tbody.innerHTML += `
-      <tr>
-        <td>
-          <div class="cell-title">${event.title}</div>
-          <div class="cell-sub">Submitted ${event.created_at}</div>
-        </td> 
-        <td>${event.category}</td>
-        <td>${event.date}</td>
-        <td>${event.location}</td>
-        <td>${event.contact}</td>
-        <td>${event.price}</td>
-        <td> 
-          <div class="row-actions">
-            <button class="row-btn" onclick="openModal('${event.id}')">View</button>
-            <button class="row-btn approve" onclick="quickApprove('${event.id}')">✓ Approve</button>
-            <button class="row-btn reject" onclick="quickReject('${event.id}')">✕ Reject</button>
-          </div>
-        </td>
-      </tr>
-    `;
+  notificationBtn.addEventListener("click", () => {
+    notificationDropdown.style.display =
+      notificationDropdown.style.display === "block" ? "none" : "block";
   });
-}
 
-//search feature in pending table
-const searchBarPending = document.getElementById("searchBarPending").querySelector("input");
-
-searchBarPending.addEventListener("input", () => {
-  const query = searchBarPending.value.toLowerCase();
-  document.querySelectorAll("#pending-tbody tr").forEach((row) => {
-    const title = row.querySelector(".cell-title").textContent.toLowerCase();
-    const category = row.children[1].textContent.toLowerCase();
-    const location = row.children[3].textContent.toLowerCase();
-    if (title.includes(query) || category.includes(query) || location.includes(query)) {
-      row.style.display = "";
-    } else {
-      row.style.display = "none";
+  window.addEventListener("click", (e) => {
+    if (
+      !notificationBtn.contains(e.target) &&
+      !notificationDropdown.contains(e.target)
+    ) {
+      notificationDropdown.style.display = "none";
     }
   });
-});
 
-//search feature in all events table
-const searchBarAll = document.getElementById("searchBarAll").querySelector("input");
+  //refresh button
+  const refreshBtn = document.getElementById("refreshBtn");
+  refreshBtn.addEventListener("click", () => {
+    // loadAll();
+    location.reload();
+  });
 
-searchBarAll.addEventListener("input", () => {
-  const query = searchBarAll.value.toLowerCase();
-  document.querySelectorAll("#all-tbody tr").forEach((row) => {
-    const title = row.querySelector(".cell-title").textContent.toLowerCase();
-    const category = row.children[1].textContent.toLowerCase();
-    const location = row.children[3].textContent.toLowerCase();
-    if (title.includes(query) || category.includes(query) || location.includes(query)) {
-      row.style.display = "";
-    } else {
-      row.style.display = "none";
+  //avatar dropdown
+  const avatarBtn = document.querySelector(".avatar");
+  const avatarDropdown = document.getElementById("avatarDropdown");
+
+  avatarBtn.addEventListener("click", () => {
+    avatarDropdown.style.display =
+      avatarDropdown.style.display === "block" ? "none" : "block";
+  });
+
+  window.addEventListener("click", (e) => {
+    if (!avatarBtn.contains(e.target) && !avatarDropdown.contains(e.target)) {
+      avatarDropdown.style.display = "none";
     }
   });
-});
 
+  //avatar initial based on name from supabase
+  async function setAvatarInitial() {
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
+    if (error) {
+      console.error("Error fetching user:", error);
+      return;
+    }
+    if (!user) {
+      console.error("No user found");
+      return;
+    }
 
-//aprove events with notification
-window.quickApprove = async function (eventId) {
-  // fetch event first to get student id and title
-  const { data: event, error: fetchError } = await supabase
-    .from("events")
-    .select("title, org_id")
-    .eq("id", eventId)
-    .single();
+    if (user.is_admin === false) {
+      console.error("User is not an admin");
+      window.location.href = "/pages/login.html";
+      return;
+    }
 
-  if (fetchError) { console.error(fetchError); return; }
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .select("full_name")
+      .eq("id", user.id)
+      .single();
 
-  // update status
-  const { error } = await supabase
-    .from("events")
-    .update({ status: "approved" })
-    .eq("id", eventId);
+    if (profileError) {
+      console.error("Error fetching profile:", profileError);
+      return;
+    }
 
-  if (error) { console.error(error); return; }
+    if (!profile?.full_name) {
+      console.error("Profile full_name not found.");
+      return;
+    }
 
-  //send notification to student
-  await supabase.from("notifications").insert({
-    user_id: event.org_id,
-    event_id: eventId,
-    message: `Your event "${event.title}" was approved! Check it out on the events page.`,
-    is_read: false,
+    const initial = profile.full_name.charAt(0).toUpperCase();
+    const avatarElement = document.querySelector(".avatar");
+    if (!avatarElement) {
+      console.error("Avatar element not found in the DOM.");
+      return;
+    }
+    avatarElement.textContent = initial;
+  }
+
+  setAvatarInitial();
+
+  // populate pending table
+  const PENDING_PAGE_SIZE = 5;
+  let pendingCurrentPage = 1;
+  let pendingEvents = [];
+
+  function populatePending(events) {
+    pendingEvents = events;
+    pendingCurrentPage = 1;
+    renderPendingPage();
+  }
+
+  function renderPendingPage() {
+    const tbody = document.getElementById("pending-tbody");
+    const totalPages = Math.max(1, Math.ceil(pendingEvents.length / PENDING_PAGE_SIZE));
+    const start = (pendingCurrentPage - 1) * PENDING_PAGE_SIZE;
+    const pageEvents = pendingEvents.slice(start, start + PENDING_PAGE_SIZE);
+
+    tbody.innerHTML = "";
+    document.getElementById("noPending").style.display = pendingEvents.length === 0 ? "" : "none";
+
+    pageEvents.forEach((event) => {
+      const price = event.price === 0 ? "badge badge-free" : "badge badge-paid";
+      tbody.innerHTML += `
+        <tr>
+          <td>
+            <div class="cell-title">${event.title}</div>
+            <div class="cell-sub">Submitted ${event.created_at}</div>
+          </td>
+          <td>${event.category}</td>
+          <td>${event.date}</td>
+          <td>${event.location}</td>
+          <td>${event.contact_details}</td>
+          <td><span class="${price}">${event.price === 0 ? "Free" : `QAR ${event.price}`}</span></td>
+          <td>
+            <div class="row-actions">
+              <button class="row-btn" onclick="openModal('${event.id}')">View</button>
+              <button class="row-btn approve" onclick="quickApprove('${event.id}')">✓ Approve</button>
+              <button class="row-btn reject" onclick="quickReject('${event.id}')">✕ Reject</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    });
+
+    // update label
+    const showing = pendingEvents.length === 0 ? 0 : Math.min(start + PENDING_PAGE_SIZE, pendingEvents.length);
+    document.querySelector(".pending-pagination").textContent =
+      `Showing ${showing} of ${pendingEvents.length} pending events`;
+
+    // rebuild page buttons
+    const pagebtns = document.querySelector(".page-btns");
+    pagebtns.innerHTML = `<button class="page-btn" ${pendingCurrentPage === 1 ? "disabled" : ""} onclick="pendingChangePage(${pendingCurrentPage - 1})">‹</button>`;
+    for (let i = 1; i <= totalPages; i++) {
+      pagebtns.innerHTML += `<button class="page-btn ${i === pendingCurrentPage ? "active" : ""}" onclick="pendingChangePage(${i})">${i}</button>`;
+    }
+    pagebtns.innerHTML += `<button class="page-btn" ${pendingCurrentPage === totalPages ? "disabled" : ""} onclick="pendingChangePage(${pendingCurrentPage + 1})">›</button>`;
+  }
+
+  window.pendingChangePage = function (page) {
+    pendingCurrentPage = page;
+    renderPendingPage();
+  };
+
+  //populate all events table
+    function populateAll(events) {
+    const tbody = document.getElementById("allTBody");
+    if (!tbody) {
+      console.error("Element with id 'allTBody' not found in the DOM.");
+      return;
+    }
+  
+    tbody.innerHTML = "";
+    events.forEach((event) => {
+      const widthPercentage = (event.current_registration / event.max_capacity) * 100;
+  
+      // Check if event is free or paid
+      const price = event.price === 0 ? "badge badge-free" : "badge badge-paid";
+  
+      // Check status of event
+      let statusClass = "badge";
+      if (event.event_status === "pending") {
+        statusClass += " badge-pending";
+      } else if (event.event_status === "approved") {
+        statusClass += " badge-approved";
+      } else if (event.event_status === "rejected") {
+        statusClass += " badge-rejected";
+      }
+  
+      tbody.innerHTML += `
+        <tr>
+          <td>
+            <div class="cell-title">${event.title}</div>
+            <div class="cell-sub">org: ${event.org_id}</div>
+          </td>
+          <td>${event.category}</td>
+          <td>${event.date} · ${event.start_time} - ${event.end_time}</td>
+          <td>${event.location}</td>
+          <td>
+            <div class="att-wrap">
+              <div class="att-bar">
+                <div class="att-fill" style="width:${widthPercentage}%;"></div>
+              </div>
+              <span class="att-label">${event.current_registration}/${event.max_capacity}</span>
+            </div>
+          </td>
+          <td><span class="${price}">${event.price === 0 ? "Free" : `QAR ${event.price}`}</span></td>
+          <td><span class="${statusClass}">${event.event_status}</span></td>
+          <td><span class="badge ${event.is_active ? "badge-active" : "badge-inactive"}">
+            ${event.is_active ? "Active" : "Inactive"}
+          </span></td>
+          <td><button class="row-btn" onclick="openModal('${event.id}')">View</button></td>
+        </tr>
+      `;
+    });
+  }
+
+  //populate stats and attendance table
+    function statusBar(events) {
+    const statsAttendanceTbody = document.getElementById("statsTBody");
+    if (!statsAttendanceTbody) {
+      console.error("Element with id 'statsTBody' not found in the DOM.");
+      return;
+    }
+  
+    statsAttendanceTbody.innerHTML = "";
+    events.forEach((event) => {
+      const widthPercentage = event.max_capacity > 0
+        ? (event.current_registration / event.max_capacity) * 100
+        : 0;
+  
+      let statusClass = "badge";
+      if (event.event_status === "pending") {
+        statusClass += " badge-pending";
+      } else if (event.event_status === "approved") {
+        statusClass += " badge-approved";
+      } else if (event.event_status === "rejected") {
+        statusClass += " badge-rejected";
+      }
+  
+      statsAttendanceTbody.innerHTML += `
+        <tr>
+          <td style="display: flex; flex-direction: column; gap: 4px;">
+            <div class="cell-title">${event.title}
+            <span class="cell-sub">org: ${event.org_id}</span>
+            </div>
+          </td>
+          <td>${event.category}</td>
+          <td>${event.date} · ${event.start_time} - ${event.end_time}</td>
+          <td>${event.current_registration}</td>
+          <td>${event.max_capacity}</td>
+          <td>
+            <div class="att-wrap">
+              <div class="att-bar">
+                <div class="att-fill" style="width:${widthPercentage}%;"></div>
+              </div>
+              <span class="att-label">${widthPercentage.toFixed(2)}%</span>
+            </div>
+          </td>
+          <td><span class="${statusClass}">${event.event_status}</span></td>
+        </tr>
+      `;
+    });
+  }
+
+  //search feature in pending table
+  const searchBarPending = document
+    .getElementById("searchBarPending")
+    .querySelector("input");
+
+  searchBarPending.addEventListener("input", () => {
+    const query = searchBarPending.value.toLowerCase();
+    document.querySelectorAll("#pending-tbody tr").forEach((row) => {
+      const title = row.querySelector(".cell-title").textContent.toLowerCase();
+      const category = row.children[1].textContent.toLowerCase();
+      const location = row.children[3].textContent.toLowerCase();
+      if (
+        title.includes(query) ||
+        category.includes(query) ||
+        location.includes(query)
+      ) {
+        row.style.display = "";
+      } else {
+        row.style.display = "none";
+      }
+    });
   });
 
-  // loadAll();
-};
+  //search feature in all events table
+  const searchBarAll = document
+    .getElementById("searchBarAll")
+    .querySelector("input");
 
-window.quickReject = async function (eventId) {
-  //ask for rejection reason
-  const reason = prompt("Enter rejection reason:");
-  if (!reason) return;
-
-  const { data: event, error: fetchError } = await supabase
-    .from("events")
-    .select("title, org_id")
-    .eq("id", eventId)
-    .single();
-
-  if (fetchError) { console.error(fetchError); return; }
-
-  const { error } = await supabase
-    .from("events")
-    .update({ status: "rejected", rejection_reason: reason })
-    .eq("id", eventId);
-
-  if (error) { console.error(error); return; }
-
-  //send notification to student
-  await supabase.from("notifications").insert({
-    user_id: event.org_id,
-    event_id: eventId,
-    message: `Your event "${event.title}" was not approved. Reason: ${reason}. Please try again.`,
-    is_read: false,
+  searchBarAll.addEventListener("input", () => {
+    const query = searchBarAll.value.toLowerCase();
+    document.querySelectorAll("#all-tbody tr").forEach((row) => {
+      const title = row.querySelector(".cell-title").textContent.toLowerCase();
+      const category = row.children[1].textContent.toLowerCase();
+      const location = row.children[3].textContent.toLowerCase();
+      if (
+        title.includes(query) ||
+        category.includes(query) ||
+        location.includes(query)
+      ) {
+        row.style.display = "";
+      } else {
+        row.style.display = "none";
+      }
+    });
   });
 
-  // loadAll();
-};
+  //aprove events with notification
+  window.quickApprove = async function (eventId) {
+    // fetch event first to get student id and title
+    const { data: event, error: fetchError } = await supabase
+      .from("events")
+      .select("title, org_id")
+      .eq("id", eventId)
+      .single();
 
-// Initialize the chatbot
-initChatbot();
+    if (fetchError) {
+      console.error(fetchError);
+      return;
+    }
 
+    // update status
+    const { error } = await supabase
+      .from("events")
+      .update({ status: "approved" })
+      .eq("id", eventId);
 
-// AI chatbot overlay view
-const chatBotSidebar = document.querySelector(".ai-sidebar-btn");
-const askAiBtn = document.querySelector(".ai-top-btn");
-const chatBotOverlay = document.getElementById("overlay");
-const closeAiBtn = document.querySelector(".ai-close");
-const aiChips = document.querySelectorAll(".ai-chips .chip");
+    if (error) {
+      console.error(error);
+      return;
+    }
 
-function toggleAI() {
-  const aiPanel = document.getElementById("ai-panel");
-  aiPanel.classList.toggle("open");
-  chatBotOverlay.classList.toggle("open");
+    //send notification to student
+    await supabase.from("notifications").insert({
+      user_id: event.org_id,
+      event_id: eventId,
+      message: `Your event "${event.title}" was approved! Check it out on the events page.`,
+      is_read: false,
+    });
 
-  closeAiBtn.style.display = aiPanel.classList.contains("open") ? "block" : "none";
+    loadAll();
+  };
+
+  //event modal
+  async function openModal(eventId) {
+    currentEventId = eventId;
+
+    const modal = document.getElementById("eventsDetailModal");
+    modal.style.display = "flex";
+
+    //pull in supabase data
+    const { data: event } = await supabase
+      .from("events")
+      .select("*, org_id (id, full_name)")
+      .eq("id", eventId)
+      .single();
+    document.getElementById("modalSubtitle").innerHTML = `Submitted by ${event.org_id.full_name}`;
+    document.getElementById("modalImg").innerHTML = event.img_url
+      ? `<img src="${event.img_url}" alt="Event Image">`
+      : `<img src="/assets/Images/default-event.jpg" alt="Placeholder Image">`;
+    document.getElementById("modalTitle").textContent = event.title;
+    document.getElementById("modalDescription").textContent = event.description;
+    document.getElementById("modalDate").textContent = event.date;
+    document.getElementById("modalTime").textContent = `${event.start_time} - ${event.end_time}`;
+    document.getElementById("modalLocation").textContent = event.location;
+    document.getElementById("modalCategory").textContent = event.category;
+    document.getElementById("modalContact").textContent = event.contact_details;
+    document.getElementById("modalPrice").textContent =
+      event.price === 0 ? "Free" : `QAR ${event.price}`;
+    document.getElementById("modalMaxAttendees").textContent = event.max_capacity;
+    document.getElementById("modalRegistered").textContent =
+      event.current_registration;
+    document.getElementById("modalUserID").textContent = event.org_id.id;
+    document.getElementById("modalCreated").textContent = new Date(
+      event.created_at
+    ).toLocaleString();
+
+    // close on overlay click
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
+    });
+  }
+
+  function closeModal() {
+    document.getElementById("eventsDetailModal").style.display = "none";
+  }
+
+  window.closeModal = closeModal;
+  window.openModal = openModal;
+
+  //reject modal
+  function openRejectModal() {
+    const rejectModal = document.getElementById("rejectModal");
+    rejectModal.style.display = "flex";
+
+    // close on overlay click
+    rejectModal.addEventListener("click", (e) => {
+      if (e.target === rejectModal) closeRejectModal();
+    });
+  }
+
+  function closeRejectModal() {
+    document.getElementById("rejectModal").style.display = "none";
+    document.getElementById("rejectReason").value = "";
+  }
+
+  window.confirmReject = async function () {
+    const reason = document.getElementById("rejectReason").value.trim();
+
+    const { data: event, error: fetchError } = await supabase
+      .from("events")
+      .select("title, org_id")
+      .eq("id", currentEventId)
+      .single();
+
+    if (fetchError) { console.error(fetchError); return; }
+
+    const { error } = await supabase
+      .from("events")
+      .update({ event_status: "rejected", rejection_reason: reason || null })
+      .eq("id", currentEventId);
+
+    if (error) { console.error(error); return; }
+
+    await supabase.from("notifications").insert({
+      user_id: event.org_id,
+      event_id: currentEventId,
+      message: `Your event "${event.title}" was not approved.${reason ? ` Reason: ${reason}` : ""} Please try again.`,
+      is_read: false,
+    });
+
+    closeRejectModal();
+    closeModal();
+    loadAll();
+  };
+
+  window.openRejectModal = openRejectModal;
+  window.closeRejectModal = closeRejectModal;
+
+  window.quickReject = function (eventId) {
+    currentEventId = eventId;
+    openRejectModal();
+  };
+
+  // Initialize the chatbot
+  initChatbot();
+
+  // AI chatbot overlay view
+  const chatBotSidebar = document.querySelector(".ai-sidebar-btn");
+  const askAiBtn = document.querySelector(".ai-top-btn");
+  const chatBotOverlay = document.getElementById("overlay");
+  const closeAiBtn = document.querySelector(".ai-close");
+  const aiChips = document.querySelectorAll(".ai-chips .chip");
+
+  function toggleAI() {
+    const aiPanel = document.getElementById("ai-panel");
+    aiPanel.classList.toggle("open");
+    chatBotOverlay.classList.toggle("open");
+
+    closeAiBtn.style.display = aiPanel.classList.contains("open")
+      ? "block"
+      : "none";
+  }
+
+  // Event listeners to toggle the AI panel
+  chatBotSidebar.addEventListener("click", toggleAI);
+  askAiBtn.addEventListener("click", toggleAI);
+  closeAiBtn.addEventListener("click", toggleAI);
+  chatBotOverlay.addEventListener("click", toggleAI);
+
+  // Add event listeners for AI chips
+  aiChips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const chipText = chip.textContent.trim();
+      document.getElementById("ai-input").value = chipText;
+      sendAI(); // Trigger the sendAI function
+    });
+  });
+
+  console.log(chatBotSidebar, askAiBtn, closeAiBtn);
+
+  //signout
+  const logOutBtn = document.getElementById("logOutBtn");
+
+  logOutBtn.addEventListener("click", async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Error signing out:", error);
+    } else {
+      window.location.href = "/pages/login.html";
+    }
+  });
 }
 
-// Event listeners to toggle the AI panel
-chatBotSidebar.addEventListener("click", toggleAI);
-askAiBtn.addEventListener("click", toggleAI);
-closeAiBtn.addEventListener("click", toggleAI);
-chatBotOverlay.addEventListener("click", toggleAI);
-
-// Add event listeners for AI chips
-aiChips.forEach((chip) => {
-  chip.addEventListener("click", () => {
-    const chipText = chip.textContent.trim();
-    document.getElementById("ai-input").value = chipText;
-    sendAI(); // Trigger the sendAI function
-  });
-});
-
-console.log(chatBotSidebar, askAiBtn, closeAiBtn);
-
-//signout 
-const logOutBtn = document.getElementById("logOutBtn");
-
-logOutBtn.addEventListener("click", async () => {
-  const { error } = await supabase.auth.signOut();
-  if (error) {
-    console.error("Error signing out:", error);
-  } else {
-    window.location.href = '/pages/login.html';
-  }
-});
-
-initAdminPage();
 document.addEventListener("DOMContentLoaded", initAdminPage);

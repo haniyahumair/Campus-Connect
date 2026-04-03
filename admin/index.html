@@ -27,14 +27,14 @@
     <div class="nav-item active" id="navPending" onclick="showPanel('pending', this)">
       <span class="nav-icon">⏳</span>
       Pending Events
-      <span class="nav-badge" id="pendingCount">3</span>
+      <span class="nav-badge" id="pendingCount">0</span>
     </div>
 
     <div class="sidebar-section-label">Manage</div>
     <div class="nav-item" id="navAll" onclick="showPanel('all', this)">
       <span class="nav-icon">📅</span>
       All Events
-      <span class="nav-badge gray" id="allCount">5</span>
+      <span class="nav-badge gray" id="allCount">0</span>
     </div>
 
     <div class="sidebar-section-label">Overview</div>
@@ -92,13 +92,12 @@
 
         <!-- Stat cards -->
         <div class="stats-row">
-
           <div class="stat-card">
             <div class="stat-card-icon">
               <img src="/assets/Icons/Pending.svg" alt="Pending icon" />
             </div>
             <div class="stat-card-label">Pending Review</div>
-            <div class="stat-card-value" id="statsPending">3</div>
+            <div class="stat-card-value" id="statsPending">0</div>
           </div>
 
           <div class="stat-card">
@@ -106,7 +105,7 @@
               <img src="/assets/Icons/Approved.svg" alt="Approved icon" />
             </div>
             <div class="stat-card-label">Approved Events</div>
-            <div class="stat-card-value" id="statsApproved">2</div>
+            <div class="stat-card-value" id="statsApproved">0</div>
           </div>
 
           <div class="stat-card">
@@ -124,7 +123,6 @@
             <div class="stat-card-label">Avg Fill Rate</div>
             <div class="stat-card-value" id="statsFilled">72%</div>
           </div>
-
         </div>
 
         <!-- Pending table -->
@@ -153,71 +151,34 @@
                   <th>Actions</th>
                 </tr>
               </thead>
+              <!-- if no pending events: -->
+              <tr id="noPending" style="display:none;">
+                <td colspan="7" style="text-align: center;">No event's pending! :)</td>
+              </tr>
               <tbody id="pending-tbody">
-
+                <tr>
+                  <td colspan="7" style="text-align: center;">Loading events...</td>
+                </tr>
                 <tr>
                   <td>
-                    <div class="cell-title">Spring Campus Fair</div>
-                    <div class="cell-sub">Submitted Feb 20, 2026</div>
+                    <div class="cell-title"></div>
+                    <div class="cell-sub"></div>
                   </td>
-                  <td>Fair</td>
-                  <td>Mar 15, 2026</td>
-                  <td>Main Quad</td>
-                  <td>events@campus.edu</td>
-                  <td><span class="badge badge-free">Free</span></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td><span></span></td>
                   <td>
-                    <div class="row-actions">
-                      <button class="row-btn" onclick="openModal('1')">View</button>
-                      <button class="row-btn approve" onclick="quickApprove('1')">✓ Approve</button>
-                      <button class="row-btn reject" onclick="quickReject('1')">✕ Reject</button>
-                    </div>
+                    <div class="row-actions"></div>
                   </td>
                 </tr>
-
-                <tr>
-                  <td>
-                    <div class="cell-title">Tech Talk: AI in 2026</div>
-                    <div class="cell-sub">Submitted Feb 21, 2026</div>
-                  </td>
-                  <td>Talk</td>
-                  <td>Mar 20, 2026</td>
-                  <td>Lecture Hall A</td>
-                  <td>tech@campus.edu</td>
-                  <td><span class="badge badge-free">Free</span></td>
-                  <td>
-                    <div class="row-actions">
-                      <button class="row-btn" onclick="openModal('2')">View</button>
-                      <button class="row-btn approve" onclick="quickApprove('2')">✓ Approve</button>
-                      <button class="row-btn reject" onclick="quickReject('2')">✕ Reject</button>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>
-                    <div class="cell-title">Off-Campus Concert</div>
-                    <div class="cell-sub">Submitted Feb 19, 2026</div>
-                  </td>
-                  <td>Music</td>
-                  <td>Mar 25, 2026</td>
-                  <td>Downtown Venue</td>
-                  <td>music@campus.edu</td>
-                  <td><span class="badge badge-paid">25 QAR</span></td>
-                  <td>
-                    <div class="row-actions">
-                      <button class="row-btn" onclick="openModal('5')">View</button>
-                      <button class="row-btn approve" onclick="quickApprove('5')">✓ Approve</button>
-                      <button class="row-btn reject" onclick="quickReject('5')">✕ Reject</button>
-                    </div>
-                  </td>
-                </tr>
-
               </tbody>
             </table>
           </div>
 
           <div class="pagination">
-            <span>Showing 3 of 3 pending events</span>
+            <span class="pending-pagination"></span>
             <div class="page-btns">
               <button class="page-btn">‹</button>
               <button class="page-btn active">1</button>
@@ -236,7 +197,6 @@
             <h2 class="table-title">All Events</h2>
             <div class="table-controls">
               <button class="ctrl-btn">🔽 Filter</button>
-              <button class="ctrl-btn">↕ Sort</button>
               <select class="ctrl-select" id="status-filter" onchange="applyAllFilters()">
                 <option value="">All statuses</option>
                 <option value="pending">Pending</option>
@@ -267,118 +227,32 @@
                 </tr>
               </thead>
               <tbody id="allTBody">
-
-                <tr data-search="spring campus fair fair pending">
+                <tr>
+                  <td colspan="7" style="text-align: center;">Loading events...</td>
+                </tr>
+                <tr>
                   <td>
-                    <div class="cell-title">Spring Campus Fair</div>
-                    <div class="cell-sub">org: usr_abc123</div>
+                    <div class="cell-title"></div>
+                    <div class="cell-sub"></div>
                   </td>
-                  <td>Fair</td>
-                  <td>Mar 15 · 10:00</td>
-                  <td>Main Quad</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                   <td>
                     <div class="att-wrap">
-                      <div class="att-bar"><div class="att-fill" style="width:62%"></div></div>
-                      <span class="att-label">312/500</span>
+                      <div class="att-bar">
+                        <div class="att-fill"></div>
+                      </div>
+                      <span class="att-label"></span>
                     </div>
                   </td>
-                  <td><span class="badge badge-free">Free</span></td>
-                  <td><span class="badge badge-pending">Pending</span></td>
-                  <td><span class="badge badge-active">Active</span></td>
-                  <td><button class="row-btn" onclick="openModal('1')">View</button></td>
+                  <td><span class="badge badge-free"></span></td>
+                  <td><span class="badge badge-pending"></span></td>
+                  <td><span class="badge badge-active"></span></td>
+                  <td><button class="row-btn" onclick="openModal()">View</button></td>
                 </tr>
-
-                <tr data-search="tech talk ai talk pending">
-                  <td>
-                    <div class="cell-title">Tech Talk: AI in 2026</div>
-                    <div class="cell-sub">org: usr_def456</div>
-                  </td>
-                  <td>Talk</td>
-                  <td>Mar 20 · 14:00</td>
-                  <td>Lecture Hall A</td>
-                  <td>
-                    <div class="att-wrap">
-                      <div class="att-bar"><div class="att-fill high" style="width:99%"></div></div>
-                      <span class="att-label">198/200</span>
-                    </div>
-                  </td>
-                  <td><span class="badge badge-free">Free</span></td>
-                  <td><span class="badge badge-pending">Pending</span></td>
-                  <td><span class="badge badge-active">Active</span></td>
-                  <td><button class="row-btn" onclick="openModal('2')">View</button></td>
-                </tr>
-
-                <tr data-search="freshman welcome night social approved">
-                  <td>
-                    <div class="cell-title">Freshman Welcome Night</div>
-                    <div class="cell-sub">org: usr_ghi789</div>
-                  </td>
-                  <td>Social</td>
-                  <td>Mar 5 · 18:00</td>
-                  <td>Student Union</td>
-                  <td>
-                    <div class="att-wrap">
-                      <div class="att-bar"><div class="att-fill" style="width:50%"></div></div>
-                      <span class="att-label">150/300</span>
-                    </div>
-                  </td>
-                  <td><span class="badge badge-free">Free</span></td>
-                  <td><span class="badge badge-approved">Approved</span></td>
-                  <td><span class="badge badge-active">Active</span></td>
-                  <td><button class="row-btn" onclick="openModal('3')">View</button></td>
-                </tr>
-
-                <tr data-search="photography workshop approved">
-                  <td>
-                    <div class="cell-title">Photography Workshop</div>
-                    <div class="cell-sub">org: usr_jkl012</div>
-                  </td>
-                  <td>Workshop</td>
-                  <td>Apr 2 · 13:00</td>
-                  <td>Arts Building</td>
-                  <td>
-                    <div class="att-wrap">
-                      <div class="att-bar"><div class="att-fill full" style="width:100%"></div></div>
-                      <span class="att-label">30/30</span>
-                    </div>
-                  </td>
-                  <td><span class="badge badge-paid">10 QAR</span></td>
-                  <td><span class="badge badge-approved">Approved</span></td>
-                  <td><span class="badge badge-active">Active</span></td>
-                  <td><button class="row-btn" onclick="openModal('4')">View</button></td>
-                </tr>
-
-                <tr data-search="off-campus concert music rejected">
-                  <td>
-                    <div class="cell-title">Off-Campus Concert</div>
-                    <div class="cell-sub">org: usr_mno345</div>
-                  </td>
-                  <td>Music</td>
-                  <td>Mar 25 · 20:00</td>
-                  <td>Downtown Venue</td>
-                  <td>
-                    <div class="att-wrap">
-                      <div class="att-bar"><div class="att-fill" style="width:5%"></div></div>
-                      <span class="att-label">45/1000</span>
-                    </div>
-                  </td>
-                  <td><span class="badge badge-paid">25 QAR</span></td>
-                  <td><span class="badge badge-rejected">Rejected</span></td>
-                  <td><span class="badge badge-inactive">Inactive</span></td>
-                  <td><button class="row-btn" onclick="openModal('5')">View</button></td>
-                </tr>
-
               </tbody>
             </table>
-          </div>
-
-          <div class="pagination">
-            <span>Showing 5 of 5 events</span>
-            <div class="page-btns">
-              <button class="page-btn">‹</button>
-              <button class="page-btn active">1</button>
-              <button class="page-btn">›</button>
-            </div>
           </div>
         </div>
 
@@ -388,13 +262,12 @@
 
         <!-- Stat cards -->
         <div class="stats-row">
-
           <div class="stat-card">
             <div class="stat-card-icon">
               <img src="/assets/Icons/Pending.svg" alt="Pending icon" />
             </div>
             <div class="stat-card-label">Pending Review</div>
-            <div class="stat-card-value">3</div>
+            <div class="stat-card-value" id="statsPending">0</div>
           </div>
 
           <div class="stat-card">
@@ -402,7 +275,7 @@
               <img src="/assets/Icons/Approved.svg" alt="Approved icon" />
             </div>
             <div class="stat-card-label">Approved Events</div>
-            <div class="stat-card-value">2</div>
+            <div class="stat-card-value" id="statsApproved">0</div>
           </div>
 
           <div class="stat-card">
@@ -410,7 +283,7 @@
               <img src="/assets/Icons/Total Reg.svg" alt="Total Registrations icon" />
             </div>
             <div class="stat-card-label">Total Registrations</div>
-            <div class="stat-card-value">735</div>
+            <div class="stat-card-value" id="statsRegistered">735</div>
           </div>
 
           <div class="stat-card">
@@ -418,9 +291,8 @@
               <img src="/assets/Icons/Avg Fill.svg" alt="Average Fill Rate icon" />
             </div>
             <div class="stat-card-label">Avg Fill Rate</div>
-            <div class="stat-card-value">72%</div>
+            <div class="stat-card-value" id="statsFilled">72%</div>
           </div>
-
         </div>
 
         <!-- Attendance table -->
@@ -443,83 +315,26 @@
                   <th>Status</th>
                 </tr>
               </thead>
-              <tbody id="stats-tbody">
 
+              <tbody id="statsTBody">
                 <tr>
-                  <td><div class="cell-title">Spring Campus Fair</div></td>
-                  <td>Fair</td>
-                  <td>Mar 15, 2026</td>
-                  <td>312</td>
-                  <td>500</td>
+                  <td>
+                    <div class="cell-title"></div>
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                   <td>
                     <div class="att-wrap">
-                      <div class="att-bar"><div class="att-fill" style="width:62%"></div></div>
-                      <span class="att-label">62%</span>
+                      <div class="att-bar">
+                        <div class="att-fill"></div>
+                      </div>
+                      <span class="att-label"></span>
                     </div>
                   </td>
-                  <td><span class="badge badge-pending">Pending</span></td>
+                  <td><span class="badge badge-pending"></span></td>
                 </tr>
-
-                <tr>
-                  <td><div class="cell-title">Tech Talk: AI in 2026</div></td>
-                  <td>Talk</td>
-                  <td>Mar 20, 2026</td>
-                  <td>198</td>
-                  <td>200</td>
-                  <td>
-                    <div class="att-wrap">
-                      <div class="att-bar"><div class="att-fill high" style="width:99%"></div></div>
-                      <span class="att-label">99%</span>
-                    </div>
-                  </td>
-                  <td><span class="badge badge-pending">Pending</span></td>
-                </tr>
-
-                <tr>
-                  <td><div class="cell-title">Freshman Welcome Night</div></td>
-                  <td>Social</td>
-                  <td>Mar 5, 2026</td>
-                  <td>150</td>
-                  <td>300</td>
-                  <td>
-                    <div class="att-wrap">
-                      <div class="att-bar"><div class="att-fill" style="width:50%"></div></div>
-                      <span class="att-label">50%</span>
-                    </div>
-                  </td>
-                  <td><span class="badge badge-approved">Approved</span></td>
-                </tr>
-
-                <tr>
-                  <td><div class="cell-title">Photography Workshop</div></td>
-                  <td>Workshop</td>
-                  <td>Apr 2, 2026</td>
-                  <td>30</td>
-                  <td>30</td>
-                  <td>
-                    <div class="att-wrap">
-                      <div class="att-bar"><div class="att-fill full" style="width:100%"></div></div>
-                      <span class="att-label">100%</span>
-                    </div>
-                  </td>
-                  <td><span class="badge badge-approved">Approved</span></td>
-                </tr>
-
-                <tr>
-                  <td><div class="cell-title">Off-Campus Concert</div></td>
-                  <td>Music</td>
-                  <td>Mar 25, 2026</td>
-                  <td>45</td>
-                  <td>1000</td>
-                  <td>
-                    <div class="att-wrap">
-                      <div class="att-bar"><div class="att-fill" style="width:5%"></div></div>
-                      <span class="att-label">5%</span>
-                    </div>
-                  </td>
-                  <td><span class="badge badge-rejected">Rejected</span></td>
-                </tr>
-
               </tbody>
             </table>
           </div>
@@ -528,16 +343,14 @@
     </div>
   </div>
 
-  <!-- ================================================
-       MODAL: Event Detail
-  ================================================ -->
+  <!-- Modal - Event Detail -->
   <div class="modal-overlay" id="eventsDetailModal">
     <div class="modal">
 
       <div class="modal-header">
         <div>
           <div class="modal-title" id="modalTitle">Event Title</div>
-          <div class="modal-subtitle" id="modalSubtitle">Submitted by organizer</div>
+          <div class="modal-subtitle" id="modalSubtitle"></div>
           <div id="modalStatus" style="margin-top:6px"></div>
         </div>
         <button class="modal-close" onclick="closeModal()">✕</button>
@@ -548,15 +361,13 @@
 
         <div class="detail-desc">
           <label>Description</label>
-          <p id="m-desc">—</p>
+          <p id="modalDescription"></p>
         </div>
 
         <div class="detail-grid">
           <div class="detail-field"><label>Date</label><span id="modalDate">—</span></div>
           <div class="detail-field"><label>Time</label><span id="modalTime">—</span></div>
           <div class="detail-field"><label>Location</label><span id="modalLocation">—</span></div>
-          <div class="detail-field"><label>Address</label><span id="modalAddress">—</span></div>
-          <div class="detail-field"><label>Venue Details</label><span id="modalVenue">—</span></div>
           <div class="detail-field"><label>Category</label><span id="modalCategory">—</span></div>
           <div class="detail-field"><label>Price</label><span id="modalPrice">—</span></div>
           <div class="detail-field"><label>Capacity</label><span id="modalMaxAttendees">—</span></div>
@@ -570,24 +381,18 @@
       <div class="modal-footer" id="modalFooter">
         <button class="approve-btn" onclick="doApprove()">✓ Approve</button>
         <button class="reject-btn" onclick="openRejectModal()">✕ Reject</button>
-        <button class="close-btn" onclick="closeModal()">Close</button>
       </div>
 
     </div>
   </div>
 
-  <!-- ================================================
-       MODAL: Reject Reason
-  ================================================ -->
-  <div class="modal-overlay" id="rejectModal">
+  <!-- MODAL: Reject Reason -->
+  <div class="modal-overlay" id="rejectModal" style="display: none;">
     <div class="reason-card">
       <h3>Reject Event</h3>
       <p>Optionally add a reason that will be visible to the organizer.</p>
-      <textarea
-        class="reason-ta"
-        id="rejectReason"
-        placeholder="e.g. Off-campus venue not permitted, missing details..."
-      ></textarea>
+      <textarea class="reason-ta" id="rejectReason"
+        placeholder="e.g. Off-campus venue not permitted, missing details..."></textarea>
       <div class="reason-actions">
         <button class="confirm-reject-btn" onclick="confirmReject()">Confirm Reject</button>
         <button class="cancel-reject-btn" onclick="closeRejectModal()">Cancel</button>
@@ -597,7 +402,7 @@
   <!-- /rejectModal -->
 
 
-<!-- AI CHAT PANEL -->
+  <!-- AI CHAT PANEL -->
   <div class="overlay" id="overlay"></div>
 
   <div class="ai-panel" id="ai-panel">
@@ -640,4 +445,5 @@
   <script type="module" src="ai.js"></script>
 
 </body>
+
 </html>
