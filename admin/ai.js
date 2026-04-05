@@ -6,6 +6,7 @@ marked.setOptions({
   });
 
 const messages = [];
+let currentSystemPrompt = "";
 
 function addUserMessage(text) {
   const userMessage = { role: "user", content: text };
@@ -25,7 +26,6 @@ function displayMessage(message) {
   msgDiv.className = `msg msg-${message.role}`;
 
   if (message.role === "assistant") {
-    // ✅ Render markdown for assistant messages
     msgDiv.innerHTML = marked.parse(message.content);
   } else {
     msgDiv.textContent = message.content;
@@ -54,11 +54,12 @@ async function fetchAIResponse(messages) {
   const response = await fetch("http://localhost:3001/api/anthropic", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ messages }),
+    body: JSON.stringify({ messages, systemPrompt: currentSystemPrompt }),
   });
 
   if (!response.ok) {
-    throw new Error(`Proxy server error: ${response.statusText}`);
+    const error = await response.text();
+    throw new Error(error);
   }
 
   const data = await response.json();
@@ -85,9 +86,12 @@ async function sendAI() {
   }
 }
 
-export function initChatbot() {
+export function initChatbot(systemPrompt = "") {
+  currentSystemPrompt = systemPrompt;
+
   const aiChips = document.querySelectorAll(".ai-chips .chip");
   const sendButton = document.querySelector(".ai-send-btn");
+  const inputField = document.getElementById("ai-input");
 
   aiChips.forEach((chip) => {
     chip.addEventListener("click", () => {
@@ -95,6 +99,12 @@ export function initChatbot() {
       sendAI();
     });
   });
+
+  inputField.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+      sendAI();
+    }
+  });  
 
   sendButton.addEventListener("click", sendAI);
 }

@@ -1036,6 +1036,7 @@ tbody tr:hover {
   top: 0;
   bottom: 0;
   width: 400px;
+  max-width: 90vw;
   background: var(--white);
   z-index: 200;
   display: flex;
@@ -1126,10 +1127,50 @@ tbody tr:hover {
 }
 
 .msg-ai {
-  background: var(--primary-grey);
+  background: var(--seconday-grey);
   color: var(--black);
   align-self: flex-start;
   border-bottom-left-radius: 4px;
+  max-width: 90%;
+  word-wrap: break-word;
+}
+
+.msg-assistant {
+  background: var(--secondary-grey);
+  color: var(--black);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+  max-width: 90%;
+  min-width: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.msg-assistant * {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.msg-assistant table {
+  width: 100%;
+  table-layout: fixed;  
+  border-collapse: collapse;
+  font-size: 0.85em;
+}
+
+.msg-assistant td,
+.msg-assistant th {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+}
+
+#aiMsg {
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-width: 0;
 }
 .msg-user {
   background: var(--black);
@@ -1208,7 +1249,7 @@ tbody tr:hover {
 
 /* Typing bubble */
 .msg-assistant {
-  background: var(--light-grey);
+  background: var(--seconday-grey);
   border-radius: 12px;
   padding: 10px 14px;
 }

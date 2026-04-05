@@ -1,0 +1,71 @@
+#Terms & Conditions 
+
+1. Eligibility
+You must be at least 18 years old to use the Service. By using the Service, you represent and warrant that you have the right, authority, and capacity to enter into these Terms.
+
+2. User/Account Registration
+2.1 Information You Provide
+Profile information (name, age, interests)
+Contact information (email, phone number)
+Activity preferences and interests
+Photos and media you upload
+Communications with other users
+2.2 Automatically Collected Information
+Device information
+Location data
+Usage statistics
+IP address
+Cookie data
+Login times and activity
+
+3. Account Creation
+3.1 Account Creation
+You must provide accurate, current, and complete information during registration.
+You are responsible for maintaining the confidentiality of your account credentials.
+You agree to immediately notify us of any unauthorized use of your account.
+3.2 Account Security
+You are solely responsible for all activities that occur under your account.
+We reserve the right to suspend or terminate accounts that violate these Terms.
+
+4. User Conduct
+4.1 Prohibited Activities You agree not to:
+Harass, abuse, or harm other users.
+Post false, misleading, or fraudulent content.
+Impersonate others.
+Use the Service for any purpose that violates the laws of the State of Qatar.
+Attempt to reverse engineer the Service.
+Create multiple accounts or share account credentials.
+4.2 Content and Event Guidelines (Qatar Public Decency) All content and events posted must comply with the Qatar Penal Code and local customs. You are strictly prohibited from posting content or organizing events that involve:
+Public Morality: Content that is deemed "immoral" or "obscene" under Qatari law, including the promotion of LGBTQ+ themes, symbols, or advocacy.
+Controlled Substances: The promotion, sale, or organized consumption of alcohol, drugs, or any illegal substances.
+Prohibited Activities: Gambling, betting, or any activities involving "uncontrolled chance" for money.
+Offensive Material: Content that offends religious beliefs or promotes hate speech and discrimination.
+4.3 Grant of License The user is granted a limited, non-exclusive, non-transferrable right to use the platform.
+
+5. Admin User
+5.1 Administrative Rights We reserve the right to exercise manual override on any event details. This includes, but is not limited to, correcting typographical errors, adjusting event categories, or modifying descriptions to ensure platform consistency and accuracy.
+5.2 Moderation and Rejection The Admin User has the sole discretion to accept or reject event submissions. If an event is rejected:
+The Admin will provide a specific "Status Reason" (e.g., Inappropriate Content, Violation of Qatar Public Decency, Incomplete Information).
+Notification of the rejection and the accompanying reason will be sent to the user.
+5.3 Oversight Authority The Admin User may monitor, flag, or remove any content that, in our sole judgment, violates these Terms, Qatari law, or harms the integrity of the Service.
+
+6. Event Creation & Management
+6.1 User-Generated Content Event organisers retain all ownership rights to their event descriptions, logos, and media. However, by posting content, you grant the platform a worldwide, non-exclusive, royalty-free license to host, display, and distribute that content for the purpose of operating the Service.
+6.2 Content Standards All events must adhere to our safety and quality guidelines. We reserve the right to immediately reject or remove any event that:
+Violates Qatar Law: Includes events promoting unauthorized alcohol consumption, drug use, or LGBTQ+ advocacy.
+Public Disturbance: Events that incite public disorder or violate Ministry of Interior guidelines regarding public gatherings.
+Intellectual Property: Infringes upon the copyright or trademarks of others.
+6.3 Suspension and Cancellation We reserve the right to suspend or cancel any event at any time without prior notice if we suspect fraudulent activity, a breach of these Terms, or a violation of local regulations.
+
+7. Data Privacy & Compliance
+7.1 Compliance with Law No. 13 of 2016 The Service is committed to protecting user privacy in accordance with the Qatar Personal Data Privacy Protection Law (Law No. 13 of 2016). We process all personal data—including names, contact details, and location data—honestly, legitimately, and with respect for human dignity.
+7.2 User Rights In accordance with the PDPPL, you have the right to access, review, correct, or delete your personal data.
+7.3 Data Security and Protection We implement appropriate administrative and technical precautions (including Supabase security protocols) to protect your data from unauthorized access or disclosure.
+
+8. Governing Law
+8.1 Jurisdiction These Terms and your use of the Service are governed by and construed in accordance with the laws of the State of Qatar.
+8.2 Dispute Resolution Any disputes arising from or relating to these Terms shall be subject to the exclusive jurisdiction of the courts of the State of Qatar.
+
+9. Promotion/Marketing
+9.1 Consent to Marketing By creating an account, you agree that we may contact you for marketing purposes, including promotional emails and personalized recommendations, in accordance with Law No. 13 of 2016.
+9.2 AI-Generated Content We may use AI systems to generate personalized event recommendations. You acknowledge that some content may be automated, and we commit to ensuring all such content complies with Qatar's advertising standards and cultural sensitivities.

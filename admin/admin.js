@@ -211,27 +211,25 @@ async function initAdminPage() {
 
   setAvatarInitial();
 
-  // populate pending table
-  const PENDING_PAGE_SIZE = 5;
-  let pendingCurrentPage = 1;
+    // Populate pending table
   let pendingEvents = [];
-
+  
   function populatePending(events) {
     pendingEvents = events;
-    pendingCurrentPage = 1;
-    renderPendingPage();
+    renderPendingTable();
   }
-
-  function renderPendingPage() {
+  
+  function renderPendingTable() {
     const tbody = document.getElementById("pending-tbody");
-    const totalPages = Math.max(1, Math.ceil(pendingEvents.length / PENDING_PAGE_SIZE));
-    const start = (pendingCurrentPage - 1) * PENDING_PAGE_SIZE;
-    const pageEvents = pendingEvents.slice(start, start + PENDING_PAGE_SIZE);
-
+  
+    // Clear the table body
     tbody.innerHTML = "";
+  
+    // Show or hide the "No Pending Events" message
     document.getElementById("noPending").style.display = pendingEvents.length === 0 ? "" : "none";
-
-    pageEvents.forEach((event) => {
+  
+    // Render all pending events
+    pendingEvents.forEach((event) => {
       const price = event.price === 0 ? "badge badge-free" : "badge badge-paid";
       tbody.innerHTML += `
         <tr>
@@ -254,25 +252,11 @@ async function initAdminPage() {
         </tr>
       `;
     });
-
-    // update label
-    const showing = pendingEvents.length === 0 ? 0 : Math.min(start + PENDING_PAGE_SIZE, pendingEvents.length);
+  
+    // Update the label to show the total number of pending events
     document.querySelector(".pending-pagination").textContent =
-      `Showing ${showing} of ${pendingEvents.length} pending events`;
-
-    // rebuild page buttons
-    const pagebtns = document.querySelector(".page-btns");
-    pagebtns.innerHTML = `<button class="page-btn" ${pendingCurrentPage === 1 ? "disabled" : ""} onclick="pendingChangePage(${pendingCurrentPage - 1})">‹</button>`;
-    for (let i = 1; i <= totalPages; i++) {
-      pagebtns.innerHTML += `<button class="page-btn ${i === pendingCurrentPage ? "active" : ""}" onclick="pendingChangePage(${i})">${i}</button>`;
-    }
-    pagebtns.innerHTML += `<button class="page-btn" ${pendingCurrentPage === totalPages ? "disabled" : ""} onclick="pendingChangePage(${pendingCurrentPage + 1})">›</button>`;
+      `Showing ${pendingEvents.length} pending events`;
   }
-
-  window.pendingChangePage = function (page) {
-    pendingCurrentPage = page;
-    renderPendingPage();
-  };
 
   //populate all events table
     function populateAll(events) {
@@ -491,7 +475,6 @@ async function initAdminPage() {
       event.created_at
     ).toLocaleString();
 
-    // close on overlay click
     modal.addEventListener("click", (e) => {
       if (e.target === modal) closeModal();
     });
@@ -509,7 +492,6 @@ async function initAdminPage() {
     const rejectModal = document.getElementById("rejectModal");
     rejectModal.style.display = "flex";
 
-    // close on overlay click
     rejectModal.addEventListener("click", (e) => {
       if (e.target === rejectModal) closeRejectModal();
     });
@@ -558,8 +540,39 @@ async function initAdminPage() {
     openRejectModal();
   };
 
-  // Initialize the chatbot
-  initChatbot();
+  // T&C from file
+  const termsRes = await fetch("/terms&conditions.txt");
+  const termsAndConditions = termsRes.ok ? await termsRes.text() : "";
+
+  //injecting event information into prompt
+  await loadAll();
+
+  console.log("Pending events to be reviewed by AI:", pendingEvents);
+  const formattedPendingEvents = pendingEvents.map(event => `
+    - Title: ${event.title} 
+    - ID: ${event.id}
+    - Description of event: ${event.description}
+    - Date: ${event.date} · ${event.start_time} - ${event.end_time}
+    - Location: ${event.location}
+    - Status: ${event.event_status}`).join("\n");
+  
+  //prompt for AI chatbot
+  const promptInput = `You are an admin assistant for Campus Connect. Your role is to help the admin manage events, answer questions about event details, and flag any policy violations.
+
+  TERMS AND CONDITIONS:
+  ${termsAndConditions}
+
+  When reviewing events, check them against the terms above and clearly flag any violations so the admin can decide whether to approve or reject the posting.
+  
+  PENDING EVENTS:
+  ${formattedPendingEvents}
+  
+  Using the information above, assist the admin in managing events and answering any questions they may have about the pending events. Always refer to the terms and conditions when evaluating events. Provide clear explanations for any flagged issues, and why a certain event is set to be rejected.
+  
+  If asked by the admin to provide a reason for rejection of an event, use the information from the terms and conditions and the event details to generate a clear and concise reason that can be communicated to the event organizer.`;
+
+  //initialize chatbot
+  initChatbot(promptInput);
 
   // AI chatbot overlay view
   const chatBotSidebar = document.querySelector(".ai-sidebar-btn");
@@ -592,8 +605,6 @@ async function initAdminPage() {
       sendAI(); // Trigger the sendAI function
     });
   });
-
-  console.log(chatBotSidebar, askAiBtn, closeAiBtn);
 
   //signout
   const logOutBtn = document.getElementById("logOutBtn");

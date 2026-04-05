@@ -8,7 +8,7 @@ const app = express();
 const PORT = 3001;
 
 const corsOptions = {
-  origin: "*",
+  origin:'*',
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "Origin", "Accept"],
   preflightContinue: false,
@@ -27,13 +27,21 @@ app.options(/.*/, (req, res) => {
 app.use(bodyParser.json());
 
 app.post("/api/anthropic", async (req, res) => {
-  const { messages } = req.body;
+  const { messages, systemPrompt } = req.body;
 
   if (!messages || !Array.isArray(messages)) {
+    console.error("Invalid messages format:", messages);
     return res.status(400).json({ error: "messages must be an array" });
   }
 
   try {
+    const body = {
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 1024,
+      messages,
+    };
+    if (systemPrompt) body.system = systemPrompt;
+
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
@@ -41,15 +49,12 @@ app.post("/api/anthropic", async (req, res) => {
         "x-api-key": ANTHROPIC_API_KEY,
         "anthropic-version": "2023-06-01",
       },
-      body: JSON.stringify({
-        model: "claude-haiku-4-5-20251001",
-        max_tokens: 1024,
-        messages,
-      }),
+      body: JSON.stringify(body),
     });
 
     if (!response.ok) {
       const error = await response.text();
+      console.error("Error from Anthropic API:", error);
       return res.status(response.status).send(error);
     }
 
