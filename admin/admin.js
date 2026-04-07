@@ -254,8 +254,8 @@ async function initAdminPage() {
     });
   
     // Update the label to show the total number of pending events
-    document.querySelector(".pending-pagination").textContent =
-      `Showing ${pendingEvents.length} pending events`;
+    const pendingPagination = document.querySelector(".pending-pagination");
+    if (pendingPagination) pendingPagination.textContent = `Showing ${pendingEvents.length} pending events`;
   }
 
   //populate all events table

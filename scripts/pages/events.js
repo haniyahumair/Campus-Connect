@@ -35,19 +35,22 @@ async function loadEvents() {
   
     events.forEach(event => {
       const date = new Date(event.date);
+      if (event.price === 0){
+        event.price = "Free";
+      }
       const mappedEvent = {
         id: event.id,
         title: event.title,
         description: event.description,
         location: event.location,
-        price: event.price ?? "Free",
+        price: event.price === "Free" ? "Free" : `${event.price} QAR`,
         image: event.img_url ?? event.image ?? "/assets/default-event.jpg",
         month: date.toLocaleString('default', { month: 'long' }),
         day: date.getDate(),
         year: date.getFullYear(),
         start: event.start_time ?? event.start,
         end: event.end_time ?? event.end,
-        attendees: event.current_registrations ?? 0,
+        attendees: event.current_registration ?? 0,
         capacity: event.max_capacity ?? 100,
         type: event.category ?? event.type,
         saveEvent: "/assets/Icons/Heart outline peach.svg"

@@ -1,3 +1,7 @@
+body{
+    font-family: var(--text-font);
+}
+
 /*Hero Styling*/
 .hero {
     padding-bottom: 50px;

@@ -51,6 +51,34 @@ async function loadEventDetails() {
     });
 }
 
+//if there are items in cart but not yet purchased, then the registraiton should upload, with status = "pending" and payment_status = "unpaid". 
+async function awaitingPayment(userId, eventId) {
+    if (!userId || !eventId) return;
+    
+    const { data: existing } = await supabase
+      .from("registration")
+      .select("*")
+      .eq("user_id", userId )
+      .eq("event_id", eventId)
+      .eq("payment_status", "unpaid")
+      .single();
+  
+    if (existing) return;
+  
+    const { error } = await supabase
+      .from("registration")
+      .insert({
+        user_id: userId,
+        event_id: eventId,
+        status: "pending",
+        payment_status: "unpaid",
+        registration_date: new Date().toISOString(),
+      });
+  
+    if (error) console.error("Pending registration error:", error);
+  }
+  
+
 async function addToCart() {
     try {
         const { data: { user }, error: authError } = await supabase.auth.getUser();
@@ -76,6 +104,8 @@ async function addToCart() {
             event_id: eventId,
             quantity: 1
         });
+
+        await awaitingPayment(user.id, eventId);
 
         if (error) throw error;
         showModal(

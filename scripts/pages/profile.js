@@ -108,19 +108,22 @@ async function loadCreatedEvents() {
   container.innerHTML = "";
   events.forEach((event) => {
     const date = new Date(event.date);
+    if (event.price === 0){
+      event.price = "Free";
+    }
     const mappedEvent = {
       id: event.id,
       title: event.title,
       description: event.description,
       location: event.location,
-      price: event.price ?? "Free",
+      price: event.price === "Free" ? "Free" : `${event.price} QAR`,
       image: event.img_url ?? event.image ?? "/assets/default-event.jpg",
       month: date.toLocaleString("default", { month: "long" }),
       day: date.getDate(),
       year: date.getFullYear(),
       start: event.start_time ?? event.start,
       end: event.end_time ?? event.end,
-      attendees: event.current_registrations ?? 0,
+      attendees: event.current_registration ?? 0,
       capacity: event.max_capacity ?? 100,
       type: event.category ?? event.type,
       saveEvent: "/assets/Icons/Heart outline peach.svg",
@@ -136,10 +139,15 @@ async function loadCreatedEvents() {
 async function loadUpcomingEvents() {
   const container = document.getElementById("upcomingEventsContainer");
   const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    window.location.href = '/pages/login.html';
+    return;
+  }
   const { data: registrations, error } = await supabase
     .from("registration")
     .select("*, events(*)")
-    .eq("user_id", user.id);
+    .eq("user_id", user.id)
+    .eq("status", "registered");
 
   if (error || !registrations || registrations.length === 0) {
     container.innerHTML = `
@@ -156,19 +164,22 @@ async function loadUpcomingEvents() {
   registrations.forEach((reg) => {
     const event = reg.events;
     const date = new Date(event.date);
+    if (event.price === 0){
+      event.price = "Free";
+    }
     const mappedEvent = {
       id: event.id,
       title: event.title,
       description: event.description,
       location: event.location,
-      price: event.price ?? "Free",
+      price: event.price === "Free" ? "Free" : `${event.price} QAR`,
       image: event.img_url ?? event.image ?? "/assets/default-event.jpg",
       month: date.toLocaleString("default", { month: "long" }),
       day: date.getDate(),
       year: date.getFullYear(),
       start: event.start_time ?? event.start,
       end: event.end_time ?? event.end,
-      attendees: event.current_registrations ?? 0,
+      attendees: event.current_registration ?? 0,
       capacity: event.max_capacity ?? 100,
       type: event.category ?? event.type,
       saveEvent: "/assets/Icons/Heart outline peach.svg",
@@ -184,6 +195,10 @@ async function loadUpcomingEvents() {
 async function loadSavedEvents() {
   const container = document.getElementById("savedEventsContainer");
   const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    window.location.href = '/pages/login.html';
+    return;
+  }
   const { data: saved, error } = await supabase
     .from("wishlist")
     .select("*, events(*)")
@@ -204,19 +219,22 @@ async function loadSavedEvents() {
   saved.forEach((row) => {
     const event = row.events;
     const date = new Date(event.date);
+    if (event.price === 0){
+      event.price = "Free";
+    }
     const mappedEvent = {
       id: event.id,
       title: event.title,
       description: event.description,
       location: event.location,
-      price: event.price ?? "Free",
+      price: event.price === "Free" ? "Free" : `${event.price} QAR`,
       image: event.img_url ?? event.image ?? "/assets/default-event.jpg",
       month: date.toLocaleString("default", { month: "long" }),
       day: date.getDate(),
       year: date.getFullYear(),
       start: event.start_time ?? event.start,
       end: event.end_time ?? event.end,
-      attendees: event.current_registrations ?? 0,
+      attendees: event.current_registration ?? 0,
       capacity: event.max_capacity ?? 100,
       type: event.category ?? event.type,
       saveEvent: "/assets/Icons/Heart filled peach.svg",
