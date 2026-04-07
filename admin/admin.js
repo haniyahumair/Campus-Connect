@@ -475,6 +475,16 @@ async function initAdminPage() {
       event.created_at
     ).toLocaleString();
 
+    // show acctpt/reject buttions when event still pending
+    const status = event.event_status;
+    let statusClass = "badge";
+    if (status === "pending") statusClass += " badge-pending";
+    else if (status === "approved") statusClass += " badge-approved";
+    else if (status === "rejected") statusClass += " badge-rejected";
+    document.getElementById("modalStatus").innerHTML = `<span class="${statusClass}">${status}</span>`;
+    
+    document.getElementById("modalFooter").style.display = status === "pending" ? "flex" : "none";
+
     modal.addEventListener("click", (e) => {
       if (e.target === modal) closeModal();
     });
@@ -532,12 +542,40 @@ async function initAdminPage() {
     loadAll();
   };
 
+  // accept event
   window.openRejectModal = openRejectModal;
   window.closeRejectModal = closeRejectModal;
 
   window.quickReject = function (eventId) {
     currentEventId = eventId;
     openRejectModal();
+  };
+
+  window.doApprove = async function () {
+    const { data: event, error: fetchError } = await supabase
+      .from("events")
+      .select("title, org_id")
+      .eq("id", currentEventId)
+      .single();
+
+    if (fetchError) { console.error(fetchError); return; }
+    
+    const { error } = await supabase
+      .from("events")
+      .update({ event_status: "approved" })
+      .eq("id", currentEventId);
+    
+    if (error) { console.error(error); return; }
+    
+    await supabase.from("notifications").insert({
+      user_id: event.org_id,
+      event_id: currentEventId,
+      message: `Your event "${event.title}" was approved! Check it out on the events page.`,
+      is_read: false,
+    });
+    
+    closeModal();
+    loadAll();
   };
 
   // T&C from file
