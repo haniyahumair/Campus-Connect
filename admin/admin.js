@@ -55,12 +55,12 @@ async function initAdminPage() {
     const { data: allEvents, error: allError } = await supabase
       .from("events")
       .select("*");
-  
+
     if (allError) {
       console.error("Error fetching all events:", allError);
       return;
     }
-  
+
     // Update stat cards and sidebar counts
     const allEventsCount = allEvents.length;
     const approvedEvents = allEvents.filter(event => event.event_status === "approved");
@@ -211,7 +211,7 @@ async function initAdminPage() {
 
   setAvatarInitial();
 
-    // Populate pending table
+  // Populate pending table
   let pendingEvents = [];
   
   function populatePending(events) {
@@ -252,20 +252,18 @@ async function initAdminPage() {
         </tr>
       `;
     });
-  
-    // Update the label to show the total number of pending events
+
     const pendingPagination = document.querySelector(".pending-pagination");
     if (pendingPagination) pendingPagination.textContent = `Showing ${pendingEvents.length} pending events`;
   }
 
   //populate all events table
-    function populateAll(events) {
+  function populateAll(events) {
     const tbody = document.getElementById("allTBody");
     if (!tbody) {
-      console.error("Element with id 'allTBody' not found in the DOM.");
+      console.error("allTBody element not found in DOM.");
       return;
     }
-  
     tbody.innerHTML = "";
     events.forEach((event) => {
       const widthPercentage = (event.current_registration / event.max_capacity) * 100;
@@ -312,7 +310,7 @@ async function initAdminPage() {
   }
 
   //populate stats and attendance table
-    function statusBar(events) {
+  function statusBar(events) {
     const statsAttendanceTbody = document.getElementById("statsTBody");
     if (!statsAttendanceTbody) {
       console.error("Element with id 'statsTBody' not found in the DOM.");
@@ -407,6 +405,8 @@ async function initAdminPage() {
 
   //aprove events with notification
   window.quickApprove = async function (eventId) {
+    console.log("quickApprove called for event ID:", eventId);
+
     // fetch event first to get student id and title
     const { data: event, error: fetchError } = await supabase
       .from("events")
@@ -415,24 +415,31 @@ async function initAdminPage() {
       .single();
 
     if (fetchError) {
-      console.error(fetchError);
+      console.error("Fetch error:", fetchError);
       return;
     }
+    console.log("Fetched event:", event);
 
     // update status
-    const { error } = await supabase
+    const { data: updatedRows, error } = await supabase
       .from("events")
-      .update({ status: "approved" })
-      .eq("id", eventId);
+      .update({ event_status: "approved", is_active: true })
+      .eq("id", eventId)
+      .select();
 
     if (error) {
-      console.error(error);
+      console.error("Update error:", error);
+      return;
+    }
+    if (!updatedRows || updatedRows.length === 0) {
+      console.error("Update failed: no rows affected. Check Supabase RLS policies for events table UPDATE.");
       return;
     }
 
     //send notification to student
     await supabase.from("notifications").insert({
       user_id: event.org_id,
+      sender_id: (await supabase.auth.getUser()).data.user.id,
       event_id: eventId,
       message: `Your event "${event.title}" was approved! Check it out on the events page.`,
       is_read: false,
@@ -532,6 +539,7 @@ async function initAdminPage() {
 
     await supabase.from("notifications").insert({
       user_id: event.org_id,
+      sender_id: (await supabase.auth.getUser()).data.user.id,
       event_id: currentEventId,
       message: `Your event "${event.title}" was not approved.${reason ? ` Reason: ${reason}` : ""} Please try again.`,
       is_read: false,
@@ -552,6 +560,7 @@ async function initAdminPage() {
   };
 
   window.doApprove = async function () {
+    console.log("doApprove function called for event ID:", currentEventId);
     const { data: event, error: fetchError } = await supabase
       .from("events")
       .select("title, org_id")
@@ -559,23 +568,38 @@ async function initAdminPage() {
       .single();
 
     if (fetchError) { console.error(fetchError); return; }
+    console.log("Fetched event details:", event);
     
-    const { error } = await supabase
+    const { data: updatedRows, error } = await supabase
       .from("events")
-      .update({ event_status: "approved" })
-      .eq("id", currentEventId);
-    
+      .update({ event_status: "approved", is_active: true })
+      .eq("id", currentEventId)
+      .select();
+
     if (error) { console.error(error); return; }
+    if (!updatedRows || updatedRows.length === 0) {
+      console.error("Update failed: no rows affected. Check Supabase RLS policies for events table UPDATE.");
+      return;
+    }
+    //successfully approved event modal
+    console.alert("Event approved successfully!");
     
-    await supabase.from("notifications").insert({
+    const { error: notificationError } = await supabase.from("notifications").insert({
       user_id: event.org_id,
+      sender_id: (await supabase.auth.getUser()).data.user.id,
       event_id: currentEventId,
       message: `Your event "${event.title}" was approved! Check it out on the events page.`,
       is_read: false,
     });
+    if (notificationError) {
+      console.error("Error sending notification:", notificationError);
+    } else {
+      console.log("Notification sent to organizer:", event.org_id);
+    }
     
     closeModal();
     loadAll();
+    console.log("Modal closed and events reloaded.");
   };
 
   // T&C from file
@@ -586,6 +610,7 @@ async function initAdminPage() {
   await loadAll();
 
   console.log("Pending events to be reviewed by AI:", pendingEvents);
+
   const formattedPendingEvents = pendingEvents.map(event => `
     - Title: ${event.title} 
     - ID: ${event.id}

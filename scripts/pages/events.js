@@ -20,7 +20,8 @@ let eventCardsArray = [];
 async function loadEvents() {
     const { data: events, error } = await supabase
       .from("events")
-      .select("*");
+      .select("*")
+      .eq("event_status", "approved");
   
     console.log("Events data:", events);
     console.log("Error:", error);

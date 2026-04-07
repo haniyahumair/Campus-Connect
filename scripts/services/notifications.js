@@ -71,7 +71,7 @@ function addNotificationToDropdown(notif) {
   const list = document.getElementById('notifList');
   if (!list) return;
 
-  // remove empty state
+  // Remove empty state
   const empty = list.querySelector('.notif-empty');
   if (empty) empty.remove();
 
@@ -81,17 +81,19 @@ function addNotificationToDropdown(notif) {
   item.innerHTML = `
     <p class="notif-msg">${notif.message}</p>
     <span class="notif-time">${timeAgo(notif.created_at)}</span>
+    <p class="read-notif" style="font-size: 0.8rem; text-decoration: underline; color: #666;">Read</p>
   `;
 
-  // mark as read on click
-  item.addEventListener('click', async () => {
-    item.classList.remove('unread');
+  // Attach event listener to the "Read" button
+  const readNotif = item.querySelector('.read-notif');
+  readNotif.addEventListener('click', async () => {
+    item.classList.remove('unread'); 
     await supabase
       .from('notifications')
       .update({ is_read: true })
       .eq('id', notif.id);
 
-    // go to events page
+    // Redirect to events page
     window.location.href = '/pages/events.html';
   });
 
