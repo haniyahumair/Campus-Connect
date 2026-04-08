@@ -88,6 +88,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (error) throw error;
 
+            //send notification to admin about event being made
+            const { data: admins, error: adminError} = await supabase
+                .from('profiles')
+                .select('user_id')
+                .eq('is_admin', true)
+                .eq('role', "admin")
+                .single();
+
+            if (adminError) {
+                console.error('Error fetching admin user:', adminError);
+                return;
+            };
+
+            if (!admins || !admins.user_id) {
+                console.error('No admin user found');
+                return;
+            }
+
+            const notificationToAdmin = admins.map(admin => ({  
+                user_id: admin.user_id,
+                sender_id: user.id,
+                event_id: currentEventId,
+                message: `A new event "${title}" has been created. Please review and approve it.`,
+                is_read: false,
+            }));
+
+            const { error: notificationError } = await supabase
+                .from('notifications')
+                .insert(notificationToAdmin);
+
+            if (notificationError) {
+                console.error('Error sending notification to admin:', notificationError);
+            }
+
             // Success popup
             showModal(
                 'Form Submitted',

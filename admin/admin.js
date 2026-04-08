@@ -30,8 +30,9 @@ async function initAdminPage() {
     const { data: pendingData, error: pendingError } = await supabase
       .from("events")
       .select("*")
-      .eq("event_status", "pending");
-  
+      .eq("event_status", "pending")
+      .eq("is_active", false); 
+      
     if (pendingError) {
       console.error("Error fetching pending events:", pendingError);
       return;

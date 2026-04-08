@@ -245,3 +245,14 @@ section{
     gap: 20px;
     padding-bottom: 15px;
   }
+
+  /* pending event */
+  .pending-event{
+    opacity: 0.6;
+  }
+
+  /* rejected event */
+    .rejected-event{
+        opacity: 0.6;
+        border: 2px solid var(--red);
+    }

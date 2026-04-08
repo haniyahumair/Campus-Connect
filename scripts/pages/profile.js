@@ -91,6 +91,8 @@ async function loadCreatedEvents() {
     .from("events")
     .select("*")
     .eq("org_id", user.id);
+    console.log("Fetched events:", events);
+    console.log("Logged-in user ID:", user.id);
 
   const container = document.getElementById("createdEventsContainer");
 
@@ -104,32 +106,98 @@ async function loadCreatedEvents() {
     return;
   }
 
-  document.getElementById("createdCount").textContent = events.length;
-  container.innerHTML = "";
-  events.forEach((event) => {
-    const date = new Date(event.date);
-    if (event.price === 0){
-      event.price = "Free";
+    if (events && events.length > 0) {
+    // Filter events with status "pending"
+    const pendingEvents = events.filter(event => event.event_status === "pending");
+    const approvedEvents = events.filter(event => event.event_status === "approved");
+    const rejectedEvents = events.filter(event => event.event_status === "rejected");
+
+    document.getElementById("createdCount").textContent = events.length;
+    container.innerHTML = "";
+
+    if (pendingEvents.length > 0) {
+      container.innerHTML += "<h3 style='grid-column: 1 / -1; font-family: var(--subheader-font); font-size: 1.5rem;'>Your pending events:</h3>";
+      pendingEvents.forEach((event) => {
+        const date = new Date(event.date);
+        if (event.price === 0) event.price = "Free";
+        const mappedEvent = {
+          id: event.id,
+          title: event.title,
+          description: event.description,
+          location: event.location,
+          price: event.price === "Free" ? "Free" : `${event.price} QAR`,
+          image: event.img_url ?? event.image ?? "/assets/default-event.jpg",
+          month: date.toLocaleString("default", { month: "long" }),
+          day: date.getDate(),
+          year: date.getFullYear(),
+          start: event.start_time ?? event.start,
+          end: event.end_time ?? event.end,
+          attendees: event.current_registration ?? 0,
+          capacity: event.max_capacity ?? 100,
+          type: event.category ?? event.type,
+          saveEvent: "/assets/Icons/Heart outline peach.svg",
+        };
+        const eventElement = document.createElement("div");
+        eventElement.classList.add("pending-event");
+        eventElement.innerHTML = createEventCard(mappedEvent);
+        container.appendChild(eventElement);
+      });
     }
-    const mappedEvent = {
-      id: event.id,
-      title: event.title,
-      description: event.description,
-      location: event.location,
-      price: event.price === "Free" ? "Free" : `${event.price} QAR`,
-      image: event.img_url ?? event.image ?? "/assets/default-event.jpg",
-      month: date.toLocaleString("default", { month: "long" }),
-      day: date.getDate(),
-      year: date.getFullYear(),
-      start: event.start_time ?? event.start,
-      end: event.end_time ?? event.end,
-      attendees: event.current_registration ?? 0,
-      capacity: event.max_capacity ?? 100,
-      type: event.category ?? event.type,
-      saveEvent: "/assets/Icons/Heart outline peach.svg",
-    };
-    container.innerHTML += createEventCard(mappedEvent);
-  });
+
+    if (approvedEvents.length > 0) {
+      container.innerHTML += "<h3 style='; grid-column: 1 / -1; font-family: var(--subheader-font); font-size: 1.5rem;'>Your created events:</h3>";
+      approvedEvents.forEach((event) => {
+        const date = new Date(event.date);
+        if (event.price === 0) event.price = "Free";
+        const mappedEvent = {
+          id: event.id,
+          title: event.title,
+          description: event.description,
+          location: event.location,
+          price: event.price === "Free" ? "Free" : `${event.price} QAR`,
+          image: event.img_url ?? event.image ?? "/assets/default-event.jpg",
+          month: date.toLocaleString("default", { month: "long" }),
+          day: date.getDate(),
+          year: date.getFullYear(),
+          start: event.start_time ?? event.start,
+          end: event.end_time ?? event.end,
+          attendees: event.current_registration ?? 0,
+          capacity: event.max_capacity ?? 100,
+          type: event.category ?? event.type,
+          saveEvent: "/assets/Icons/Heart outline peach.svg",
+        };
+        container.innerHTML += createEventCard(mappedEvent);
+      });
+    }
+    if (rejectedEvents.length > 0) {
+      container.innerHTML += "<h3 style='; grid-column: 1 / -1; font-family: var(--subheader-font); font-size: 1.5rem;'>Rejected events:</h3>";
+      rejectedEvents.forEach((event) => {
+        const date = new Date(event.date);
+        if (event.price === 0) event.price = "Free";
+        const mappedEvent = {
+          id: event.id,
+          title: event.title,
+          description: event.description,
+          location: event.location,
+          price: event.price === "Free" ? "Free" : `${event.price} QAR`,
+          image: event.img_url ?? event.image ?? "/assets/default-event.jpg",
+          month: date.toLocaleString("default", { month: "long" }),
+          day: date.getDate(),
+          year: date.getFullYear(),
+          start: event.start_time ?? event.start,
+          end: event.end_time ?? event.end,
+          attendees: event.current_registration ?? 0,
+          capacity: event.max_capacity ?? 100,
+          type: event.category ?? event.type,
+          saveEvent: "/assets/Icons/Heart outline peach.svg",
+        };
+        const eventElement = document.createElement("div");
+        eventElement.classList.add("rejected-event");
+        eventElement.innerHTML = createEventCard(mappedEvent);
+        container.appendChild(eventElement);
+      });
+    }
+  }
 
   const savedEvents = await getWishlist(user);
   const savedEventIds = new Set(savedEvents.map(s => String(s.event_id)));
