@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 org_id: user.id,
                 category: eventType,
                 contact_details: contact,
-                is_active: true
+                event_status: 'pending' // when created, event is pending review by admin
             });
 
             if (error) throw error;
