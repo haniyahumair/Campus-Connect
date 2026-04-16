@@ -57,8 +57,11 @@
             </div>
 
             <div class="event-info">
-                <label class="form-label ">Map</label>
-                <input type="text" id="Map" class="form-control" placeholder="Map Goes Here" required>
+                <label class="form-label">Event Location (Pin the Map)</label>
+                <div id="googleMap" style="height: 350px; width: 100%; border-radius: 8px; border: 2px solid #FF8A80; margin-bottom: 10px;"></div>
+    
+                <input type="hidden" id="Map" required>
+                <p style="font-size: 0.8rem; color: #666;">Drag the marker to the exact location of the event.</p>
             </div>
 
             <div class="event-info">
@@ -103,7 +106,5 @@
 <!--Logic Links-->
     <script type="module" src="/scripts/pages/createEvent.js"></script>    
     <script type="module" src="/scripts/services/loggedInLogic.js"></script>
-    <script type="module" src="/scripts/components/footerComponent.js"></script>
-    <script type="module" src="/scripts/components/navbarComponent.js"></script>
 </body>
 </html>

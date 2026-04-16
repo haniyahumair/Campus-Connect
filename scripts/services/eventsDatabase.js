@@ -24,13 +24,56 @@ async function loadEventDetails() {
 
     document.querySelector('.event-title').textContent = event.title;
     document.querySelector('.image').src = event.img_url;
-    document.querySelector('.price').textContent = `💵 ${event.price}` ?? "💵 Free";
+        if (event.is_free === true){
+        document.querySelector('.price').textContent = "💵 Free";
+    }
+    else{
+        document.querySelector('.price').textContent = `💵 ${event.price} QAR`;
+    }
     document.querySelector('.description').textContent = event.description;
     document.querySelector('.type-text').textContent = event.category;
     document.querySelector('.date-text').textContent = event.date;
     document.querySelector('.time-text').textContent = event.start_time;
     document.querySelector('.location-text').textContent = event.location;
     document.querySelector('.email-text').textContent = event.contact_details;
+    (function setMap() {
+        const iframe = document.getElementById('mapsIframe');
+        const container = document.querySelector('.maps-display');
+        console.log('setMap() start', { eventId: event?.id, iframeFound: !!iframe, iframeId: iframe?.id });
+       
+        if (!iframe) return;
+        const rawMap = event.map_embed_url || ''; 
+        console.log('rawMap from DB:', rawMap);
+        console.log('event.location:', event.location);
+
+        function isEmbedUrl(u) {
+            return /\/embed\/|google\.com\/maps\/embed|maps\.googleapis\.com/.test(u);
+        }
+
+        function isGoogleMapUrl(u) {
+            return /google\.com\/maps/.test(u);
+        }
+
+        if (!container) {
+            console.warn('maps-display container not found');
+            if (iframe) iframe.style.display = 'none';
+            return;
+        }
+
+        if (rawMap && isEmbedUrl(rawMap)) {
+            console.log('Using embeddable rawMap in iframe:', rawMap);
+            if (iframe) { iframe.src = rawMap; iframe.style.display = ''; }
+            return;
+        }
+        // Fallback
+        const loc = (event.location || '').trim();
+        if (loc) {
+            iframe.src = 'https://maps.google.com/maps?q=' + encodeURIComponent(loc) + '&output=embed';
+            return;
+        }
+        iframe.style.display = 'none';
+    })();
+
 
     //wishlist
     const { data: { user } } = await supabase.auth.getUser();
