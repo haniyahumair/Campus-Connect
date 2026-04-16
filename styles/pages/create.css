@@ -30,7 +30,7 @@ section{
     border: 2px dashed var(--black);
     border-radius: 15px;
     background: repeating-linear-gradient(45deg, #f8f9fa, #f8f9fa 20px, #e9ecef 20px, #e9ecef 40px);
-    height: 300px;
+    height: 430px;
     display: flex;
     justify-content: center;
     align-items: center;

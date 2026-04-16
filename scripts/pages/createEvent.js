@@ -98,35 +98,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const currentEventId = newEvent.id;
             
             // send notification to admin about event being made
-            const { data: admins, error: adminError } = await supabase
-                .from('profiles')
-                .select('id') // use profiles.id as the user id
-                .eq('is_admin', true)
-                .eq('role', 'admin');
-            
-            if (adminError) {
-                console.error('Error fetching admin users:', adminError);
-            }
-            
-            if (!admins || admins.length === 0) {
-                console.warn('No admin users found to notify');
-            } else {
-                const notificationToAdmin = admins.map(admin => ({
-                    user_id: admin.id,
-                    sender_id: user.id,
-                    event_id: currentEventId,
-                    message: `A new event "${title}" has been created. Please review and approve it.`,
-                    is_read: false,
-                }));
-            
-                const { error: notificationError } = await supabase
-                    .from('notifications')
-                    .insert(notificationToAdmin);
-            
-                if (notificationError) {
-                    console.error('Error sending notification to admin:', notificationError);
-                    }
-                }
+            const { data: adminProfile } = await supabase.from('profiles').select('id').eq('is_admin', true).single();
+            await supabase.from("notifications").insert({
+                  user_id: adminProfile.id,
+                  sender_id: user.id,
+                  event_id: currentEventId,
+                  message: `A new event "${newEvent.title}" was just created. Please review the event.`,
+                  is_read: false,
+                });
 
             // Success popup
             showModal(
@@ -185,7 +164,6 @@ async function setupMap() {
         const map = new Map(document.getElementById("googleMap"), {
             center: defaultPos,
             zoom: 15,
-            //mapId: "8420c0f6833f36e240843d6a"
         });
 
         const marker = new Marker({
@@ -195,13 +173,12 @@ async function setupMap() {
             title: "Event Location",
         });
 
-        // Update the hidden input for Supabase
+        // Update the hidden input when marker is dragged
         marker.addListener('dragend', () => {
             const pos = marker.getPosition();
-            const lat = pos.lat();  // call as method — pos.lat is a function, not a property
+            const lat = pos.lat();
             const lng = pos.lng();
             const embedUrl = `https://maps.google.com/maps?q=${lat},${lng}&output=embed`;
-            console.log('Map URL saved:', embedUrl);
             document.getElementById('Map').value = embedUrl;
         });
 

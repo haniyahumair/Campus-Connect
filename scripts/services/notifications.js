@@ -41,9 +41,12 @@ export async function initNotifications() {
   });
 
   // close dropdown when clicking outside
-  document.addEventListener('click', () => {
+  document.addEventListener('click', (e) => {
     const dropdown = document.getElementById('notifDropdown');
-    if (dropdown) dropdown.style.display = 'none';
+    const bell = document.getElementById('notificationBtn') || document.getElementById('bellBtn');
+    if (dropdown && !dropdown.contains(e.target) && (!bell || !bell.contains(e.target))) {
+      dropdown.style.display = 'none';
+    }
   });
 }
 
@@ -81,7 +84,10 @@ function addNotificationToDropdown(notif) {
   item.innerHTML = `
     <p class="notif-msg">${notif.message}</p>
     <span class="notif-time">${timeAgo(notif.created_at)}</span>
-    <p class="read-notif" style="font-size: 0.8rem; text-decoration: underline; color: #666;">Read</p>
+    <div class="notif-actions">
+      <p class="read-notif" style="font-size: 0.8rem; text-decoration: underline; color: #666;">Read</p>
+      <p class="clear-notif" style="font-size: 0.8rem; text-decoration: underline; color: #666;">Clear</p>
+    </div>
   `;
 
   // Attach event listener to the "Read" button
@@ -92,9 +98,21 @@ function addNotificationToDropdown(notif) {
       .from('notifications')
       .update({ is_read: true })
       .eq('id', notif.id);
+  });
 
-    // Redirect to events page
-    window.location.href = '/pages/events.html';
+  //Event listener for "Clear" button
+  const clearNotif = item.querySelector('.clear-notif');
+  clearNotif.addEventListener('click', async () => {
+    await supabase
+      .from('notifications')
+      .delete()
+      .eq('id', notif.id);
+    item.remove();
+    const badge = document.getElementById('bellBadge');
+    if (badge) {
+      const current = parseInt(badge.textContent) || 0;
+      updateBadge(current - 1);
+    }
   });
 
   list.prepend(item);

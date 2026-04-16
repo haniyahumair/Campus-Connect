@@ -1,5 +1,6 @@
 import { supabase } from "../scripts/config/supabase.js";
 import { initChatbot } from "./ai.js";
+import { initNotifications } from "../scripts/services/notifications.js";
 
 let currentEventId = null;
 
@@ -20,6 +21,13 @@ async function initAdminPage() {
   if (profile?.role !== 'admin') {
       window.location.href = '/pages/profile.html'
       return
+  }
+
+  try {
+    await initNotifications();
+    console.log('initNotifications: called on admin page');
+  } catch (err) {
+    console.error('initNotifications error:', err);
   }
 
   loadAll();
@@ -493,6 +501,18 @@ async function initAdminPage() {
     
     document.getElementById("modalFooter").style.display = status === "pending" ? "flex" : "none";
 
+    // set approve button to call quickApprove with this event id (works when there is a single admin)
+    const approveBtn = document.querySelector("#modalFooter .approve-btn");
+    if (approveBtn) {
+      if (status === "pending") {
+        approveBtn.setAttribute("onclick", `quickApprove('${event.id}')`);
+        alert("Event approved successfully!");
+        closeModal();
+      } else {
+        approveBtn.removeAttribute("onclick");
+      }
+    }
+
     modal.addEventListener("click", (e) => {
       if (e.target === modal) closeModal();
     });
@@ -583,7 +603,7 @@ async function initAdminPage() {
       return;
     }
     //successfully approved event modal
-    console.alert("Event approved successfully!");
+    alert("Event approved successfully!");
     
     const { error: notificationError } = await supabase.from("notifications").insert({
       user_id: event.org_id,
