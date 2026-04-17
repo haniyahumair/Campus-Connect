@@ -38,11 +38,18 @@ async function loadEvents() {
       const date = new Date(event.date);
       if (event.price === 0){
         event.price = "Free";
-      }
+      }      
+      
+      function truncateBySentences(text, maxSentences = 1) {
+        if (!text) return '';
+        const sentences = text.match(/[^.!?]+[.!?]*/g) || [text];
+        const truncated = sentences.slice(0, maxSentences).join('').trim();
+        return sentences.length > maxSentences ? truncated.replace(/\s+$/,'') + '…' : truncated;
+    }
       const mappedEvent = {
         id: event.id,
         title: event.title,
-        description: event.description,
+        description: truncateBySentences(event.description, 1),
         location: event.location,
         price: event.price === "Free" ? "Free" : `${event.price} QAR`,
         image: event.img_url ?? event.image ?? "/assets/default-event.jpg",
@@ -57,7 +64,31 @@ async function loadEvents() {
         saveEvent: "/assets/Icons/Heart outline peach.svg"
       };
       container.innerHTML += createEventCard(mappedEvent);
+
+      //display event grid based on date (soonest events first)
+        const cards = Array.from(container.querySelectorAll(".event-card"));
+        cards.sort((a, b) => {
+            const dateA = new Date(a.querySelector(".month").textContent + " " + a.querySelector(".day").textContent + ", " + a.querySelector(".year").textContent);
+            const dateB = new Date(b.querySelector(".month").textContent + " " + b.querySelector(".day").textContent + ", " + b.querySelector(".year").textContent);
+            return dateA - dateB;
+            });
+        cards.forEach(card => container.appendChild(card)); 
     });
+
+    //if events date has past the current date, hide the event card
+    const currentDate = new Date();
+
+    if (events) {
+        events.forEach(event => {
+            const eventDate = new Date(event.date);
+            if (eventDate < currentDate) {
+                const card = container.querySelector(`.event-card .viewDetailBtn[data-id="${event.id}"]`).closest(".event-card");
+                if (card) {
+                    card.style.display = "none";
+                }
+            }
+        });
+    }
   
     eventCardsArray = document.querySelectorAll(".event-card");
 

@@ -240,7 +240,7 @@
 }
 
 .event-cards-container .event-card {
-    height: 550px;
+    height: 630px;
     width: 370px;
     border-radius: 25px;
     background-color: var(--primary-grey);

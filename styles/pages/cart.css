@@ -7,13 +7,12 @@ section {
 .cart-container{
     min-height: 80vh; 
     padding-bottom: 20px; 
-    align-items: flex-start;
 }
 
 .cart-container h2 {
     font-size: 3.5rem;
     text-align: center;
-    margin-bottom: 80px;
+    margin-bottom: 65px;
     margin-top: 50px;
     font-family: var(--header-font);
 }
@@ -21,12 +20,15 @@ section {
 .cart-layout{
     display: flex;
     flex-direction: row;
+    align-items: stretch;
     justify-content: space-between;
     gap: 2rem;
+    padding: 22px 22px;
+    background-color: var(--primary-grey);
 }
 
 .cart-left{
-    flex: 1;
+    flex: 1 1 auto;
     min-width: 0;
 }
 
@@ -36,16 +38,16 @@ section {
     flex-direction: row;
     align-items: center;
     gap: 18px;
-    margin: 20px 0;
     border-radius: 12px;
     padding: 18px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
-    height: 300px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    height: 330px;
     overflow: hidden;
+    margin-bottom: 20px;
 }
 
 .item-image {
-    width: 320px;
+    width: 330px;
     flex-shrink: 0;
     height: 100%;
 }
@@ -61,6 +63,7 @@ section {
     width: 100%;
     padding-top: 0;
     overflow: hidden;
+    transform: translateY(-20px);
 }
 
 .item-details h5 {
@@ -99,7 +102,7 @@ section {
     flex-direction: row;
     gap: 5px;
     margin-bottom: 0;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 .time p {
@@ -111,19 +114,18 @@ section {
 }
 
 .item-details .location {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     margin-bottom: 8px;
-    margin-top: 5px;
+    margin-top: 14px;
 }
 
 .item-actions {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 8px;
     min-width: 100px;
-    padding: 0 20px;
+    margin-top: 28px;
 }
 
 .item-price {
@@ -131,11 +133,13 @@ section {
     font-weight: 700;
     text-align: center;
     margin-bottom: 0;
+    margin-top: 0;
 }
 
 .quantity-control {
     display: flex;
     align-items: center;
+    margin: 0;
 }
 
 .qty-btn {
@@ -151,10 +155,12 @@ section {
 
 .qty-btn:first-child {
     border-radius: 8px 0 0 8px;
+    margin: 0;
 }
 
 .qty-btn:last-child {
     border-radius: 0 8px 8px 0;
+    margin: 0;
 }
 
 .quantity {
@@ -165,6 +171,7 @@ section {
     border-bottom: 1px solid var(--black);
     padding: 8px 0;
     font-weight: bold;
+    margin: 0;
 }
 
 .remove-btn {
@@ -196,121 +203,141 @@ section {
     font-family: var(--subheader-font);
 }
 
-.cart-item hr{
-    border: 0.5px solid var(--light-grey);
-    height: 100%;
-}
+.cart-vertical-sep {
+    width: 1.3px;
+    background: var(--light-grey);
+    height: 42px;
+    display: inline-block;
+    vertical-align: middle;
+    border: none;
+  }
 
-.cart-right{
-    background-color: var(--primary-accent);
-    border-radius: 5px;
-    align-items: center;
-    min-height: 100vh; 
-    width: 50vh;
-    color: var(--white);
-}
+  .remove-btn{
+    margin-right: 25px;
+  }
 
-.order-summary{
-    padding: 0px 10px;
+  .cart-right{
+    flex: 0 0 200px;   
+    margin-right: 0;  
+    max-width: 380px;
+    width: 380px;
+    height: auto;
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .order-summary h5{
-    margin-top: 25px;
-    font-size: 1.7rem;
-    margin-bottom: 2px;
-    color: var(--white);
+    font-size: 1.5rem;
     font-family: var(--subheader-font);
+    margin-bottom: 12px;
+    margin-top: 10px;
 }
 
-.order-summary hr{
-    border: 0.7px solid var(--white);
+.cart-right hr {
+    border: none;
+    border-top: 1.5px solid var(--light-grey);
+    margin: 22px 0;
 }
 
-.summary-row{
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 50px 0;
+#eventTitle {
+    font-size: 1rem;
+    font-family: var(--text-font);
+    margin-bottom: 12px;
+    color: var(--dark-grey);
 }
 
 #cartTotal {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: white;
-    border: 2px solid white;
-    padding: 8px 16px;
-    border-radius: 10px;
+    display: inline-block;
+    font-size: 1.2rem;
+    font-family: var(--text-font);
+    margin-bottom: 16px;
 }
 
-.terms-label{
+.terms-label {
+    display: flex;
+    align-items: center;
+    font-family: var(--text-font);
     font-size: 0.9rem;
+    color: var(--dark-grey);
+    background-color: var(--primary-grey);
+    padding: 10px 12px;
+    border-radius: 8px;
+    gap: 5px;
+    margin-bottom: 12px;
 }
 
-.terms-label input{
-    width: 12px;
-    height: 12px;
-}
-
-a{
-   text-decoration: underline;
-   color: var(--white);
+.terms-label a{
+    color: var(--primary-accent);
 }
 
 .payment-options {
-    margin-top: 15px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 0;
 }
 
 .payment-title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: 0;
+    font-size: 0.9rem;
+    font-family: var(--subheader-font);
+    color: var(--dark-grey);
 }
 
-.payment-btn {
-    width: 100%;
-    padding: 12px;
-    border-radius: 25px;
-    border: none;
-    font-size: 0.95rem;
-    font-weight: 600;
+#apple-pay-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.08);
+    background: transparent;
+    width: 250px;
+    box-sizing: border-box;
     cursor: pointer;
-}
-
-@supports (-webkit-appearance: -apple-pay-button) {
-    #apple-pay-button {
+  }
+  
+  #apple-pay-btn .apple-pay-fallback {
+    height: 24px;
+    width: auto;
+    display: block;
+  }
+  
+  @supports (-webkit-appearance: -apple-pay-button) {
+    #apple-pay-btn {
       -webkit-appearance: -apple-pay-button;
-      -apple-pay-button-style: black; 
-      -apple-pay-button-type: check-out;
-      width: 100%;
-      height: 35px; 
-      padding: 20px 0;
-      box-sizing: border-box;
-      cursor: pointer;
+      -apple-pay-button-style: black;
+      -apple-pay-button-type: buy;
+      height: 45px;
+      padding: 0 12px;
+    }
+    #apple-pay-btn .apple-pay-fallback {
+      display: none;
     }
   }
   
-/* Hidden on Safari */
-@supports (-webkit-appearance: -apple-pay-button) {
-    .apple-pay-fallback {
-        display: none;
-    }
-}
-
-.paypal-btn {
-    background-color: #0070BA;
-    color: var(--black);
-    cursor: pointer;
+  .paypal-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    width: 250px;
+    background-color: #c4dbf2;
     border: none;
-    border-radius: 5px;
-    padding: 7px 0;
-}
+    border-radius: 7px;
+    height: 45px;
+  }
 
 .card {
     background-color: var(--white);
     color: var(--black);
     border: 1px solid var(--black) !important;
+    border-radius: 8px;
+    width: 250px;
+    height: 45px;
+    font-size: 1rem;
 }
 
 .payment-btn:hover {

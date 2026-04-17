@@ -84,6 +84,12 @@ async function loadUserProfile() {
 
 
 }
+function truncateBySentences(text, maxSentences = 1) {
+  if (!text) return '';
+  const sentences = text.match(/[^.!?]+[.!?]*/g) || [text];
+  const truncated = sentences.slice(0, maxSentences).join('').trim();
+  return sentences.length > maxSentences ? truncated.replace(/\s+$/,'') + '…' : truncated;
+}
 
 async function loadCreatedEvents() {
   const { data: { user } } = await supabase.auth.getUser();
@@ -120,10 +126,11 @@ async function loadCreatedEvents() {
       pendingEvents.forEach((event) => {
         const date = new Date(event.date);
         if (event.price === 0) event.price = "Free";
+
         const mappedEvent = {
           id: event.id,
           title: event.title,
-          description: event.description,
+          description: truncateBySentences(event.description, 1),
           location: event.location,
           price: event.price === "Free" ? "Free" : `${event.price} QAR`,
           image: event.img_url ?? event.image ?? "/assets/default-event.jpg",
@@ -152,7 +159,7 @@ async function loadCreatedEvents() {
         const mappedEvent = {
           id: event.id,
           title: event.title,
-          description: event.description,
+          description: truncateBySentences(event.description, 1),
           location: event.location,
           price: event.price === "Free" ? "Free" : `${event.price} QAR`,
           image: event.img_url ?? event.image ?? "/assets/default-event.jpg",
@@ -177,7 +184,7 @@ async function loadCreatedEvents() {
         const mappedEvent = {
           id: event.id,
           title: event.title,
-          description: event.description,
+          description: truncateBySentences(event.description, 1),
           location: event.location,
           price: event.price === "Free" ? "Free" : `${event.price} QAR`,
           image: event.img_url ?? event.image ?? "/assets/default-event.jpg",
@@ -238,7 +245,7 @@ async function loadUpcomingEvents() {
     const mappedEvent = {
       id: event.id,
       title: event.title,
-      description: event.description,
+      description: truncateBySentences(event.description, 1),
       location: event.location,
       price: event.price === "Free" ? "Free" : `${event.price} QAR`,
       image: event.img_url ?? event.image ?? "/assets/default-event.jpg",
@@ -293,7 +300,7 @@ async function loadSavedEvents() {
     const mappedEvent = {
       id: event.id,
       title: event.title,
-      description: event.description,
+      description: truncateBySentences(event.description, 1),
       location: event.location,
       price: event.price === "Free" ? "Free" : `${event.price} QAR`,
       image: event.img_url ?? event.image ?? "/assets/default-event.jpg",

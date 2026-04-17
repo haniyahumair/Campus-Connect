@@ -34,6 +34,9 @@ async function loadCart() {
   const container = document.getElementById("cartContainer");
   container.innerHTML = "";
 
+  const eventTitle = document.getElementById("eventTitle");
+  eventTitle.textContent = `You have ${cartItems ? cartItems.length : 0} item(s) in your cart`;
+
   const payementSection = document.querySelector(".cart-right");
   payementSection.style.display = "none";
   if (error) {
@@ -86,26 +89,21 @@ async function loadCart() {
                     </div>    
                 </div> 
                 <p class="location">📍${event.location}</p>
-                <div class="type-of-event">
-                    <button class="event-type">
-                        <img src="/assets/Icons/Star 1.svg" alt="Star-Icon">
-                        ${event.category}
-                    </button>
-                </div>
-            </div>
-            <hr>
-            <div class="item-actions">
-                <p class="item-price">${
-                  event.price === 0 ? "Free" : "QAR " + event.price
-                }</p>
+                <div class="item-actions">
                 <div class="quantity-control">
                     <button class="qty-btn" data-change="-1">−</button>
                     <span class="quantity">${item.quantity}</span>
                     <button class="qty-btn" data-change="1">+</button>
                 </div>
+                <hr class="cart-vertical-sep" />
+                <p class="item-price">${
+                  event.price === 0 ? "Free" : "QAR " + event.price
+                }</p>
+                <hr class="cart-vertical-sep" />
                 <button class="remove-btn" data-id="${
                   item.event_id
                 }">✖ Remove</button>
+            </div>
             </div>
         </div>`;
   });
