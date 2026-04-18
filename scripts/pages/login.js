@@ -22,7 +22,12 @@ form?.addEventListener('submit', async (e) => {
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
 
-        console.log('Login successful! User:', data.user.email);
+        // Add this check ↓
+        if (!data.user.email_confirmed_at) {
+            await supabase.auth.signOut();
+            alert('Please verify your email before logging in. Check your inbox for the verification link.');
+            return;
+        }
 
         // Fetch role from database — don't trust the radio button
         const { data: profile, error: profileError } = await supabase

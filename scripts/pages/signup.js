@@ -6,7 +6,7 @@ async function uploadAvatar(file) {
         const fileExt = file.name.split('.').pop()
         const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`
 
-        console.log('Uploading file:', fileName) 
+        console.log('Uploading file:', fileName)
 
         const { data, error } = await supabase.storage
             .from('avatars')
@@ -23,7 +23,7 @@ async function uploadAvatar(file) {
             .from('avatars')
             .getPublicUrl(fileName)
 
-        console.log('Public URL:', publicUrl) 
+        console.log('Public URL:', publicUrl)
         return publicUrl
 
     } catch (error) {
@@ -38,14 +38,11 @@ function setupForm() {
     form.addEventListener('submit', async (e) => {
         e.preventDefault()
 
-        // Read role at submit time
         const selectedRole = document.querySelector('input[name="role"]:checked').value
         const name = document.getElementById('name').value.trim()
         const email = document.getElementById('email').value.trim()
         const password = document.getElementById('password').value
 
-        // Basic field validation (step 2 fields are also validated inline via nextStep,
-        // but we guard here too in case of direct submit)
         if (!name || !email || !password) {
             alert('Please fill in all required fields')
             return
@@ -55,6 +52,11 @@ function setupForm() {
             alert('Password must be at least 6 characters')
             return
         }
+
+        // grab avatar file early so we have it later
+        const avatarFile = selectedRole === 'student'
+            ? document.getElementById('avatar').files[0]
+            : null
 
         let userData = {
             full_name: name,
@@ -69,9 +71,7 @@ function setupForm() {
             const major = document.getElementById('major').value.trim()
             const yearOfStudy = document.getElementById('year_of_study').value
             const bio = document.getElementById('bio').value.trim()
-            const avatarFile = document.getElementById('avatar').files[0]
 
-            // Validate student-specific fields
             if (!studentId) {
                 alert('Please enter your Student ID')
                 return
@@ -89,20 +89,14 @@ function setupForm() {
                 return
             }
 
-            let avatarUrl = '/assets/Icons/user-Icon.svg'
-            if (avatarFile) {
-                avatarUrl = await uploadAvatar(avatarFile)
-            }
-
             userData.student_id = studentId
             userData.university = university
             userData.major = major
             userData.year_of_study = parseInt(yearOfStudy)
-            userData.avatar_url = avatarUrl
             if (bio) userData.bio = bio
+            // avatar_url will be set after signup
 
         } else {
-            // Admin
             const department = document.getElementById('department').value.trim()
             const adminBio = document.getElementById('admin_bio').value.trim()
 
@@ -115,7 +109,6 @@ function setupForm() {
             if (adminBio) userData.bio = adminBio
         }
 
-        // Disable submit button
         const submitBtn = form.querySelector('.btn-submit')
         submitBtn.disabled = true
         const originalText = submitBtn.textContent
@@ -123,44 +116,55 @@ function setupForm() {
 
         try {
             console.log('Starting signup...', userData)
-
             const { data: authData, error: authError } = await supabase.auth.signUp({
                 email,
-                password
+                password,
+                options: {
+                    emailRedirectTo: window.location.hostname === '127.0.0.1'
+                        ? 'http://127.0.0.1:5502/pages/email-verification.html'
+                        : 'https://qc-3002-campus-connect.vercel.app/pages/email-verification.html'
+                }
             })
 
             console.log('Auth response:', authData, authError)
-
             if (authError) throw authError
-
-            if (!authData.user) {
-                throw new Error('No user returned from signup')
-            }
+            if (!authData.user) throw new Error('No user returned from signup')
 
             console.log('User created:', authData.user.id)
+
+            const { data: { session } } = await supabase.auth.getSession()
+            console.log('Session after signup:', session)
+
+            let avatarUrl = '/assets/Icons/user-Icon.svg'
+            if (avatarFile && session) {
+                const uploaded = await uploadAvatar(avatarFile)
+                if (uploaded) avatarUrl = uploaded
+            } else if (avatarFile && !session) {
+                console.log('No session yet, skipping avatar upload')
+            }
 
             const { data: profileData, error: profileError } = await supabase
                 .from('profiles')
                 .insert([{
                     id: authData.user.id,
                     email,
-                    ...userData
+                    ...userData,
+                    avatar_url: avatarUrl
                 }])
                 .select()
 
             console.log('Profile response:', profileData, profileError)
-
             if (profileError) throw profileError
 
             submitBtn.textContent = 'Account Created!'
 
             const title = selectedRole === 'admin' ? 'Admin Account Created!' : 'Welcome to Campus Connect!'
             const message = selectedRole === 'admin'
-                ? 'Your admin account has been created successfully. Please wait for approval before you can access all features.'
-                : 'Your account has been created successfully. You can now explore events and connect with your campus community!'
+                ? 'Your admin account has been created. Please check your email to verify your account before logging in.'
+                : 'Your account has been created! Please check your email and click the verification link before logging in.'
 
             showModal(title, message, 'success', {
-                autoClose: 3000,
+                autoClose: 6000,
                 onClose: () => { window.location.href = '/pages/login.html' }
             })
 

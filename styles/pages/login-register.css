@@ -20,7 +20,7 @@
 /*Login Page Styling*/
 body {
     background: var(--white);
-    padding-left: 115px;
+    padding-left: 100px;
     margin: 0;
     height: auto;
     font-family: var(--text-font);
@@ -44,16 +44,16 @@ body {
 main{
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 1024px;
+    align-items: flex-start; 
+    min-height: calc(100vh - 100px); 
     margin: 0;
-    gap: 100px;
+    gap: 100px; 
     width: calc(100% - 115px);
-    height: calc(100% - 100px);
+    padding: 40px 0;
 }
 
 .login-container, .sign-up-container{
-    padding: 100px 0;
+    padding: 50px 0;
     display: flex;
     flex-direction: column;
 }
@@ -83,7 +83,7 @@ main{
     display: flex;
     flex-direction: column;
     gap: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
 .login-form-group input{
@@ -103,22 +103,38 @@ main{
     border-radius: 25px;
     width: 100%;    
     cursor: pointer;
+    margin-bottom: 12px;
 }
 
-.sign-up-link{
-    text-align: center;
+.link {
     font-size: 0.8rem;
     color: var(--black);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
 }
 
-.sign-up-link a{
+.link,
+.link p,
+.link.sign-up-link,
+.link.reset-password-link {
+    margin: 0;
+    padding: 0;
+}
+
+.link.sign-up-link {
+    margin-block: 12px; 
+}
+
+.link a{
     color: var(--black);
     text-decoration: none;
     font-weight: 600;
 }
 
-.signup-img img{
-    width: 600px;
+.login-img img{
+    width: 500px;
 }
 
 /*Sign Up Page styling*/
@@ -158,6 +174,10 @@ main{
     width: 100%;    
     cursor: pointer;
     margin-top: 30px;
+}
+
+.signup-img img{
+    width: 500px;
 }
 
 /*Mobile layout*/
