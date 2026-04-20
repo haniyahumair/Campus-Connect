@@ -1,192 +1,236 @@
-import { supabase } from '../config/supabase.js'
-import { showModal } from '../utils/modal.js'
+// ...existing code...
+import { supabase } from '../config/supabase.js';
+import { showModal } from '../utils/modal.js';
 import { createNavbar } from '../components/navbarComponent.js';
 import { createFooter } from '../components/footerComponent.js';
-import { GOOGLEMAP_API_KEY } from '../config/env.js';
 import { Loader } from 'https://cdn.jsdelivr.net/npm/@googlemaps/js-api-loader@1.16.6/+esm';
 
-// Initialize the loader once
-const mapLoader = new Loader({
-  apiKey: GOOGLEMAP_API_KEY,
-  version: "weekly"
-});
+try {
+  const headerEl = document.querySelector('header');
+  const footerEl = document.querySelector('footer');
+  if (headerEl) headerEl.innerHTML = createNavbar();
+  if (footerEl) footerEl.innerHTML = createFooter();
+} catch (err) {
+  console.error('Navbar/Footer render failed:', err);
+}
 
-document.querySelector('header').innerHTML = createNavbar();
-document.querySelector('footer').innerHTML = createFooter();
+// map loader guard
+let mapLoader = null;
+const mapLoaderReady = (async () => {
+  try {
+    const env = await import('../config/env.js');
+    const GOOGLEMAP_API_KEY = env?.GOOGLEMAP_API_KEY || env?.default?.GOOGLEMAP_API_KEY;
+    if (GOOGLEMAP_API_KEY) {
+      mapLoader = new Loader({ apiKey: GOOGLEMAP_API_KEY, version: 'weekly' });
+    } else {
+      console.warn('Google Maps API key not found; map will be disabled.');
+    }
+  } catch (err) {
+    console.warn('Could not load env.js for Google Maps API key — map disabled.', err);
+  }
+})();
 
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.querySelector('.create-events-form');
+  const form = document.querySelector('.create-events-form');
 
-    document.getElementById('eventPhoto').addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            const uploadArea = document.getElementById('uploadArea');
-            const oldPreview = uploadArea.querySelector('.preview-image');
-            if (oldPreview) oldPreview.remove();
-
-            const preview = document.createElement('img');
-            preview.src = event.target.result;
-            preview.className = 'preview-image';
-            
-            uploadArea.appendChild(preview);
-            uploadArea.classList.add('has-image');
-        };
-        reader.readAsDataURL(file);
+  // image preview
+  const eventPhotoInput = document.getElementById('eventPhoto');
+  if (eventPhotoInput) {
+    eventPhotoInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const uploadArea = document.getElementById('uploadArea');
+        if (!uploadArea) return;
+        const oldPreview = uploadArea.querySelector('.preview-image');
+        if (oldPreview) oldPreview.remove();
+        const preview = document.createElement('img');
+        preview.src = event.target.result;
+        preview.className = 'preview-image';
+        uploadArea.appendChild(preview);
+        uploadArea.classList.add('has-image');
+      };
+      reader.readAsDataURL(file);
     });
-    
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
+  }
 
-        const btn = document.getElementById('sumbitBtn');
+  // form submit
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('sumbitBtn');
+      if (btn) {
         btn.disabled = true;
         btn.textContent = 'Creating...';
-
-        try {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) {
-                alert('Please login first');
-                window.location.href = '/pages/login.html';
-                return;
-            }
-            //form values
-            const title = document.getElementById('eventName').value;
-            const description = document.getElementById('aboutEvent').value;
-            const date = document.getElementById('eventDate').value;
-            const startTime = document.getElementById('eventStartTime').value;
-            const endTime = document.getElementById('eventEndTime').value;
-            const location = document.getElementById('location').value;
-            const map = document.getElementById('Map').value;
-            const priceInput = document.getElementById('price').value;
-            const maxAttendees = document.getElementById('maxAttendees').value;
-            const eventType = document.getElementById('eventType').value;
-            const contact = document.getElementById('eventContactInfo').value;
-            const isFree = priceInput.toLowerCase().includes('free');
-            const price = isFree ? 0 : parseFloat(priceInput.match(/\d+/)?.[0] || 0);
-            
-            // Upload image
-            const eventImage = document.getElementById('eventPhoto').files[0];
-            let imageUrl = '/assets/Images/default-event.jpg';
-            if (eventImage) {
-                imageUrl = await uploadEventImage(eventImage, user.id);
-            }
-
-            //supabase upload
-            const { data: newEvent, error } = await supabase.from('events').insert({
-                title,
-                description,
-                location,
-                venue_details: location,
-                map_embed_url: map || null,
-                date,
-                start_time: startTime,
-                end_time: endTime || null,
-                max_capacity: parseInt(maxAttendees),
-                current_registration: 0,
-                price,
-                is_free: isFree,
-                img_url: imageUrl,
-                org_id: user.id,
-                category: eventType,
-                contact_details: contact,
-                event_status: 'pending' // when created, event is pending review by admin
-            }).select().single();
-
-            if (error) throw error;
-            const currentEventId = newEvent.id;
-            
-            // send notification to admin about event being made
-            const { data: adminProfile } = await supabase.from('profiles').select('id').eq('is_admin', true).single();
-            await supabase.from("notifications").insert({
-                  user_id: adminProfile.id,
-                  sender_id: user.id,
-                  event_id: currentEventId,
-                  message: `A new event "${newEvent.title}" was just created. Please review the event.`,
-                  is_read: false,
-                });
-
-            // Success popup
-            showModal(
-                'Form Submitted',
-                'Your event is under review and will be published within 24-48 hours. You can view your event in the "My Events" section." in your profile.',
-                'success',
-                {
-                    autoClose: 3000,
-                    onClose: () => {
-                        window.location.href = '/pages/events.html';
-                    }
-                }
-            );
-
-        } catch (error) {
-            console.error('Error creating event:', error);
-            alert('Error: ' + error.message);
-            btn.disabled = false;
-            btn.textContent = 'Create Event';
+      }
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          alert('Please login first');
+          window.location.href = '/pages/login.html';
+          return;
         }
+
+        const title = document.getElementById('eventName')?.value || '';
+        const description = document.getElementById('aboutEvent')?.value || '';
+        const date = document.getElementById('eventDate')?.value || '';
+        const startTime = document.getElementById('eventStartTime')?.value || '';
+        const endTime = document.getElementById('eventEndTime')?.value || '';
+        const location = document.getElementById('location')?.value || '';
+        const map = document.getElementById('Map')?.value || null;
+        const priceInput = document.getElementById('price')?.value || '';
+        const maxAttendees = document.getElementById('maxAttendees')?.value || '0';
+        const eventType = document.getElementById('eventType')?.value || '';
+        const contact = document.getElementById('eventContactInfo')?.value || '';
+        const isFree = String(priceInput).toLowerCase().includes('free');
+        const price = isFree ? 0 : parseFloat(String(priceInput).match(/\d+/)?.[0] || 0);
+
+        // upload image
+        const eventImage = document.getElementById('eventPhoto')?.files?.[0];
+        let imageUrl = '/assets/Images/default-event.jpg';
+        if (eventImage) {
+          imageUrl = await uploadEventImage(eventImage, user.id);
+        }
+
+        const { data: newEvent, error } = await supabase.from('events').insert({
+          title,
+          description,
+          location,
+          venue_details: location,
+          map_embed_url: map || null,
+          date,
+          start_time: startTime,
+          end_time: endTime || null,
+          max_capacity: parseInt(maxAttendees, 10) || 0,
+          current_registration: 0,
+          price,
+          is_free: isFree,
+          img_url: imageUrl,
+          org_id: user.id,
+          category: eventType,
+          contact_details: contact,
+          event_status: 'pending'
+        }).select().single();
+
+        if (error) throw error;
+        const currentEventId = newEvent.id;
+
+        // notify admin (best-effort)
+        try {
+          const { data: adminProfile } = await supabase.from('profiles').select('id').eq('is_admin', true).single();
+          if (adminProfile?.id) {
+            await supabase.from('notifications').insert({
+              user_id: adminProfile.id,
+              sender_id: user.id,
+              event_id: currentEventId,
+              message: `A new event "${newEvent.title}" was just created. Please review the event.`,
+              is_read: false,
+            });
+          }
+        } catch (err) {
+          console.warn('Failed to notify admin:', err);
+        }
+
+        showModal(
+          'Form Submitted',
+          'Your event is under review and will be published within 24-48 hours. You can view your event in the "My Events" section in your profile.',
+          'success',
+          {
+            autoClose: 3000,
+            onClose: () => { window.location.href = '/pages/events.html'; }
+          }
+        );
+
+      } catch (error) {
+        console.error('Error creating event:', error);
+        alert('Error: ' + (error.message || error));
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = 'Create Event';
+        }
+      }
     });
+  }
+
+  (async () => {
+    await mapLoaderReady;
+    if (mapLoader) {
+      try {
+        await setupMap();
+      } catch (err) {
+        console.error('setupMap error:', err);
+        const mapEl = document.getElementById('googleMap');
+        if (mapEl) mapEl.innerHTML = '<p style="padding:16px;color:#666">Map failed to load.</p>';
+      }
+    } else {
+      const mapEl = document.getElementById('googleMap');
+      if (mapEl) mapEl.innerHTML = '<p style="padding:16px;color:#666">Map is unavailable.</p>';
+    }
+  })();
 });
 
+// image upload helper
 async function uploadEventImage(file, userId) {
-    try {
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${userId}_${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
-        
-        const { data, error } = await supabase.storage
-            .from('event_image')
-            .upload(fileName, file, {
-                cacheControl: '3600',
-                upsert: false
-            });
-            
-        if (error) throw error;
-        
-        const { data: { publicUrl } } = supabase.storage
-            .from('event_image')
-            .getPublicUrl(fileName);
-            
-        return publicUrl;
-    } catch (error) {
-        console.error('Event image upload error:', error);
-        return '/assets/Images/default-event.jpg';
-    }
+  try {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${userId}_${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+
+    const { data, error } = await supabase.storage
+      .from('event_image')
+      .upload(fileName, file, {
+        cacheControl: '3600',
+        upsert: false
+      });
+
+    if (error) throw error;
+
+    const { data: urlData } = await supabase.storage
+      .from('event_image')
+      .getPublicUrl(fileName);
+
+    return urlData?.publicUrl || '/assets/Images/default-event.jpg';
+  } catch (error) {
+    console.error('Event image upload error:', error);
+    return '/assets/Images/default-event.jpg';
+  }
 }
 
 async function setupMap() {
-    try {
-        const { Map } = await mapLoader.importLibrary("maps");
-        const { Marker } = await mapLoader.importLibrary("marker");
+  if (!mapLoader) throw new Error('Map loader not initialized');
+  try {
+    // import the maps + marker libraries via loader
+    const { Map } = await mapLoader.importLibrary('maps');
+    const { AdvancedMarkerElement, Marker } = await mapLoader.importLibrary('marker'); // marker or advanced marker depending on API
+    const defaultPos = { lat: 25.2854, lng: 51.5310 };
 
-        const defaultPos = { lat: 25.2854, lng: 51.5310 }; // Default to Doha, Qatar
+    const mapEl = document.getElementById('googleMap');
+    if (!mapEl) return;
 
-        const map = new Map(document.getElementById("googleMap"), {
-            center: defaultPos,
-            zoom: 15,
-        });
+    const map = new Map(mapEl, {
+      center: defaultPos,
+      zoom: 15,
+    });
 
-        const marker = new Marker({
-            position: defaultPos,
-            map: map,
-            draggable: true,
-            title: "Event Location",
-        });
+    const marker = new Marker({
+      position: defaultPos,
+      map: map,
+      draggable: true,
+      title: 'Event Location',
+    });
 
-        // Update the hidden input when marker is dragged
-        marker.addListener('dragend', () => {
-            const pos = marker.getPosition();
-            const lat = pos.lat();
-            const lng = pos.lng();
-            const embedUrl = `https://maps.google.com/maps?q=${lat},${lng}&output=embed`;
-            document.getElementById('Map').value = embedUrl;
-        });
+    // update hidden input on drag end
+    marker.addListener('dragend', () => {
+      const pos = marker.getPosition();
+      const lat = pos.lat();
+      const lng = pos.lng();
+      const embedUrl = `https://maps.google.com/maps?q=${lat},${lng}&output=embed`;
+      const mapInput = document.getElementById('Map');
+      if (mapInput) mapInput.value = embedUrl;
+    });
 
-    } catch (error) {
-        console.error("Google Map failed to load:", error);
-    }
+  } catch (error) {
+    console.error('Google Map failed to load:', error);
+    throw error;
+  }
 }
-
-// Run the setup
-setupMap();
-
