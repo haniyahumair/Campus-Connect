@@ -18,6 +18,11 @@ try {
 let mapLoader = null;
 const mapLoaderReady = (async () => {
   try {
+    const globalKey = window?.GOOGLEMAP_API_KEY || window?.__GOOGLEMAP_API_KEY__;
+    if (globalKey) {
+      mapLoader = new Loader({ apiKey: globalKey, version: 'weekly' });
+      return;
+    }
     const env = await import('../config/env.js');
     const GOOGLEMAP_API_KEY = env?.GOOGLEMAP_API_KEY || env?.default?.GOOGLEMAP_API_KEY;
     if (GOOGLEMAP_API_KEY) {
