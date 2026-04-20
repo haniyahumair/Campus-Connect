@@ -18,20 +18,32 @@ try {
 let mapLoader = null;
 const mapLoaderReady = (async () => {
   try {
-    const globalKey = window?.GOOGLEMAP_API_KEY || window?.__GOOGLEMAP_API_KEY__;
-    if (globalKey) {
-      mapLoader = new Loader({ apiKey: globalKey, version: 'weekly' });
-      return;
+    let apiKey = window?.GOOGLEMAP_API_KEY || window?.__GOOGLEMAP_API_KEY__;
+
+    if (!apiKey) {
+      try {
+        const res = await fetch('/api/config');
+        if (res.ok) {
+          const cfg = await res.json();
+          apiKey = cfg?.GOOGLEMAP_API_KEY;
+        }
+      } catch {}
     }
-    const env = await import('../config/env.js');
-    const GOOGLEMAP_API_KEY = env?.GOOGLEMAP_API_KEY || env?.default?.GOOGLEMAP_API_KEY;
-    if (GOOGLEMAP_API_KEY) {
-      mapLoader = new Loader({ apiKey: GOOGLEMAP_API_KEY, version: 'weekly' });
+
+    if (!apiKey) {
+      try {
+        const env = await import('../config/env.js');
+        apiKey = env?.GOOGLEMAP_API_KEY || env?.default?.GOOGLEMAP_API_KEY;
+      } catch {}
+    }
+
+    if (apiKey) {
+      mapLoader = new Loader({ apiKey, version: 'weekly' });
     } else {
       console.warn('Google Maps API key not found; map will be disabled.');
     }
   } catch (err) {
-    console.warn('Could not load env.js for Google Maps API key — map disabled.', err);
+    console.warn('Could not initialize Google Maps:', err);
   }
 })();
 
@@ -201,12 +213,21 @@ async function uploadEventImage(file, userId) {
   }
 }
 
+function updateMapInput(marker) {
+  const pos = marker.getPosition();
+  const lat = pos.lat();
+  const lng = pos.lng();
+  const embedUrl = `https://maps.google.com/maps?q=${lat},${lng}&output=embed`;
+  const mapInput = document.getElementById('Map');
+  if (mapInput) mapInput.value = embedUrl;
+}
+
 async function setupMap() {
   if (!mapLoader) throw new Error('Map loader not initialized');
   try {
-    // import the maps + marker libraries via loader
     const { Map } = await mapLoader.importLibrary('maps');
-    const { AdvancedMarkerElement, Marker } = await mapLoader.importLibrary('marker'); // marker or advanced marker depending on API
+    const { Marker } = await mapLoader.importLibrary('marker');
+    const { Autocomplete } = await mapLoader.importLibrary('places');
     const defaultPos = { lat: 25.2854, lng: 51.5310 };
 
     const mapEl = document.getElementById('googleMap');
@@ -224,15 +245,20 @@ async function setupMap() {
       title: 'Event Location',
     });
 
-    // update hidden input on drag end
-    marker.addListener('dragend', () => {
-      const pos = marker.getPosition();
-      const lat = pos.lat();
-      const lng = pos.lng();
-      const embedUrl = `https://maps.google.com/maps?q=${lat},${lng}&output=embed`;
-      const mapInput = document.getElementById('Map');
-      if (mapInput) mapInput.value = embedUrl;
-    });
+    marker.addListener('dragend', () => updateMapInput(marker));
+
+    const searchInput = document.getElementById('mapSearchInput');
+    if (searchInput) {
+      const autocomplete = new Autocomplete(searchInput);
+      autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
+        if (!place.geometry?.location) return;
+        map.setCenter(place.geometry.location);
+        map.setZoom(15);
+        marker.setPosition(place.geometry.location);
+        updateMapInput(marker);
+      });
+    }
 
   } catch (error) {
     console.error('Google Map failed to load:', error);
