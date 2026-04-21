@@ -48,7 +48,7 @@ const mapLoaderReady = (async () => {
 })();
 
 document.addEventListener('DOMContentLoaded', () => {
-  const form = document.querySelector('.create-events-form');
+  const form = document.querySelector('.itcreate-events-form');
 
   // image preview
   const eventPhotoInput = document.getElementById('eventPhoto');

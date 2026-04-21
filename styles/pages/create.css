@@ -1,130 +1,136 @@
-body{
-    font-family: var(--text-font);
+body {
+  font-family: var(--text-font);
 }
 
 /*Hero Styling*/
 .hero {
-    padding-bottom: 50px;
-    padding-top: 30px;
-    text-align: center;
-    margin: 0;
-    gap: 0;
+  padding-bottom: 50px;
+  padding-top: 30px;
+  text-align: center;
+  margin: 0;
+  gap: 0;
 }
 
-.hero h2{
-    font-size: 3.1rem;
-    font-family: var(--header-font);
+.hero h2 {
+  font-size: 3.1rem;
+  font-family: var(--header-font);
 }
 
-.hero p{
-    font-size: 1.1rem;
+.hero p {
+  font-size: 1.1rem;
 }
 
 /*Uploading photo styling*/
-section{
-    padding: 0 24px;
-    margin-bottom: 15px;
+section {
+  padding: 0 24px;
+  margin-bottom: 15px;
 }
 
 .upload-area {
-    border: 2px dashed var(--black);
-    border-radius: 15px;
-    background: repeating-linear-gradient(45deg, #f8f9fa, #f8f9fa 20px, #e9ecef 20px, #e9ecef 40px);
-    height: 430px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    cursor: pointer;
-    margin-bottom: 30px;
-    position: relative;
-    overflow: hidden;
+  border: 2px dashed var(--black);
+  border-radius: 15px;
+  background: repeating-linear-gradient(
+    45deg,
+    #f8f9fa,
+    #f8f9fa 20px,
+    #e9ecef 20px,
+    #e9ecef 40px
+  );
+  height: 430px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  cursor: pointer;
+  margin-bottom: 30px;
+  position: relative;
+  overflow: hidden;
 }
 
 .upload-area label {
-    font-size: 1.2rem;
-    font-weight: 700;
-    font-family: var(--subheader-font);
-    cursor: pointer;
-    z-index: 1;
+  font-size: 1.2rem;
+  font-weight: 700;
+  font-family: var(--subheader-font);
+  cursor: pointer;
+  z-index: 1;
 }
 
 .upload-area input {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-    z-index: 2;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
 }
 
 /* Preview image styles */
 .upload-area .preview-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 13px;
-    z-index: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 13px;
+  z-index: 0;
 }
 
 .upload-area.has-image label {
-    display: none;
+  display: none;
 }
 
 /*Form styling*/
-.create-events-form{
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
+.create-events-form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }
 
-.create-events-form .event-info{
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
+.create-events-form .event-info {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
 }
 
-.event-info .form-label{
-    font-size: 1.1rem;
+.event-info .form-label {
+  font-size: 1.1rem;
 }
 
-.event-info input{
-    border: 1px solid var(--black);
-    border-radius: 50px;
-    padding: 12px;
-    font-size: 0.9rem;
+.event-info input {
+  border: 1px solid var(--black);
+  border-radius: 50px;
+  padding: 12px;
+  font-size: 0.9rem;
 }
 
-.event-info textarea{
-    background-color: transparent;
-    font-size: 0.9rem;
-    padding: 12px;
-    border-radius: 12px;
+.event-info textarea {
+  background-color: transparent;
+  font-size: 0.9rem;
+  padding: 12px;
+  border-radius: 12px;
 }
 
 .form-select {
-    background-color: #fff;
-    color: #111;
-    padding: 12px 16px;
-    padding-right: 40px;
-    border-radius: 25px;
-    border: 1px solid #ccc;
-    height: 48px;
-    font-size: 1rem;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-  }
+  background-color: #fff;
+  color: #111;
+  padding: 12px 16px;
+  padding-right: 40px;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  height: 48px;
+  font-size: 1rem;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
 
-.create-events-form button{
-    padding: 12px 18px;
-    border-radius: 50px;
-    background-color: var(--black);
-    color: var(--white);
-    border: none;
-    font-size: 1rem;
-    cursor: pointer;
+.create-events-form button {
+  padding: 12px 18px;
+  border-radius: 50px;
+  background-color: var(--black);
+  color: var(--white);
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
 }

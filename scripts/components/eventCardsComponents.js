@@ -1,5 +1,5 @@
 export function createEventCard(event) {
-    return `
+  return `
     <div class="event-card">
             <div class="event-price">
                 <p class="price">💵 ${event.price}</p>

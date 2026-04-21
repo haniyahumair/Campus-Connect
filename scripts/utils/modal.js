@@ -1,79 +1,86 @@
-export function showModal(title, message, type = 'success', options = {}) {
-    const existingModal = document.getElementById('customModal')
-    if (existingModal) {
-        existingModal.remove()
-    }
+export function showModal(title, message, type = "success", options = {}) {
+  const existingModal = document.getElementById("customModal");
+  if (existingModal) {
+    existingModal.remove();
+  }
 
-    const modal = document.createElement('div')
-    modal.id = 'customModal'
-    modal.className = 'modal-overlay'
-    
-    const icon = getIcon(type)
-    const color = getColor(type)
-    
-    modal.innerHTML = `
+  const modal = document.createElement("div");
+  modal.id = "customModal";
+  modal.className = "modal-overlay";
+
+  const icon = getIcon(type);
+  const color = getColor(type);
+
+  modal.innerHTML = `
         <div class="modal-container" style="animation: slideIn 0.3s ease-out;">
             <div class="modal-icon" style="color: ${color};">${icon}</div>
             <h2 class="modal-title">${title}</h2>
             <p class="modal-message">${message}</p>
-            ${options.showButton !== false ? `
+            ${
+              options.showButton !== false
+                ? `
                 <button class="modal-btn" style="background: ${color};" onclick="closeModal()">
-                    ${options.buttonText || 'Done'}
+                    ${options.buttonText || "Done"}
                 </button>
-            ` : ''}
+            `
+                : ""
+            }
         </div>
-    `
-    
-    document.body.appendChild(modal)
-    
-    // Auto-close after delay if specified
-    if (options.autoClose) {
-        setTimeout(() => {
-            closeModal()
-            if (options.onClose) options.onClose()
-        }, options.autoClose)
+    `;
+
+  document.body.appendChild(modal);
+
+  // Auto-close after delay if specified
+  if (options.autoClose) {
+    setTimeout(() => {
+      closeModal();
+      if (options.onClose) options.onClose();
+    }, options.autoClose);
+  }
+
+  // Add click outside to close
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      closeModal();
     }
-    
-    // Add click outside to close
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            closeModal()
-        }
-    })
+  });
 }
 
 function getIcon(type) {
-    const icons = {
-        success: '<img src="/assets/Icons/Tick.png" alt="Success" style="width: 100px; height: 100px;">',
-        error: '<img src="/assets/Icons/Cross.png" alt="Error" style="width: 100px; height: 100px;">',
-        warning: '⚠️',
-        info: 'ℹ️',
-        loading: '<img src="/assets/Icons/Loading.svg" alt="Loading" style="width: 100px; height: 100px; animation: spin 1s linear infinite;">'
-    }
-    return icons[type] || icons.info
+  const icons = {
+    success:
+      '<img src="/assets/Icons/Tick.png" alt="Success" style="width: 100px; height: 100px;">',
+    error:
+      '<img src="/assets/Icons/Cross.png" alt="Error" style="width: 100px; height: 100px;">',
+    warning: "⚠️",
+    info: "ℹ️",
+    loading:
+      '<img src="/assets/Icons/Loading.svg" alt="Loading" style="width: 100px; height: 100px; animation: spin 1s linear infinite;">',
+  };
+  return icons[type] || icons.info;
 }
 
 function getColor(type) {
-    const colors = {
-        success: '#000000',  
-        error: '#dc3545',    
-        warning: '#ffc107',  
-        info: '#2563eb',     
-        loading: '#6c757d'
-    }
-    return colors[type] || colors.info
+  const colors = {
+    success: "#000000",
+    error: "#dc3545",
+    warning: "#ffc107",
+    info: "#2563eb",
+    loading: "#6c757d",
+  };
+  return colors[type] || colors.info;
 }
 
-window.closeModal = function() {
-    const modal = document.getElementById('customModal')
-    if (modal) {
-        modal.classList.add('fade-out')
-        setTimeout(() => modal.remove(), 300)
-    }
-}
+window.closeModal = function () {
+  const modal = document.getElementById("customModal");
+  if (modal) {
+    modal.classList.add("fade-out");
+    setTimeout(() => modal.remove(), 300);
+  }
+};
 
 //CSS
-const style = document.createElement('style')
+const style = document.createElement("style");
 style.textContent = `
     
     :root{
@@ -189,5 +196,5 @@ style.textContent = `
         from { opacity: 1; }
         to { opacity: 0; }
     }
-`
-document.head.appendChild(style)
+`;
+document.head.appendChild(style);

@@ -15,8 +15,13 @@ document.addEventListener("DOMContentLoaded", () => {
   loadSavedEvents();
 });
 
-async function attachWishlistHandlers(container, user, savedEventIds, onToggle) {
-  container.querySelectorAll(".event-card").forEach(card => {
+async function attachWishlistHandlers(
+  container,
+  user,
+  savedEventIds,
+  onToggle
+) {
+  container.querySelectorAll(".event-card").forEach((card) => {
     const eventId = card.querySelector(".viewDetailBtn").dataset.id;
     const heartIcon = card.querySelector(".save-event img");
 
@@ -26,7 +31,11 @@ async function attachWishlistHandlers(container, user, savedEventIds, onToggle) 
 
     card.querySelector(".save-event").addEventListener("click", async (e) => {
       e.stopPropagation();
-      console.log(`Save button clicked — event ID: ${eventId}, user: ${user?.id ?? "not logged in"}`);
+      console.log(
+        `Save button clicked — event ID: ${eventId}, user: ${
+          user?.id ?? "not logged in"
+        }`
+      );
       await toggleWishlist(user, eventId, heartIcon);
       console.log(`toggleWishlist completed for event ID: ${eventId}`);
       if (onToggle) onToggle();
@@ -35,11 +44,19 @@ async function attachWishlistHandlers(container, user, savedEventIds, onToggle) 
 }
 
 async function loadUserProfile() {
-  showModal("Loading...", "Please wait while we load your profile.", "loading", {
-    showButton: false,
-  });
+  showModal(
+    "Loading...",
+    "Please wait while we load your profile.",
+    "loading",
+    {
+      showButton: false,
+    }
+  );
 
-  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
 
   if (!user || authError) {
     alert("You must be logged in to view your profile.");
@@ -64,41 +81,51 @@ async function loadUserProfile() {
     document.getElementById("profileName").textContent = profile.full_name;
     document.getElementById("profileEmail").textContent = profile.email;
     document.getElementById("profileRole").textContent = `🎓 ${profile.role}`;
-    document.getElementById("university").textContent = `🏫 ${profile.university}`;
-    document.getElementById("studentId").textContent = `🆔 ${profile.student_id}`;
+    document.getElementById(
+      "university"
+    ).textContent = `🏫 ${profile.university}`;
+    document.getElementById(
+      "studentId"
+    ).textContent = `🆔 ${profile.student_id}`;
     document.getElementById("major").textContent = `📚 ${profile.major}`;
-    document.getElementById("yearOfStudy").textContent = `📅 Year ${profile.year_of_study}`;
-    document.getElementById("bioText").textContent = profile.bio || "No bio available.";
+    document.getElementById(
+      "yearOfStudy"
+    ).textContent = `📅 Year ${profile.year_of_study}`;
+    document.getElementById("bioText").textContent =
+      profile.bio || "No bio available.";
 
     const avatar = document.getElementById("profileAvatar");
     avatar.src = profile.avatar_url || "/assets/Icons/userIcon.svg";
-    avatar.onerror = () => { avatar.src = "/assets/Icons/userIcon.svg"; };
+    avatar.onerror = () => {
+      avatar.src = "/assets/Icons/userIcon.svg";
+    };
 
     closeModal();
     document.getElementById("profileContent").style.display = "block";
-
   } catch (error) {
     console.error("Error loading profile:", error);
     alert("Failed to load profile. Please try again later.");
   }
-
-
 }
 function truncateBySentences(text, maxSentences = 1) {
-  if (!text) return '';
+  if (!text) return "";
   const sentences = text.match(/[^.!?]+[.!?]*/g) || [text];
-  const truncated = sentences.slice(0, maxSentences).join('').trim();
-  return sentences.length > maxSentences ? truncated.replace(/\s+$/,'') + '…' : truncated;
+  const truncated = sentences.slice(0, maxSentences).join("").trim();
+  return sentences.length > maxSentences
+    ? truncated.replace(/\s+$/, "") + "…"
+    : truncated;
 }
 
 async function loadCreatedEvents() {
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   const { data: events, error } = await supabase
     .from("events")
     .select("*")
     .eq("org_id", user.id);
-    console.log("Fetched events:", events);
-    console.log("Logged-in user ID:", user.id);
+  console.log("Fetched events:", events);
+  console.log("Logged-in user ID:", user.id);
 
   const container = document.getElementById("createdEventsContainer");
 
@@ -112,17 +139,24 @@ async function loadCreatedEvents() {
     return;
   }
 
-    if (events && events.length > 0) {
+  if (events && events.length > 0) {
     // Filter events with status "pending"
-    const pendingEvents = events.filter(event => event.event_status === "pending");
-    const approvedEvents = events.filter(event => event.event_status === "approved");
-    const rejectedEvents = events.filter(event => event.event_status === "rejected");
+    const pendingEvents = events.filter(
+      (event) => event.event_status === "pending"
+    );
+    const approvedEvents = events.filter(
+      (event) => event.event_status === "approved"
+    );
+    const rejectedEvents = events.filter(
+      (event) => event.event_status === "rejected"
+    );
 
     document.getElementById("createdCount").textContent = events.length;
     container.innerHTML = "";
 
     if (pendingEvents.length > 0) {
-      container.innerHTML += "<h3 style='grid-column: 1 / -1; font-family: var(--subheader-font); font-size: 1.5rem;'>Your pending events:</h3>";
+      container.innerHTML +=
+        "<h3 style='grid-column: 1 / -1; font-family: var(--subheader-font); font-size: 1.5rem;'>Your pending events:</h3>";
       pendingEvents.forEach((event) => {
         const date = new Date(event.date);
         if (event.price === 0) event.price = "Free";
@@ -152,7 +186,8 @@ async function loadCreatedEvents() {
     }
 
     if (approvedEvents.length > 0) {
-      container.innerHTML += "<h3 style='; grid-column: 1 / -1; font-family: var(--subheader-font); font-size: 1.5rem;'>Your created events:</h3>";
+      container.innerHTML +=
+        "<h3 style='; grid-column: 1 / -1; font-family: var(--subheader-font); font-size: 1.5rem;'>Your created events:</h3>";
       approvedEvents.forEach((event) => {
         const date = new Date(event.date);
         if (event.price === 0) event.price = "Free";
@@ -177,7 +212,8 @@ async function loadCreatedEvents() {
       });
     }
     if (rejectedEvents.length > 0) {
-      container.innerHTML += "<h3 style='; grid-column: 1 / -1; font-family: var(--subheader-font); font-size: 1.5rem;'>Rejected events:</h3>";
+      container.innerHTML +=
+        "<h3 style='; grid-column: 1 / -1; font-family: var(--subheader-font); font-size: 1.5rem;'>Rejected events:</h3>";
       rejectedEvents.forEach((event) => {
         const date = new Date(event.date);
         if (event.price === 0) event.price = "Free";
@@ -207,15 +243,17 @@ async function loadCreatedEvents() {
   }
 
   const savedEvents = await getWishlist(user);
-  const savedEventIds = new Set(savedEvents.map(s => String(s.event_id)));
+  const savedEventIds = new Set(savedEvents.map((s) => String(s.event_id)));
   await attachWishlistHandlers(container, user, savedEventIds);
 }
 
 async function loadUpcomingEvents() {
   const container = document.getElementById("upcomingEventsContainer");
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) {
-    window.location.href = '/pages/login.html';
+    window.location.href = "/pages/login.html";
     return;
   }
   const { data: registrations, error } = await supabase
@@ -239,7 +277,7 @@ async function loadUpcomingEvents() {
   registrations.forEach((reg) => {
     const event = reg.events;
     const date = new Date(event.date);
-    if (event.price === 0){
+    if (event.price === 0) {
       event.price = "Free";
     }
     const mappedEvent = {
@@ -263,15 +301,17 @@ async function loadUpcomingEvents() {
   });
 
   const savedEvents = await getWishlist(user);
-  const savedEventIds = new Set(savedEvents.map(s => String(s.event_id)));
+  const savedEventIds = new Set(savedEvents.map((s) => String(s.event_id)));
   await attachWishlistHandlers(container, user, savedEventIds);
 }
 
 async function loadSavedEvents() {
   const container = document.getElementById("savedEventsContainer");
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) {
-    window.location.href = '/pages/login.html';
+    window.location.href = "/pages/login.html";
     return;
   }
   const { data: saved, error } = await supabase
@@ -294,7 +334,7 @@ async function loadSavedEvents() {
   saved.forEach((row) => {
     const event = row.events;
     const date = new Date(event.date);
-    if (event.price === 0){
+    if (event.price === 0) {
       event.price = "Free";
     }
     const mappedEvent = {
@@ -318,8 +358,10 @@ async function loadSavedEvents() {
   });
 
   // All events here are already saved — mark all as filled and reload tab on un-heart
-  const savedEventIds = new Set(saved.map(s => String(s.event_id)));
-  await attachWishlistHandlers(container, user, savedEventIds, () => loadSavedEvents());
+  const savedEventIds = new Set(saved.map((s) => String(s.event_id)));
+  await attachWishlistHandlers(container, user, savedEventIds, () =>
+    loadSavedEvents()
+  );
 }
 
 document.addEventListener("click", (e) => {
@@ -341,9 +383,13 @@ document.getElementById("signOutBtn").addEventListener("click", async (e) => {
   }
 });
 
-window.switchTab = function(tab, el) {
-  document.querySelectorAll(".events-tab").forEach(t => t.classList.remove("active"));
-  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+window.switchTab = function (tab, el) {
+  document
+    .querySelectorAll(".events-tab")
+    .forEach((t) => t.classList.remove("active"));
+  document
+    .querySelectorAll(".tab-panel")
+    .forEach((p) => p.classList.remove("active"));
   el.classList.add("active");
   document.getElementById(`tab-${tab}`).classList.add("active");
-}
+};

@@ -35,7 +35,9 @@ async function loadCart() {
   container.innerHTML = "";
 
   const eventTitle = document.getElementById("eventTitle");
-  eventTitle.textContent = `You have ${cartItems ? cartItems.length : 0} item(s) in your cart`;
+  eventTitle.textContent = `You have ${
+    cartItems ? cartItems.length : 0
+  } item(s) in your cart`;
 
   const payementSection = document.querySelector(".cart-right");
   payementSection.style.display = "none";
@@ -206,13 +208,15 @@ async function handlePayment() {
       const quantity = item.quantity;
 
       // Update attendees count
-      const { error: updateError } = await supabase
-        .rpc('increment_registration', { 
-            event_id: eventId, 
-            qty: quantity
-        });
+      const { error: updateError } = await supabase.rpc(
+        "increment_registration",
+        {
+          event_id: eventId,
+          qty: quantity,
+        }
+      );
 
-        console.log('updateError:', updateError);
+      console.log("updateError:", updateError);
 
       //registration entry
       const { error: registrationError } = await supabase
@@ -224,7 +228,6 @@ async function handlePayment() {
           payment_status: "paid",
           registration_date: new Date().toISOString(),
         });
-
 
       if (registrationError) {
         console.error(
@@ -253,8 +256,8 @@ async function handlePayment() {
 }
 
 applePayBtn.addEventListener("click", handlePayment);
-paypalBtn.addEventListener("click",handlePayment);
-cardBtn.addEventListener("click",() => handlePayment);
+paypalBtn.addEventListener("click", handlePayment);
+cardBtn.addEventListener("click", () => handlePayment);
 
 document.getElementById("cartContainer").addEventListener("click", (e) => {
   if (e.target.classList.contains("remove-btn")) {

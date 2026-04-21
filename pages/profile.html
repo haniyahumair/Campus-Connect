@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,97 +15,98 @@
     <header></header>
 
 
-<section class="profile-info-container">
-    <!-- Header -->
-    <div class="profile-header">
-        <h1>My <span class="accent-text">Profile</span></h1>
-        <p>Manage your account information and preferences</p>
-    </div>
-    <!-- Profile Grid -->
-    <div id="profileContent" style="display: none;">
-        <div class="profile-grid">
-            <!-- Left Side - Profile Card -->
-            <div class="profile-main-card">
-                <div class="profile-avatar">
-                    <img src="/assets/Icons/userIcon.svg" alt="Profile Picture" id="profileAvatar">
-                </div>
-                
-                <div class="profile-name" id="profileName">
-                    John Smith
-                    <img src="/assets/Icons/edit-icon.svg" class="edit-icon" onclick="editProfile()">
-                </div>
-                
-                <p class="profile-email" id="profileEmail">s01j23@abdn.ac.uk</p>
-                
-                <span class="profile-role-badge" id="profileRole">🎓 Student</span>
-                
-                <a href="/pages/login.html" class="sign-out-btn" id="signOutBtn">Sign Out</a>
-            </div>
-    
-            <!-- Academic Info Side -->
-            <div class="academic-info-card">
-                <h2 class="card-title">Academic Information</h2>
-                
-                <div class="info-grid">
-                    <div class="info-item">
-                        <span class="info-label">University</span>
-                        <span class="info-value" id="university">🎓 Qatar University</span>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-label">Student ID</span>
-                        <span class="info-value" id="studentId">🆔 S012345</span>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-label">Major</span>
-                        <span class="info-value" id="major">💼 Computer Science</span>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-label">Year of Study</span>
-                        <span class="info-value" id="yearOfStudy">📅 Year 3</span>
-                    </div>
-                </div>
-                
-                <div class="bio-section">
-                    <span class="info-label">About Me</span>
-                    <p class="bio-text" id="bioText">
-                        Passionate about technology and campus events. Love connecting with fellow students and exploring new opportunities.
-                    </p>
-                </div>
-            </div>
+    <section class="profile-info-container">
+        <!-- Header -->
+        <div class="profile-header">
+            <h1>My <span class="accent-text">Profile</span></h1>
+            <p>Manage your account information and preferences</p>
         </div>
+        <!-- Profile Grid -->
+        <div id="profileContent" style="display: none;">
+            <div class="profile-grid">
+                <!-- Left Side - Profile Card -->
+                <div class="profile-main-card">
+                    <div class="profile-avatar">
+                        <img src="/assets/Icons/userIcon.svg" alt="Profile Picture" id="profileAvatar">
+                    </div>
 
-        <div class="events-tabs-container">
-            <div class="events-tabs">
-              <button class="events-tab active" onclick="switchTab('upcoming', this)">
-                Upcoming <span class="tab-count" id="upcomingCount">0</span>
-              </button>
-              <button class="events-tab" onclick="switchTab('created', this)">
-                Created <span class="tab-count" id="createdCount">0</span>
-              </button>
-              <button class="events-tab" onclick="switchTab('saved', this)">
-                Saved <span class="tab-count" id="savedCount">0</span>
-              </button>
+                    <div class="profile-name" id="profileName">
+                        John Smith
+                        <img src="/assets/Icons/edit-icon.svg" class="edit-icon" onclick="editProfile()">
+                    </div>
+
+                    <p class="profile-email" id="profileEmail">s01j23@abdn.ac.uk</p>
+
+                    <span class="profile-role-badge" id="profileRole">🎓 Student</span>
+
+                    <a href="/pages/login.html" class="sign-out-btn" id="signOutBtn">Sign Out</a>
+                </div>
+
+                <!-- Academic Info Side -->
+                <div class="academic-info-card">
+                    <h2 class="card-title">Academic Information</h2>
+
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">University</span>
+                            <span class="info-value" id="university">🎓 Qatar University</span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">Student ID</span>
+                            <span class="info-value" id="studentId">🆔 S012345</span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">Major</span>
+                            <span class="info-value" id="major">💼 Computer Science</span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">Year of Study</span>
+                            <span class="info-value" id="yearOfStudy">📅 Year 3</span>
+                        </div>
+                    </div>
+
+                    <div class="bio-section">
+                        <span class="info-label">About Me</span>
+                        <p class="bio-text" id="bioText">
+                            Passionate about technology and campus events. Love connecting with fellow students and
+                            exploring new opportunities.
+                        </p>
+                    </div>
+                </div>
             </div>
-          
-            <div class="tab-panel active" id="tab-upcoming">
-              <div class="events-container" id="upcomingEventsContainer"></div>
+
+            <div class="events-tabs-container">
+                <div class="events-tabs">
+                    <button class="events-tab active" onclick="switchTab('upcoming', this)">
+                        Upcoming <span class="tab-count" id="upcomingCount">0</span>
+                    </button>
+                    <button class="events-tab" onclick="switchTab('created', this)">
+                        Created <span class="tab-count" id="createdCount">0</span>
+                    </button>
+                    <button class="events-tab" onclick="switchTab('saved', this)">
+                        Saved <span class="tab-count" id="savedCount">0</span>
+                    </button>
+                </div>
+
+                <div class="tab-panel active" id="tab-upcoming">
+                    <div class="events-container" id="upcomingEventsContainer"></div>
+                </div>
+                <div class="tab-panel" id="tab-created">
+                    <div class="events-container" id="createdEventsContainer"></div>
+                </div>
+                <div class="tab-panel" id="tab-saved">
+                    <div class="events-container" id="savedEventsContainer"></div>
+                </div>
             </div>
-            <div class="tab-panel" id="tab-created">
-              <div class="events-container" id="createdEventsContainer"></div>
-            </div>
-            <div class="tab-panel" id="tab-saved">
-              <div class="events-container" id="savedEventsContainer"></div>
-            </div>
-          </div>
-          
-    </div>
-</section>
+
+        </div>
+    </section>
 
 
-<footer class="bg-white py-4 text-center shadow-sm"></footer>
+    <footer class="bg-white py-4 text-center shadow-sm"></footer>
 
 
     <!--Logic Links-->
@@ -114,4 +116,5 @@
     <script type="module" src="/scripts/components/navbarComponent.js"></script>
     <script type="module" src="/scripts/components/eventCardsComponents.js"></script>
 </body>
+
 </html>i

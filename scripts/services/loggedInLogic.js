@@ -1,7 +1,6 @@
 import { supabase } from "../config/supabase.js";
 import { initNotifications } from "./notifications.js";
 
-
 async function checkLoginStatus() {
   // retrieve user status from login/signup
   const {
@@ -46,23 +45,25 @@ async function checkLoginStatus() {
     .eq("id", session.user.id)
     .single();
 
-    //if user is admin, redir
-    if (profile?.is_admin) {
-      console.log("User is admin, redirecting to admin dashboard.");
-      window.location.href = "/admin/index.html";
-      return;
-    }
+  //if user is admin, redir
+  if (profile?.is_admin) {
+    console.log("User is admin, redirecting to admin dashboard.");
+    window.location.href = "/admin/index.html";
+    return;
+  }
 
-    const avatarImg = document.getElementById("userAvatar");
-    if (avatarImg) {
-      if (profile?.avatar_url) {
-        avatarImg.src = profile.avatar_url;
-      } else {
-        const name = profile?.full_name || "User";
-        avatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=ff8b80&color=fff&rounded=true&size=35`;
-      }
-      avatarImg.style.display = "block";
+  const avatarImg = document.getElementById("userAvatar");
+  if (avatarImg) {
+    if (profile?.avatar_url) {
+      avatarImg.src = profile.avatar_url;
+    } else {
+      const name = profile?.full_name || "User";
+      avatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+        name
+      )}&background=ff8b80&color=fff&rounded=true&size=35`;
     }
+    avatarImg.style.display = "block";
+  }
 
   const viewDetailsBtn = document.querySelectorAll(".viewDetailBtn");
   const createEventBtn = document.querySelectorAll(".createEvent");

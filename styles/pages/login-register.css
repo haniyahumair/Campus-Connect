@@ -1,245 +1,249 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap");
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
 
-
-:root{
-    --white: #ffffff;
-    --black: #000000;
-    --primary-grey: #f0f0f0;
-    --seconday-grey: #E9E9E9;
-    --primary-accent: #FF8A80;
-    --secondary-accent: #2EC4B6; 
-    --header-font: 'Fraunces', serif;
-    --subheader-font: 'Inter', sans-serif;
-    --text-font: 'Manrope', sans-serif;
+:root {
+  --white: #ffffff;
+  --black: #000000;
+  --primary-grey: #f0f0f0;
+  --seconday-grey: #e9e9e9;
+  --primary-accent: #ff8a80;
+  --secondary-accent: #2ec4b6;
+  --header-font: "Fraunces", serif;
+  --subheader-font: "Inter", sans-serif;
+  --text-font: "Manrope", sans-serif;
 }
 
 /*Login Page Styling*/
 body {
-    background: var(--white);
-    padding-left: 100px;
-    margin: 0;
-    height: auto;
-    font-family: var(--text-font);
+  background: var(--white);
+  padding-left: 100px;
+  margin: 0;
+  height: auto;
+  font-family: var(--text-font);
 }
 
-.company{
-    display: flex;
-    align-items: center;
-    gap: 7px; 
+.company {
+  display: flex;
+  align-items: center;
+  gap: 7px;
 }
 
 .company img {
-    width: 15px; 
+  width: 15px;
 }
 
-.company-name{
-    font-size: 1rem;
-    color: var(--black);
+.company-name {
+  font-size: 1rem;
+  color: var(--black);
 }
 
-main{
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; 
-    min-height: calc(100vh - 100px); 
-    margin: 0;
-    gap: 100px; 
-    width: calc(100% - 115px);
-    padding: 40px 0;
+main {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: calc(100vh - 100px);
+  margin: 0;
+  gap: 100px;
+  width: calc(100% - 115px);
+  padding: 40px 0;
 }
 
-.login-container, .sign-up-container{
-    padding: 50px 0;
-    display: flex;
-    flex-direction: column;
+.login-container,
+.sign-up-container {
+  padding: 50px 0;
+  display: flex;
+  flex-direction: column;
 }
 
-.login-content .text h2, .sign-up-content .text h2{
-    font-size: 2.9rem;
-    color: var(--black);
-    margin-bottom: 20px;
-    font-family: var(--header-font);
+.login-content .text h2,
+.sign-up-content .text h2 {
+  font-size: 2.9rem;
+  color: var(--black);
+  margin-bottom: 20px;
+  font-family: var(--header-font);
 }
 
-.login-content .text p{   
-    font-size: 1rem;
-    color: var(--black);
-    margin-bottom: 35px;
-    font-family: var(--subheader-font);
+.login-content .text p {
+  font-size: 1rem;
+  color: var(--black);
+  margin-bottom: 35px;
+  font-family: var(--subheader-font);
 }
 
-.login-form, sign-up-form{
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    width: 100%;
+.login-form,
+sign-up-form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
 }
 
-.login-form-group, register-form{
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-bottom: 12px;
+.login-form-group,
+register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 12px;
 }
 
-.login-form-group input{
-    padding: 12px 15px;
-    font-size: 0.9rem;
-    border: 1px solid var(--black);
-    border-radius: 50px;
-    color: var(--seconday-grey);
+.login-form-group input {
+  padding: 12px 15px;
+  font-size: 0.9rem;
+  border: 1px solid var(--black);
+  border-radius: 50px;
+  color: var(--seconday-grey);
 }
 
-.l-submit-btn input{
-    background-color: var(--black);
-    border: none;
-    color: var(--white);
-    font-size: 1rem;
-    padding: 12px 50px ;
-    border-radius: 25px;
-    width: 100%;    
-    cursor: pointer;
-    margin-bottom: 12px;
+.l-submit-btn input {
+  background-color: var(--black);
+  border: none;
+  color: var(--white);
+  font-size: 1rem;
+  padding: 12px 50px;
+  border-radius: 25px;
+  width: 100%;
+  cursor: pointer;
+  margin-bottom: 12px;
 }
 
 .link {
-    font-size: 0.8rem;
-    color: var(--black);
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    text-align: center;
+  font-size: 0.8rem;
+  color: var(--black);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: center;
 }
 
 .link,
 .link p,
 .link.sign-up-link,
 .link.reset-password-link {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .link.sign-up-link {
-    margin-block: 12px; 
+  margin-block: 12px;
 }
 
-.link a{
-    color: var(--black);
-    text-decoration: none;
-    font-weight: 600;
+.link a {
+  color: var(--black);
+  text-decoration: none;
+  font-weight: 600;
 }
 
-.login-img img{
-    width: 500px;
+.login-img img {
+  width: 500px;
 }
 
 /*Sign Up Page styling*/
-.sign-up-content .text p{   
-    font-size: 1rem;
-    color: var(--black);
-    margin-bottom: 35px;
+.sign-up-content .text p {
+  font-size: 1rem;
+  color: var(--black);
+  margin-bottom: 35px;
 }
 
-.login-message a{
-    color: var(--black);
-    text-decoration: none;
-    font-weight: 600;
+.login-message a {
+  color: var(--black);
+  text-decoration: none;
+  font-weight: 600;
 }
 
-.register-form{
-    width: fit-content;
+.register-form {
+  width: fit-content;
 }
 
-.register-form input{
-    padding: 12px 15px;
-    font-size: 0.9rem;
-    border: 1px solid var(--black);
-    border-radius: 50px;
-    color: var(--seconday-grey);
-    width: 90%;
-    margin-bottom: 12px;
+.register-form input {
+  padding: 12px 15px;
+  font-size: 0.9rem;
+  border: 1px solid var(--black);
+  border-radius: 50px;
+  color: var(--seconday-grey);
+  width: 90%;
+  margin-bottom: 12px;
 }
 
-.s-submit-btn input{
-    background-color: var(--black);
-    border: none;
-    color: var(--white);
-    font-size: 1rem;
-    padding: 12px 50px ;
-    border-radius: 25px;
-    width: 100%;    
-    cursor: pointer;
-    margin-top: 30px;
+.s-submit-btn input {
+  background-color: var(--black);
+  border: none;
+  color: var(--white);
+  font-size: 1rem;
+  padding: 12px 50px;
+  border-radius: 25px;
+  width: 100%;
+  cursor: pointer;
+  margin-top: 30px;
 }
 
-.signup-img img{
-    width: 500px;
+.signup-img img {
+  width: 500px;
 }
 
 /*Mobile layout*/
-@media (max-width: 768px){
-    main{
-        flex-direction: column;
-        height: auto;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        margin-bottom: 0;
-    }
-    .login-form, sign-up-form{
-        margin-bottom: 0;
-    }
+@media (max-width: 768px) {
+  main {
+    flex-direction: column;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 0;
+  }
+  .login-form,
+  sign-up-form {
+    margin-bottom: 0;
+  }
 
-    .signup-img img{
-        width: 100%;
-    }
+  .signup-img img {
+    width: 100%;
+  }
 
-    body {
-        margin-left: 20px;
-    }
+  body {
+    margin-left: 20px;
+  }
 }
 
 /*role selection */
 .role-selection {
-    margin-bottom: 25px;
-    font-family: var(--text-font);
+  margin-bottom: 25px;
+  font-family: var(--text-font);
 }
 
 .role-selection h3 {
-    margin-bottom: 15px;
-    color: var(--black);
-    font-size: 20px;
-    font-weight: 600;
-    font-family: var(--subheader-font);
+  margin-bottom: 15px;
+  color: var(--black);
+  font-size: 20px;
+  font-weight: 600;
+  font-family: var(--subheader-font);
 }
 
 .role-options {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
 }
 
 .role-option {
-    cursor: pointer;
-    position: relative;
+  cursor: pointer;
+  position: relative;
 }
 
 .role-option input[type="radio"] {
-    display: none;
+  display: none;
 }
 
 .role-card {
-    border: 2px solid #ddd;
-    border-radius: 12px;
-    padding: 20px;
-    text-align: center;
-    transition: all 0.3s ease;
-    background: var(--white);
-    /* display: flex;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  background: var(--white);
+  /* display: flex;
     flex-direction: row; */
 }
 
@@ -250,174 +254,176 @@ main{
 } */
 
 .role-option input[type="radio"]:checked + .role-card {
-    border-color: grey;
-    background: var(--seconday-grey);
+  border-color: grey;
+  background: var(--seconday-grey);
 }
 
 .role-card:hover {
-    border-color: grey;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-color: grey;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .role-icon {
-    font-size: 40px;
-    display: block;
-    margin-bottom: 10px;
+  font-size: 40px;
+  display: block;
+  margin-bottom: 10px;
 }
 
 .role-label {
-    display: block;
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 5px;
-    color: var(--black);
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: var(--black);
 }
 
 .role-desc {
-    display: block;
-    font-size: 13px;
-    color: grey;
+  display: block;
+  font-size: 13px;
+  color: grey;
 }
 
 /* Student/Admin specific fields */
 #studentFields,
 #adminFields {
-    margin-top: 15px;
+  margin-top: 15px;
 }
 
 .info-message {
-    background: #E9E9E9;
-    border: 1px solid rgb(99, 98, 98);
-    border-radius: 8px;
-    padding: 12px;
-    margin-top: 15px;
-    font-size: 14px;
-    color: var(--black);
+  background: #e9e9e9;
+  border: 1px solid rgb(99, 98, 98);
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 15px;
+  font-size: 14px;
+  color: var(--black);
 }
 
 .form-group input,
 .form-group select {
-    width: 100%;
-    margin-bottom: 15px;
+  width: 100%;
+  margin-bottom: 15px;
 }
 
 /* button */
-.btn-next, .btn-submit{
-    background-color: var(--black);
-    border: none;
-    color: var(--white);
-    font-size: 1rem;
-    padding: 12px 50px ;
-    border-radius: 25px;
-    width: 100%;    
-    cursor: pointer;
+.btn-next,
+.btn-submit {
+  background-color: var(--black);
+  border: none;
+  color: var(--white);
+  font-size: 1rem;
+  padding: 12px 50px;
+  border-radius: 25px;
+  width: 100%;
+  cursor: pointer;
 }
 
-.btn-prev{
-    background-color: transparent;
-    border: 1px solid var(--black);
-    color: var(--black);
-    font-size: 1rem;
-    padding: 12px 50px ;
-    border-radius: 25px;
-    width: 50%;    
-    cursor: pointer;
+.btn-prev {
+  background-color: transparent;
+  border: 1px solid var(--black);
+  color: var(--black);
+  font-size: 1rem;
+  padding: 12px 50px;
+  border-radius: 25px;
+  width: 50%;
+  cursor: pointer;
 }
 
 /* Step 3 */
 .avatar-upload {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    margin: 20px auto;
-    width: 90%;
-    max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin: 20px auto;
+  width: 90%;
+  max-width: 400px;
 }
 
 .avatar-preview {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    background: var(--primary-grey);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border: 3px solid var(--seconday-grey);
-    margin-bottom: 15px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: var(--primary-grey);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 3px solid var(--seconday-grey);
+  margin-bottom: 15px;
 }
 
 .avatar-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .avatar-preview-icon {
-    font-size: 60px;
-    color: #999;
+  font-size: 60px;
+  color: #999;
 }
 
 .avatar-upload-btn {
-    padding: 12px 30px;
-    background: var(--white);
-    border: 2px solid var(--black);
-    border-radius: 25px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 16px;
-    font-weight: 500;
-    text-align: center;
+  padding: 12px 30px;
+  background: var(--white);
+  border: 2px solid var(--black);
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
 }
 
 .avatar-upload-btn:hover {
-    background: var(--black);
-    color: var(--white);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  background: var(--black);
+  color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.avatar-upload input{
-    display: none;
-    margin-top: 30px;
+.avatar-upload input {
+  display: none;
+  margin-top: 30px;
 }
 
-.avatar-upload-btn, .upload-avatar{  
-    background-color: transparent;
-    border: solid 1px black;
-    color: var(--black);
-    font-size: 1rem;
-    padding: 10px 25px ;
-    border-radius: 25px;
-    width: 100%;    
-    cursor: pointer;
+.avatar-upload-btn,
+.upload-avatar {
+  background-color: transparent;
+  border: solid 1px black;
+  color: var(--black);
+  font-size: 1rem;
+  padding: 10px 25px;
+  border-radius: 25px;
+  width: 100%;
+  cursor: pointer;
 }
 
-.student-only input{
-    color: var(--black);
+.student-only input {
+  color: var(--black);
 }
 
-.student-only select{
-    background-color: transparent;
-    color: black;
-    border: 1px solid var(--black);
-    border-radius: 50px;
-    height: 35px;
-    width: 100%;
-    padding: 0 15px;
-    font-size: 0.9rem;
+.student-only select {
+  background-color: transparent;
+  color: black;
+  border: 1px solid var(--black);
+  border-radius: 50px;
+  height: 35px;
+  width: 100%;
+  padding: 0 15px;
+  font-size: 0.9rem;
 }
 
-textarea{
-    background-color: transparent;
-    color: var(--black);
-    border: 1px solid var(--black);
-    font-family: var(--text-font);
-    border-radius: 12px;
-    padding: 10px 15px;
-    font-size: 0.9rem;
-    width: 100%;
-    height: 80px;
+textarea {
+  background-color: transparent;
+  color: var(--black);
+  border: 1px solid var(--black);
+  font-family: var(--text-font);
+  border-radius: 12px;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  width: 100%;
+  height: 80px;
 }

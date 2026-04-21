@@ -1,9 +1,9 @@
 import { marked } from "https://cdn.jsdelivr.net/npm/marked/src/marked.min.js";
 
 marked.setOptions({
-    mangle: false,
-    headerIds: false,
-  });
+  mangle: false,
+  headerIds: false,
+});
 
 const messages = [];
 let currentSystemPrompt = "";
@@ -82,7 +82,9 @@ async function sendAI() {
   } catch (error) {
     console.error("Error fetching AI response:", error);
     removeTypingBubble();
-    addAssistantMessage("Sorry, I couldn't process your request. Please try again.");
+    addAssistantMessage(
+      "Sorry, I couldn't process your request. Please try again."
+    );
   }
 }
 
@@ -100,11 +102,11 @@ export function initChatbot(systemPrompt = "") {
     });
   });
 
-  inputField.addEventListener("keydown", function(event) {
+  inputField.addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
       sendAI();
     }
-  });  
+  });
 
   sendButton.addEventListener("click", sendAI);
 }

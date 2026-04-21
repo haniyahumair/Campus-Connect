@@ -5,60 +5,62 @@ import { initNotifications } from "../scripts/services/notifications.js";
 let currentEventId = null;
 
 async function initAdminPage() {
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) {
-      window.location.href = '/pages/login.html'
-      return
+    window.location.href = "/pages/login.html";
+    return;
   }
 
   const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single()
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
 
-  if (profile?.role !== 'admin') {
-      window.location.href = '/pages/profile.html'
-      return
+  if (profile?.role !== "admin") {
+    window.location.href = "/pages/profile.html";
+    return;
   }
 
   try {
     await initNotifications();
-    console.log('initNotifications: called on admin page');
+    console.log("initNotifications: called on admin page");
   } catch (err) {
-    console.error('initNotifications error:', err);
+    console.error("initNotifications error:", err);
   }
 
   loadAll();
 
   //load event
-    async function loadAll() {
+  async function loadAll() {
     // Fetch pending events
     const { data: pendingData, error: pendingError } = await supabase
       .from("events")
       .select("*")
       .eq("event_status", "pending");
-      
+
     if (pendingError) {
       console.error("Error fetching pending events:", pendingError);
       return;
     }
-  
+
     // Update pending events count and populate pending table
     const pendingCount = pendingData.length;
     const sideBar = document.getElementById("navPending");
     const statCards = document.getElementById("statsPending");
     if (sideBar) {
-      sideBar.innerHTML = `<span class="nav-icon">⏳</span> Pending Events <span class="nav-badge" id="pendingCount">${pendingCount}</span>`
+      sideBar.innerHTML = `<span class="nav-icon">⏳</span> Pending Events <span class="nav-badge" id="pendingCount">${pendingCount}</span>`;
     }
 
     if (statCards) {
       statCards.innerHTML = pendingCount;
     }
-  
+
     populatePending(pendingData);
-  
+
     // Fetch all events
     const { data: allEvents, error: allError } = await supabase
       .from("events")
@@ -71,31 +73,45 @@ async function initAdminPage() {
 
     // Update stat cards and sidebar counts
     const allEventsCount = allEvents.length;
-    const approvedEvents = allEvents.filter(event => event.event_status === "approved");
-    const totalRegisteredCount = allEvents.reduce((total, event) => total + event.current_registration, 0);
-    const avgFillRate = allEvents.reduce((total, event) => total + (event.max_capacity > 0 ? (event.current_registration / event.max_capacity) : 0), 0) / allEvents.length * 100;
+    const approvedEvents = allEvents.filter(
+      (event) => event.event_status === "approved"
+    );
+    const totalRegisteredCount = allEvents.reduce(
+      (total, event) => total + event.current_registration,
+      0
+    );
+    const avgFillRate =
+      (allEvents.reduce(
+        (total, event) =>
+          total +
+          (event.max_capacity > 0
+            ? event.current_registration / event.max_capacity
+            : 0),
+        0
+      ) /
+        allEvents.length) *
+      100;
     const approvedEventsStatCard = document.getElementById("statsApproved");
     const allEventsSidebar = document.getElementById("allCount");
     const registeredStatsCard = document.getElementById("statsRegistered");
     const avgFillRateCard = document.getElementById("statsFilled");
-    
-    
+
     if (approvedEventsStatCard) {
       approvedEventsStatCard.textContent = approvedEvents.length;
     }
 
-    if(allEventsSidebar){
+    if (allEventsSidebar) {
       allEventsSidebar.textContent = allEventsCount;
     }
 
-    if(registeredStatsCard){
+    if (registeredStatsCard) {
       registeredStatsCard.textContent = totalRegisteredCount;
     }
 
-    if(avgFillRateCard){
+    if (avgFillRateCard) {
       avgFillRateCard.textContent = `${avgFillRate.toFixed(2)}%`;
     }
-  
+
     // Populate all events table and stats table & view
     populateAll(allEvents);
     statusBar(allEvents);
@@ -221,21 +237,22 @@ async function initAdminPage() {
 
   // Populate pending table
   let pendingEvents = [];
-  
+
   function populatePending(events) {
     pendingEvents = events;
     renderPendingTable();
   }
-  
+
   function renderPendingTable() {
     const tbody = document.getElementById("pending-tbody");
-  
+
     // Clear the table body
     tbody.innerHTML = "";
-  
+
     // Show or hide the "No Pending Events" message
-    document.getElementById("noPending").style.display = pendingEvents.length === 0 ? "" : "none";
-  
+    document.getElementById("noPending").style.display =
+      pendingEvents.length === 0 ? "" : "none";
+
     // Render all pending events
     pendingEvents.forEach((event) => {
       const price = event.price === 0 ? "badge badge-free" : "badge badge-paid";
@@ -249,12 +266,20 @@ async function initAdminPage() {
           <td>${event.date}</td>
           <td>${event.location}</td>
           <td>${event.contact_details}</td>
-          <td><span class="${price}">${event.price === 0 ? "Free" : `QAR ${event.price}`}</span></td>
+          <td><span class="${price}">${
+        event.price === 0 ? "Free" : `QAR ${event.price}`
+      }</span></td>
           <td>
             <div class="row-actions">
-              <button class="row-btn" onclick="openModal('${event.id}')">View</button>
-              <button class="row-btn approve" onclick="quickApprove('${event.id}')">✓ Approve</button>
-              <button class="row-btn reject" onclick="quickReject('${event.id}')">✕ Reject</button>
+              <button class="row-btn" onclick="openModal('${
+                event.id
+              }')">View</button>
+              <button class="row-btn approve" onclick="quickApprove('${
+                event.id
+              }')">✓ Approve</button>
+              <button class="row-btn reject" onclick="quickReject('${
+                event.id
+              }')">✕ Reject</button>
             </div>
           </td>
         </tr>
@@ -262,11 +287,14 @@ async function initAdminPage() {
     });
 
     const pendingPagination = document.querySelector(".pending-pagination");
-    if (pendingPagination) pendingPagination.textContent = `Showing ${pendingEvents.length} pending events`;
+    if (pendingPagination)
+      pendingPagination.textContent = `Showing ${pendingEvents.length} pending events`;
   }
-
+  //global access to all events for search and stats
+  let allEventsArray = [];
   //populate all events table
   function populateAll(events) {
+    allEventsArray = events;
     const tbody = document.getElementById("allTBody");
     if (!tbody) {
       console.error("allTBody element not found in DOM.");
@@ -274,11 +302,12 @@ async function initAdminPage() {
     }
     tbody.innerHTML = "";
     events.forEach((event) => {
-      const widthPercentage = (event.current_registration / event.max_capacity) * 100;
-  
+      const widthPercentage =
+        (event.current_registration / event.max_capacity) * 100;
+
       // Check if event is free or paid
       const price = event.price === 0 ? "badge badge-free" : "badge badge-paid";
-  
+
       // Check status of event
       let statusClass = "badge";
       if (event.event_status === "pending") {
@@ -288,7 +317,7 @@ async function initAdminPage() {
       } else if (event.event_status === "rejected") {
         statusClass += " badge-rejected";
       }
-  
+
       tbody.innerHTML += `
         <tr>
           <td>
@@ -303,15 +332,23 @@ async function initAdminPage() {
               <div class="att-bar">
                 <div class="att-fill" style="width:${widthPercentage}%;"></div>
               </div>
-              <span class="att-label">${event.current_registration}/${event.max_capacity}</span>
+              <span class="att-label">${event.current_registration}/${
+        event.max_capacity
+      }</span>
             </div>
           </td>
-          <td><span class="${price}">${event.price === 0 ? "Free" : `QAR ${event.price}`}</span></td>
+          <td><span class="${price}">${
+        event.price === 0 ? "Free" : `QAR ${event.price}`
+      }</span></td>
           <td><span class="${statusClass}">${event.event_status}</span></td>
-          <td><span class="badge ${event.is_active ? "badge-active" : "badge-inactive"}">
+          <td><span class="badge ${
+            event.is_active ? "badge-active" : "badge-inactive"
+          }">
             ${event.is_active ? "Active" : "Inactive"}
           </span></td>
-          <td><button class="row-btn" onclick="openModal('${event.id}')">View</button></td>
+          <td><button class="row-btn" onclick="openModal('${
+            event.id
+          }')">View</button></td>
         </tr>
       `;
     });
@@ -324,13 +361,14 @@ async function initAdminPage() {
       console.error("Element with id 'statsTBody' not found in the DOM.");
       return;
     }
-  
+
     statsAttendanceTbody.innerHTML = "";
     events.forEach((event) => {
-      const widthPercentage = event.max_capacity > 0
-        ? (event.current_registration / event.max_capacity) * 100
-        : 0;
-  
+      const widthPercentage =
+        event.max_capacity > 0
+          ? (event.current_registration / event.max_capacity) * 100
+          : 0;
+
       let statusClass = "badge";
       if (event.event_status === "pending") {
         statusClass += " badge-pending";
@@ -339,7 +377,7 @@ async function initAdminPage() {
       } else if (event.event_status === "rejected") {
         statusClass += " badge-rejected";
       }
-  
+
       statsAttendanceTbody.innerHTML += `
         <tr>
           <td style="display: flex; flex-direction: column; gap: 4px;">
@@ -440,7 +478,9 @@ async function initAdminPage() {
       return;
     }
     if (!updatedRows || updatedRows.length === 0) {
-      console.error("Update failed: no rows affected. Check Supabase RLS policies for events table UPDATE.");
+      console.error(
+        "Update failed: no rows affected. Check Supabase RLS policies for events table UPDATE."
+      );
       return;
     }
 
@@ -469,20 +509,25 @@ async function initAdminPage() {
       .select("*, org_id (id, full_name)")
       .eq("id", eventId)
       .single();
-    document.getElementById("modalSubtitle").innerHTML = `Submitted by ${event.org_id.full_name}`;
+    document.getElementById(
+      "modalSubtitle"
+    ).innerHTML = `Submitted by ${event.org_id.full_name}`;
     document.getElementById("modalImg").innerHTML = event.img_url
       ? `<img src="${event.img_url}" alt="Event Image">`
       : `<img src="/assets/Images/default-event.jpg" alt="Placeholder Image">`;
     document.getElementById("modalTitle").textContent = event.title;
     document.getElementById("modalDescription").textContent = event.description;
     document.getElementById("modalDate").textContent = event.date;
-    document.getElementById("modalTime").textContent = `${event.start_time} - ${event.end_time}`;
+    document.getElementById(
+      "modalTime"
+    ).textContent = `${event.start_time} - ${event.end_time}`;
     document.getElementById("modalLocation").textContent = event.location;
     document.getElementById("modalCategory").textContent = event.category;
     document.getElementById("modalContact").textContent = event.contact_details;
     document.getElementById("modalPrice").textContent =
       event.price === 0 ? "Free" : `QAR ${event.price}`;
-    document.getElementById("modalMaxAttendees").textContent = event.max_capacity;
+    document.getElementById("modalMaxAttendees").textContent =
+      event.max_capacity;
     document.getElementById("modalRegistered").textContent =
       event.current_registration;
     document.getElementById("modalUserID").textContent = event.org_id.id;
@@ -496,9 +541,12 @@ async function initAdminPage() {
     if (status === "pending") statusClass += " badge-pending";
     else if (status === "approved") statusClass += " badge-approved";
     else if (status === "rejected") statusClass += " badge-rejected";
-    document.getElementById("modalStatus").innerHTML = `<span class="${statusClass}">${status}</span>`;
-    
-    document.getElementById("modalFooter").style.display = status === "pending" ? "flex" : "none";
+    document.getElementById(
+      "modalStatus"
+    ).innerHTML = `<span class="${statusClass}">${status}</span>`;
+
+    document.getElementById("modalFooter").style.display =
+      status === "pending" ? "flex" : "none";
 
     // set approve button to call quickApprove with this event id (works when there is a single admin)
     const approveBtn = document.querySelector("#modalFooter .approve-btn");
@@ -548,20 +596,28 @@ async function initAdminPage() {
       .eq("id", currentEventId)
       .single();
 
-    if (fetchError) { console.error(fetchError); return; }
+    if (fetchError) {
+      console.error(fetchError);
+      return;
+    }
 
     const { error } = await supabase
       .from("events")
       .update({ event_status: "rejected", rejection_reason: reason || null })
       .eq("id", currentEventId);
 
-    if (error) { console.error(error); return; }
+    if (error) {
+      console.error(error);
+      return;
+    }
 
     await supabase.from("notifications").insert({
       user_id: event.org_id,
       sender_id: (await supabase.auth.getUser()).data.user.id,
       event_id: currentEventId,
-      message: `Your event "${event.title}" was not approved.${reason ? ` Reason: ${reason}` : ""} Please try again.`,
+      message: `Your event "${event.title}" was not approved.${
+        reason ? ` Reason: ${reason}` : ""
+      } Please try again.`,
       is_read: false,
     });
 
@@ -587,36 +643,46 @@ async function initAdminPage() {
       .eq("id", currentEventId)
       .single();
 
-    if (fetchError) { console.error(fetchError); return; }
+    if (fetchError) {
+      console.error(fetchError);
+      return;
+    }
     console.log("Fetched event details:", event);
-    
+
     const { data: updatedRows, error } = await supabase
       .from("events")
       .update({ event_status: "approved", is_active: true })
       .eq("id", currentEventId)
       .select();
 
-    if (error) { console.error(error); return; }
+    if (error) {
+      console.error(error);
+      return;
+    }
     if (!updatedRows || updatedRows.length === 0) {
-      console.error("Update failed: no rows affected. Check Supabase RLS policies for events table UPDATE.");
+      console.error(
+        "Update failed: no rows affected. Check Supabase RLS policies for events table UPDATE."
+      );
       return;
     }
     //successfully approved event modal
     alert("Event approved successfully!");
-    
-    const { error: notificationError } = await supabase.from("notifications").insert({
-      user_id: event.org_id,
-      sender_id: (await supabase.auth.getUser()).data.user.id,
-      event_id: currentEventId,
-      message: `Your event "${event.title}" was approved! Check it out on the events page.`,
-      is_read: false,
-    });
+
+    const { error: notificationError } = await supabase
+      .from("notifications")
+      .insert({
+        user_id: event.org_id,
+        sender_id: (await supabase.auth.getUser()).data.user.id,
+        event_id: currentEventId,
+        message: `Your event "${event.title}" was approved! Check it out on the events page.`,
+        is_read: false,
+      });
     if (notificationError) {
       console.error("Error sending notification:", notificationError);
     } else {
       console.log("Notification sent to organizer:", event.org_id);
     }
-    
+
     closeModal();
     loadAll();
     console.log("Modal closed and events reloaded.");
@@ -631,14 +697,35 @@ async function initAdminPage() {
 
   console.log("Pending events to be reviewed by AI:", pendingEvents);
 
-  const formattedPendingEvents = pendingEvents.map(event => `
+  const formattedPendingEvents = pendingEvents
+    .map(
+      (event) => `
     - Title: ${event.title} 
     - ID: ${event.id}
     - Description of event: ${event.description}
     - Date: ${event.date} · ${event.start_time} - ${event.end_time}
     - Location: ${event.location}
-    - Status: ${event.event_status}`).join("\n");
-  
+    - Status: ${event.event_status}`
+    )
+    .join("\n");
+
+  const formattedAllEvents = allEventsArray
+    .map(
+      (event) => `
+    - Title: ${event.title} 
+    - ID: ${event.id}
+    - Description of event: ${event.description}
+    - Date: ${event.date} · ${event.start_time} - ${event.end_time}
+    - Location: ${event.location}
+    - Status: ${event.event_status}).join("\n")
+    - Attendance: ${event.current_registration}/${event.max_capacity}
+    - Max attendees: ${event.max_capacity}
+    - Registered attendees: ${event.current_registration}
+    - Price: ${event.price === 0 ? "Free" : `QAR ${event.price}`}
+    - Category: ${event.category}`
+    )
+    .join("\n");
+
   //prompt for AI chatbot
   const promptInput = `You are an admin assistant for Campus Connect. Your role is to help the admin manage events, answer questions about event details, and flag any policy violations.
 
@@ -649,6 +736,9 @@ async function initAdminPage() {
   
   PENDING EVENTS:
   ${formattedPendingEvents}
+
+  ALL EVENTS: You can refer to the list of all events for context on what types of events have been approved in the past, attendance numbers, and other details that may help in evaluating pending events.
+  ${formattedAllEvents}
   
   Using the information above, assist the admin in managing events and answering any questions they may have about the pending events. Always refer to the terms and conditions when evaluating events. Provide clear explanations for any flagged issues, and why a certain event is set to be rejected.
   

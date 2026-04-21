@@ -1,5 +1,5 @@
 export function createFooter() {
-    return `
+  return `
     <div class="brand">
             <img src="/assets/Icons/Logo.svg" alt="CampusConnect Logo" class="logo">
                 <p class="company-name">Campus<b>Connect</b></p>
