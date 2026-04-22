@@ -262,7 +262,7 @@ body {
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 300px;
-  height: 290px;
+  height: fit-content;
   z-index: 10;
 }
 
