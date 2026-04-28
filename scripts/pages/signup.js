@@ -39,9 +39,13 @@ function setupForm() {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const selectedRole = document.querySelector(
-      'input[name="role"]:checked'
-    ).value;
+    const selectedRole = document.querySelector('input[name="role"]:checked').value;
+    if (!roleInput) {
+      alert("Please select a role.");
+      return;
+    }
+    const selectedRole = roleInput.value
+    
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
