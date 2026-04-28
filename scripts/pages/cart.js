@@ -8,6 +8,35 @@ document.querySelector("footer").innerHTML = createFooter();
 
 document.addEventListener("DOMContentLoaded", () => {
   loadCart();
+
+  const applePayBtn = document.getElementById("apple-pay-btn");
+  const paypalBtn = document.querySelector(".paypal-btn");
+  const cardBtn = document.querySelector(".payment-btn");
+
+  applePayBtn.addEventListener("click", handlePayment);
+  paypalBtn.addEventListener("click", handlePayment);
+  cardBtn.addEventListener("click", handlePayment);
+
+  document.getElementById("cartContainer").addEventListener("click", (e) => {
+    if (e.target.classList.contains("remove-btn")) {
+      const eventId = e.target.dataset.id;
+      removeFromCart(eventId);
+    }
+
+    if (e.target.classList.contains("qty-btn")) {
+      const cartItem = e.target.closest(".cart-item");
+      const eventId = cartItem.dataset.id;
+      const quantitySpan = cartItem.querySelector(".quantity");
+
+      let currentQty = parseInt(quantitySpan.textContent);
+      const change = parseInt(e.target.dataset.change);
+      const newQty = currentQty + change;
+
+      if (newQty < 1) return;
+
+      updateQuantity(eventId, newQty);
+    }
+  });
 });
 
 let currentUserId = null;
@@ -164,11 +193,6 @@ async function removeFromCart(eventId) {
   }
 }
 
-//cart right features
-const applePayBtn = document.getElementById("apple-pay-btn");
-const paypalBtn = document.querySelector(".paypal-btn");
-const cardBtn = document.querySelector(".payment-btn");
-
 function calculateTotal(cartItems) {
   let total = 0;
   cartItems.forEach((item) => {
@@ -254,28 +278,3 @@ async function handlePayment() {
     showModal("Payment Failed!", "Please try again!", "error");
   }
 }
-
-applePayBtn.addEventListener("click", handlePayment);
-paypalBtn.addEventListener("click", handlePayment);
-cardBtn.addEventListener("click", () => handlePayment);
-
-document.getElementById("cartContainer").addEventListener("click", (e) => {
-  if (e.target.classList.contains("remove-btn")) {
-    const eventId = e.target.dataset.id;
-    removeFromCart(eventId);
-  }
-
-  if (e.target.classList.contains("qty-btn")) {
-    const cartItem = e.target.closest(".cart-item");
-    const eventId = cartItem.dataset.id;
-    const quantitySpan = cartItem.querySelector(".quantity");
-
-    let currentQty = parseInt(quantitySpan.textContent);
-    const change = parseInt(e.target.dataset.change);
-    const newQty = currentQty + change;
-
-    if (newQty < 1) return;
-
-    updateQuantity(eventId, newQty);
-  }
-});
