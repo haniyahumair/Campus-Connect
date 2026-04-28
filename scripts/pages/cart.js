@@ -221,7 +221,7 @@ async function handlePayment() {
       .eq("user_id", currentUserId);
 
     if (error) {
-      console.error("Cart error:", cartError);
+      console.error("Cart error:", error);
       showModal("Failed to load Cart!", "Please try again!", "error");
       return;
     }
