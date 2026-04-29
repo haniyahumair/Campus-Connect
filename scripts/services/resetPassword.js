@@ -1,9 +1,10 @@
 import { supabase } from "../config/supabase.js";
 
-const sendBtn = document.getElementById("send-reset-btn");
-const updateBtn = document.getElementById("update-password-btn");
-const step1 = document.getElementById("step1");
-const step2 = document.getElementById("step2");
+document.addEventListener("DOMContentLoaded", () => {
+  const sendBtn = document.getElementById("send-reset-btn");
+  const updateBtn = document.getElementById("update-password-btn");
+  const step1 = document.getElementById("step1");
+  const step2 = document.getElementById("step2");
 
 sendBtn?.addEventListener("click", async () => {
   const email = document.getElementById("reset-email").value.trim();
