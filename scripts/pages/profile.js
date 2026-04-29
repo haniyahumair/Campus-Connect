@@ -59,8 +59,12 @@ async function loadUserProfile() {
   } = await supabase.auth.getUser();
 
   if (!user || authError) {
-    alert("You must be logged in to view your profile.");
-    window.location.href = "/pages/login.html";
+    showModal("Error", "You must be logged in to view your profile!", "error", {
+      autoClose: 3000,
+      onClose: () => {
+        window.location.href = "/pages/login.html";
+      },
+    });
     return;
   }
 
@@ -104,7 +108,12 @@ async function loadUserProfile() {
     document.getElementById("profileContent").style.display = "block";
   } catch (error) {
     console.error("Error loading profile:", error);
-    alert("Failed to load profile. Please try again later.");
+    showModal("Error", "Failed to load profil, please try again!", "error", {
+      autoClose: 3000,
+      onClose: () => {
+        window.location.href = "index.html";
+      },
+    });
   }
 }
 function truncateBySentences(text, maxSentences = 1) {
@@ -389,7 +398,12 @@ document.getElementById("signOutBtn").addEventListener("click", async (e) => {
     window.location.href = "/pages/login.html";
   } catch (error) {
     console.error("Sign out error:", error);
-    alert("Failed to sign out. Please try again.");
+    showModal("Error", "Failed to sign out please try again!", "error", {
+      autoClose: 3000,
+      onClose: () => {
+        window.location.href = "/pages/profile.html";
+      },
+    });
   }
 });
 

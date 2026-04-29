@@ -30,7 +30,12 @@ form?.addEventListener("submit", async (e) => {
   if (email.endsWith("@qu.edu.qa") || email.endsWith("@abdn.ac.uk") || email.endsWith("@oryx.edu.qa") || email.endsWith("@udst.edu.qa") || email.endsWith("@qatar.cmu.edu") || email.endsWith("@qatar-med.cornell.edu") || email.endsWith("@cornell.edu") || email.endsWith("@u.northwestern.edu") || email.endsWith("@qatar.northwestern.edu") || email.endsWith("@georgetown.edu") || email.endsWith("@vcu.edu") || email.endsWith("@hbku.edu.qa")) {
     // Valid email domain
   } else {
-    alert("Please use your university email to log in.");
+    showModal("Error", "Please use a university email to login in!", "error", {
+      autoClose: 3000,
+      onClose: () => {
+        window.location.href = "/pages/login.html";
+      },
+    });
     return;
   }
 
@@ -46,9 +51,6 @@ form?.addEventListener("submit", async (e) => {
     // Add this check ↓
     if (!data.user.email_confirmed_at) {
       await supabase.auth.signOut();
-      alert(
-        "Please verify your email before logging in. Check your inbox for the verification link."
-      );
       return;
     }
 
@@ -91,6 +93,11 @@ form?.addEventListener("submit", async (e) => {
     }
   } catch (error) {
     console.error("Login error:", error.message);
-    alert("Login failed: " + error.message);
+    showModal("Login failed", `{error.message}`, "error", {
+      autoClose: 3000,
+      onClose: () => {
+        window.location.href = "/pages/login.html";
+      },
+    });
   }
 });

@@ -1,4 +1,3 @@
-// ...existing code...
 import { supabase } from '../config/supabase.js';
 import { showModal } from '../utils/modal.js';
 import { createNavbar } from '../components/navbarComponent.js';
@@ -84,8 +83,12 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
-          alert('Please login first');
-          window.location.href = '/pages/login.html';
+          showModal("Error", "Please login!", "error", {
+            autoClose: 3000,
+            onClose: () => {
+              window.location.href = "/pages/login.html";
+            },
+          });
           return;
         }
 

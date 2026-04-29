@@ -23,7 +23,7 @@ function nextStep() {
 
   if (currentStep === 1) {
     if (!role) {
-      alert('Please select a role');
+      showModal("Error", "Please select a role.", "error", { autoClose: 3000 });
       return;
     }
   } else if (currentStep === 2) {
@@ -32,23 +32,23 @@ function nextStep() {
     const password = document.getElementById('password').value;
 
     if (!name || !email || !password) {
-      alert('Please fill in all required fields');
+      showModal("Error", "Please fill in all fields!", "error", { autoClose: 3000 });
       return;
     }
     if (password.length < 6) {
-      alert('Password must be at least 6 characters');
+      showModal("Error", "Password must be at least 6 characters.", "error", { autoClose: 3000 });
       return;
     }
     if (role === 'student') {
       const studentId = document.getElementById('student_id').value.trim();
       if (!studentId) {
-        alert('Please enter your Student ID');
+        showModal("Error", "Please enter your Student ID.", "error", { autoClose: 3000 });
         return;
       }
     } else {
       const department = document.getElementById('department').value.trim();
       if (!department) {
-        alert('Please enter your department/organization');
+        showModal("Error", "Please enter your department/organization.", "error", { autoClose: 3000 });
         return;
       }
     }
