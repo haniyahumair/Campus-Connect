@@ -6,77 +6,90 @@ document.addEventListener("DOMContentLoaded", () => {
   const step1 = document.getElementById("step1");
   const step2 = document.getElementById("step2");
 
-sendBtn?.addEventListener("click", async () => {
-  const email = document.getElementById("reset-email").value.trim();
+  sendBtn?.addEventListener("click", async () => {
+    const emailEl = document.getElementById("reset-email");
+    const email = emailEl ? emailEl.value.trim() : "";
 
-  if (!email) {
-    alert("Please enter your email address.");
-    return;
-  }
+    if (!email) {
+      alert("Please enter your email address.");
+      return;
+    }
 
-  sendBtn.value = "Sending...";
-  sendBtn.disabled = true;
+    sendBtn.value = "Sending...";
+    sendBtn.disabled = true;
 
-  const redirectTo =
-    window.location.hostname === "127.0.0.1"
-      ? "http://127.0.0.1:5502/pages/reset-password.html"
-      : "https://qc-3002-campus-connect.vercel.app/pages/reset-password.html";
+    const redirectTo = `${window.location.origin}/pages/reset-password.html`;
 
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo,
-    });
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo,
+      });
+
+      if (error) {
+        alert("Error: " + (error.message || error));
+        sendBtn.value = "Send Reset Email";
+        sendBtn.disabled = false;
+        return;
+      }
+
+      alert("Reset email sent! Check your inbox and click the link.");
+      sendBtn.value = "Email Sent!";
+    } catch (err) {
+      console.error("Reset password error:", err);
+      alert("Error: " + (err.message || err));
+      sendBtn.value = "Send Reset Email";
+      sendBtn.disabled = false;
+    }
   });
 
-  if (error) {
-    alert("Error: " + error.message);
-    sendBtn.value = "Send Reset Email";
-    sendBtn.disabled = false;
-    return;
-  }
+  supabase.auth.onAuthStateChange(async (event, session) => {
+    if (event === "PASSWORD_RECOVERY") {
+      if (step1) step1.style.display = "none";
+      if (step2) step2.style.display = "block";
+    }
+  });
 
-  alert("Reset email sent! Check your inbox and click the link.");
-  sendBtn.value = "Email Sent!";
-});
+  updateBtn?.addEventListener("click", async () => {
+    const newPasswordEl = document.getElementById("new-password");
+    const confirmPasswordEl = document.getElementById("confirm-password");
+    const newPassword = newPasswordEl ? newPasswordEl.value : "";
+    const confirmPassword = confirmPasswordEl ? confirmPasswordEl.value : "";
 
-supabase.auth.onAuthStateChange(async (event, session) => {
-  if (event === "PASSWORD_RECOVERY") {
-    // show step 2, hide step 1
-    step1.style.display = "none";
-    step2.style.display = "block";
-  }
-});
+    if (!newPassword || !confirmPassword) {
+      alert("Please fill in both fields.");
+      return;
+    }
 
-updateBtn?.addEventListener("click", async () => {
-  const newPassword = document.getElementById("new-password").value;
-  const confirmPassword = document.getElementById("confirm-password").value;
+    if (newPassword !== confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
 
-  if (!newPassword || !confirmPassword) {
-    alert("Please fill in both fields.");
-    return;
-  }
+    if (newPassword.length < 6) {
+      alert("Password must be at least 6 characters.");
+      return;
+    }
 
-  if (newPassword !== confirmPassword) {
-    alert("Passwords do not match.");
-    return;
-  }
+    updateBtn.value = "Updating...";
+    updateBtn.disabled = true;
 
-  if (newPassword.length < 6) {
-    alert("Password must be at least 6 characters.");
-    return;
-  }
+    try {
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
 
-  updateBtn.value = "Updating...";
-  updateBtn.disabled = true;
+      if (error) {
+        alert("Error: " + (error.message || error));
+        updateBtn.value = "Reset Password";
+        updateBtn.disabled = false;
+        return;
+      }
 
-  const { error } = await supabase.auth.updateUser({ password: newPassword });
-
-  if (error) {
-    alert("Error: " + error.message);
-    updateBtn.value = "Reset Password";
-    updateBtn.disabled = false;
-    return;
-  }
-
-  alert("Password updated successfully!");
-  window.location.href = "/pages/login.html";
+      alert("Password updated successfully!");
+      window.location.href = "/pages/login.html";
+    } catch (err) {
+      console.error("Update password error:", err);
+      alert("Error: " + (err.message || err));
+      updateBtn.value = "Reset Password";
+      updateBtn.disabled = false;
+    }
+  });
 });
