@@ -122,16 +122,16 @@ async function loadCart() {
                 <p class="location">📍${event.location}</p>
                 <div class="item-actions">
                 <div class="quantity-control">
-                    <button class="qty-btn" data-change="-1">−</button>
+                    <button type="button" class="qty-btn" data-change="-1">−</button>
                     <span class="quantity">${item.quantity}</span>
-                    <button class="qty-btn" data-change="1">+</button>
+                    <button type="button" class="qty-btn" data-change="1">+</button>
                 </div>
                 <hr class="cart-vertical-sep" />
                 <p class="item-price">${
                   event.price === 0 ? "Free" : "QAR " + event.price
                 }</p>
                 <hr class="cart-vertical-sep" />
-                <button class="remove-btn" data-id="${
+                <button type="button" class="remove-btn" data-id="${
                   item.event_id
                 }">✖ Remove</button>
             </div>
@@ -156,9 +156,10 @@ async function updateQuantity(eventId, newQuantity) {
   if (!currentUserId) return;
 
   const cartItem = document.querySelector(`.cart-item[data-id="${eventId}"]`);
-  if (cartItem) {
-    cartItem.querySelector(".quantity").textContent = newQuantity;
-  }
+  const quantitySpan = cartItem ? cartItem.querySelector(".quantity") : null;
+  const oldQty = quantitySpan ? parseInt(quantitySpan.textContent) : newQuantity;
+
+  if (quantitySpan) quantitySpan.textContent = newQuantity;
 
   const { error } = await supabase
     .from("cart")
@@ -168,9 +169,20 @@ async function updateQuantity(eventId, newQuantity) {
 
   if (error) {
     console.error("Cart error:", error);
+    if (quantitySpan) quantitySpan.textContent = oldQty;
     showModal("Failed to update Cart!", "Please try again!", "error");
-    loadCart();
     return;
+  }
+
+  const { data: cartItems } = await supabase
+    .from("cart")
+    .select("*, events(*)")
+    .eq("user_id", currentUserId);
+
+  if (cartItems) {
+    updateCartTotal(cartItems);
+    const totalQty = cartItems.reduce((sum, i) => sum + i.quantity, 0);
+    document.getElementById("eventTitle").textContent = `You have ${totalQty} item(s) in your cart`;
   }
 }
 

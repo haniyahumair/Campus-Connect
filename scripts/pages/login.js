@@ -16,6 +16,24 @@ form?.addEventListener("submit", async (e) => {
     return;
   }
 
+  //qu.edu.qa 
+  //abdn.ac.uk
+  //oryx.edu.qa
+  //udst.edu.qa
+  //qatar.cmu.edu
+  // qatar-med.cornell.edu or cornell.edu
+  //u.northwestern.edu or qatar.northwestern.edu
+  //georgetown.edu
+  //vcu.edu
+  //hbku.edu.qa
+
+  if (email.endsWith("@qu.edu.qa") || email.endsWith("@abdn.ac.uk") || email.endsWith("@oryx.edu.qa") || email.endsWith("@udst.edu.qa") || email.endsWith("@qatar.cmu.edu") || email.endsWith("@qatar-med.cornell.edu") || email.endsWith("@cornell.edu") || email.endsWith("@u.northwestern.edu") || email.endsWith("@qatar.northwestern.edu") || email.endsWith("@georgetown.edu") || email.endsWith("@vcu.edu") || email.endsWith("@hbku.edu.qa")) {
+    // Valid email domain
+  } else {
+    alert("Please use your university email to log in.");
+    return;
+  }
+
   try {
     console.log("Attempting login for:", email);
 

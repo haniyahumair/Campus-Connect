@@ -262,7 +262,12 @@ async function loadUpcomingEvents() {
     .eq("user_id", user.id)
     .eq("status", "registered");
 
-  if (error || !registrations || registrations.length === 0) {
+  const today = new Date().toISOString().split("T")[0];
+  const upcoming = (registrations || []).filter(
+    (reg) => reg.events && reg.events.date >= today
+  );
+
+  if (error || upcoming.length === 0) {
     container.innerHTML = `
       <div class="empty-state" style="text-align:center;padding:40px;background:#f9f9f9;border-radius:8px;display:flex;flex-direction:column;align-items:center;font-family:'Inter',sans-serif;">
         <h3>Nothing to see here!</h3>
@@ -272,9 +277,9 @@ async function loadUpcomingEvents() {
     return;
   }
 
-  document.getElementById("upcomingCount").textContent = registrations.length;
+  document.getElementById("upcomingCount").textContent = upcoming.length;
   container.innerHTML = "";
-  registrations.forEach((reg) => {
+  upcoming.forEach((reg) => {
     const event = reg.events;
     const date = new Date(event.date);
     if (event.price === 0) {
@@ -319,7 +324,12 @@ async function loadSavedEvents() {
     .select("*, events(*)")
     .eq("user_id", user.id);
 
-  if (error || !saved || saved.length === 0) {
+  const today = new Date().toISOString().split("T")[0];
+  const upcoming = (saved || []).filter(
+    (row) => row.events && row.events.date >= today
+  );
+
+  if (error || upcoming.length === 0) {
     container.innerHTML = `
       <div class="empty-state" style="text-align:center;padding:40px;background:#f9f9f9;border-radius:8px;display:flex;flex-direction:column;align-items:center;font-family:'Inter',sans-serif;">
         <h3>No saved events yet!</h3>
@@ -329,9 +339,9 @@ async function loadSavedEvents() {
     return;
   }
 
-  document.getElementById("savedCount").textContent = saved.length;
+  document.getElementById("savedCount").textContent = upcoming.length;
   container.innerHTML = "";
-  saved.forEach((row) => {
+  upcoming.forEach((row) => {
     const event = row.events;
     const date = new Date(event.date);
     if (event.price === 0) {
@@ -358,7 +368,7 @@ async function loadSavedEvents() {
   });
 
   // All events here are already saved — mark all as filled and reload tab on un-heart
-  const savedEventIds = new Set(saved.map((s) => String(s.event_id)));
+  const savedEventIds = new Set(upcoming.map((s) => String(s.event_id)));
   await attachWishlistHandlers(container, user, savedEventIds, () =>
     loadSavedEvents()
   );

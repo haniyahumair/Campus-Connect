@@ -24,6 +24,7 @@ sendBtn?.addEventListener("click", async () => {
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo,
+    });
   });
 
   if (error) {
