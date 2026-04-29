@@ -441,6 +441,94 @@ a {
   background-color: var(--primary-accent);
 }
 
+/* Help page styling */
+.user-manual-header h1 {
+  text-align: center;
+  font-weight: 700;
+  color: var(--black);
+  margin-bottom: 15px;
+  font-family: var(--header-font);
+} 
+
+.user-manual-header p {
+  text-align: center;
+  font-size: 1rem;
+  color: var(--dark-grey);
+  margin-bottom: 30px;
+  font-family: var(--text-font);
+}
+
+.student-guide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.student-guide .container {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 24px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  background-color: var(--white);
+}
+
+.student-guide .container h3 {
+  font-size: 1.5rem;
+  color: var(--black);
+  margin-bottom: 15px;
+  font-family: var(--subheader-font);
+}
+
+.student-guide .container ol {
+  padding-left: 24px;
+}
+
+.student-guide .container ol li {
+  margin-bottom: 0.725rem;
+  color: var(--dark-grey);
+  line-height: 1.2;
+}
+
+.admin-guide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.admin-guide .container {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 24px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  background-color: var(--white);
+}
+
+.admin-guide .container h3 {
+  font-size: 1.5rem;
+  color: var(--black);
+  margin-bottom: 15px;
+  font-family: var(--subheader-font);
+}
+
+.admin-guide .container .email{
+  background-color: var(--primary-accent);
+  color: var(--white);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  display: inline-block;
+}
+
+.admin-guide .container p {
+  margin-bottom: 0.725rem;
+  color: var(--dark-grey);
+  line-height: 1.2;
+}
+
 /*Footer styling*/
 footer {
   display: flex;

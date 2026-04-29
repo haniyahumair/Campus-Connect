@@ -8,6 +8,7 @@ export function createFooter() {
             <a href="/scripts/pages/login.js">Create Event</a>
             <a href="/pages/events.html">Events</a>
             <a href="/pages/contact.html">Contact Us</a>
+            <a href="/pages/help.html">User Manual</a>
         </div>
         `;
 }

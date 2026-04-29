@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Page</title>
+
+    <link rel="stylesheet" href="/styles/global.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="brand-name">
+            <img src="/assets/Icons/Logo.svg" alt="CampusConnect Logo" class="logo">
+            <p class="CampusConnect">Campus<b>Connect</b></p>
+        </div>
+        <ul class="navbar-nav">
+            <li><a class="nav-link" href="../index.html">Home</a></li>
+            <li><a class="nav-link" href="/pages/events.html">Events</a></li>
+            <li><a class="nav-link createEvent" href="#">Create Event</a></li>
+        </ul>
+        <div class="icons">
+            <a href="/pages/cart.html" class="cart-icon" id="cartIcon">
+                <img src="/assets/Icons/cart-Icon.svg" alt="Cart-Icon">
+            </a>
+
+            <div class="notif-bell" id="notifBell" style="display:none;">
+                <button class="bell-btn" id="bellBtn">
+                    <img src="/assets/Icons/Bell.svg" alt="bell" style="width:24px;">
+                    <span class="bell-badge" id="bellBadge" style="display:none;">0</span>
+                </button>
+                <div class="notif-dropdown" id="notifDropdown" style="display:none;">
+                    <div class="notif-header">Notifications</div>
+                    <div class="notif-list" id="notifList">
+                        <p class="notif-empty">No notifications yet</p>
+                    </div>
+                </div>
+            </div>
+
+            <a href="/pages/profile.html" class="profile-icon" id="profileIcon">
+                <img id="userAvatar" alt="User-Icon"
+                    style="width:35px; height:35px; border-radius:50%; object-fit:cover;">
+            </a>
+        </div>
+        <a class="btn-primary" href="/pages/login.html" id="loginBtn">Login</a>
+    </nav>
+
+    <main>
+        <header class="user-manual-header">
+            <h1>Help / User Manual</h1>
+            <p>Welcome to CampusConnect! Below is a quick guide to help you get started with creating events, browsing
+                listings, and managing your account</p>
+        </header>
+
+        <section class="student-guide">
+            <div class="container">
+                <h3>How to use CampusConnect</h3>
+                <ol>
+                    <li><b class="accent-text">Create an account</b>: Click the "Sign Up" button and enter your university email address and
+                        password.</li>
+                    <li><b class="accent-text">Create and event:</b>Once logged in, navigate to your dashboard and click "Create Event."
+                        Fill in
+                        the event details including date, price, and category.</li>
+                    <li><b class="accent-text">Browse events and view details:</b>Go to the Events page, browse the list, and click "View
+                        Details" on any event.</li>
+                    <li><b class="accent-text">Add an event to the cart:</b>On the event details page, click "Add to Cart" to reserve your
+                        spot.
+                    </li>
+                    <li><b class="accent-text">Checkout:</b>Go to your cart, review your selected events. Complete the checkout process
+                        using
+                        any available payment method as a payment system has not been integrated.</li>
+                    <li><b class="accent-text">View your profile:</b>Click on "Profile" in the navigation menu. Here you can see all events
+                        you
+                        have created and all events you are attending.</li>
+                    <li><b class="accent-text">Save events:</b>While browsing events, click the heart icon on any event to save it to your
+                        favourites list for later.</li>
+                    <li><b class="accent-text">Notifications:</b>Click the bell icon located in the navigation bar to receive and view any
+                        notifications from the admin regarding your events.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="admin-guide">
+            <div class="container">
+                <h3>How to become and Admin</h3>
+                <p>Admin access is available only to verified university staff and student society leaders. To request
+                    admin privileges, please email your CV and a brief explanation of your role to:</p>
+                <p class="email">📧 campusconnect.admin@university.edu</p>
+                <p>Once your request is reviewed and approved, you will receive admin access to create and manage events
+                    on behalf of your society or department.</p>
+            </div>
+        </section>
+
+    </main>
+
+
+    <footer class="bg-white py-4 text-center shadow-sm">
+        <div class="brand">
+            <img src="/assets/Icons/Logo.svg" alt="CampusConnect Logo" class="logo">
+            <p class="company-name">Campus<b>Connect</b></p>
+        </div>
+        <div class="footer-links">
+            <a href="/scripts/pages/login.js">Create Event</a>
+            <a href="/pages/events.html">Events</a>
+            <a href="/pages/contact.html">Contact Us</a>
+            <a href="/pages/help.html">User Manual</a>
+        </div>
+    </footer>
+    <script src="/scripts/services/loggedInLogic.js"></script>
+</body>
+
+</html>
