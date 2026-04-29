@@ -1,6 +1,88 @@
 import { supabase } from "../config/supabase.js";
 import { showModal } from "../utils/modal.js";
 
+let currentStep = 1;
+const totalSteps = 3;
+
+function updateFormBasedOnRole() {
+  const role = document.querySelector('input[name="role"]:checked').value;
+  const studentFields = document.querySelectorAll('.student-only');
+  const adminFields = document.querySelectorAll('.admin-only');
+
+  if (role === 'student') {
+    studentFields.forEach(el => el.style.display = 'block');
+    adminFields.forEach(el => el.style.display = 'none');
+  } else {
+    studentFields.forEach(el => el.style.display = 'none');
+    adminFields.forEach(el => el.style.display = 'block');
+  }
+}
+
+function nextStep() {
+  const role = document.querySelector('input[name="role"]:checked').value;
+
+  if (currentStep === 1) {
+    if (!role) {
+      alert('Please select a role');
+      return;
+    }
+  } else if (currentStep === 2) {
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    if (!name || !email || !password) {
+      alert('Please fill in all required fields');
+      return;
+    }
+    if (password.length < 6) {
+      alert('Password must be at least 6 characters');
+      return;
+    }
+    if (role === 'student') {
+      const studentId = document.getElementById('student_id').value.trim();
+      if (!studentId) {
+        alert('Please enter your Student ID');
+        return;
+      }
+    } else {
+      const department = document.getElementById('department').value.trim();
+      if (!department) {
+        alert('Please enter your department/organization');
+        return;
+      }
+    }
+  }
+
+  if (currentStep < totalSteps) {
+    document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.remove('active');
+    currentStep++;
+    document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function prevStep() {
+  if (currentStep > 1) {
+    document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.remove('active');
+    currentStep--;
+    document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function previewAvatar(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const preview = document.getElementById('avatarPreview');
+      preview.innerHTML = `<img src="${e.target.result}" alt="Avatar Preview">`;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
 async function uploadAvatar(file) {
   try {
     const fileExt = file.name.split(".").pop();
@@ -39,12 +121,12 @@ function setupForm() {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const selectedRole = document.querySelector('input[name="role"]:checked').value;
+    const roleInput = document.querySelector('input[name="role"]:checked');
     if (!roleInput) {
       alert("Please select a role.");
       return;
     }
-    const selectedRole = roleInput.value
+    const selectedRole = roleInput.value;
     
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
@@ -215,5 +297,16 @@ function setupForm() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  updateFormBasedOnRole();
+  document.querySelectorAll('input[name="role"]').forEach(radio => {
+    radio.addEventListener('change', updateFormBasedOnRole);
+  });
+  document.querySelectorAll('.btn-next').forEach(btn => {
+    btn.addEventListener('click', nextStep);
+  });
+  document.querySelectorAll('.btn-prev').forEach(btn => {
+    btn.addEventListener('click', prevStep);
+  });
+  document.getElementById('avatar').addEventListener('change', previewAvatar);
   setupForm();
 });

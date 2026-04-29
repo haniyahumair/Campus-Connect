@@ -1,6 +1,7 @@
 import { supabase } from "../scripts/config/supabase.js";
 import { initChatbot } from "./ai.js";
 import { initNotifications } from "../scripts/services/notifications.js";
+import { showModal } from "../scripts/utils/modal.js";
 
 let currentEventId = null;
 
@@ -50,14 +51,13 @@ async function initAdminPage() {
     // Update pending events count and populate pending table
     const pendingCount = pendingData.length;
     const sideBar = document.getElementById("navPending");
-    const statCards = document.getElementById("statsPending");
     if (sideBar) {
       sideBar.innerHTML = `<span class="nav-icon">⏳</span> Pending Events <span class="nav-badge" id="pendingCount">${pendingCount}</span>`;
     }
 
-    if (statCards) {
-      statCards.innerHTML = pendingCount;
-    }
+    document.querySelectorAll("#statsPending, #statsPending2").forEach(el => {
+      el.innerHTML = pendingCount;
+    });
 
     populatePending(pendingData);
 
@@ -91,26 +91,23 @@ async function initAdminPage() {
       ) /
         allEvents.length) *
       100;
-    const approvedEventsStatCard = document.getElementById("statsApproved");
     const allEventsSidebar = document.getElementById("allCount");
-    const registeredStatsCard = document.getElementById("statsRegistered");
-    const avgFillRateCard = document.getElementById("statsFilled");
 
-    if (approvedEventsStatCard) {
-      approvedEventsStatCard.textContent = approvedEvents.length;
-    }
+    document.querySelectorAll("#statsApproved, #statsApproved2").forEach(el => {
+      el.textContent = approvedEvents.length;
+    });
 
     if (allEventsSidebar) {
       allEventsSidebar.textContent = allEventsCount;
     }
 
-    if (registeredStatsCard) {
-      registeredStatsCard.textContent = totalRegisteredCount;
-    }
+    document.querySelectorAll("#statsRegistered, #statsRegistered2").forEach(el => {
+      el.textContent = totalRegisteredCount;
+    });
 
-    if (avgFillRateCard) {
-      avgFillRateCard.textContent = `${avgFillRate.toFixed(2)}%`;
-    }
+    document.querySelectorAll("#statsFilled, #statsFilled2").forEach(el => {
+      el.textContent = `${avgFillRate.toFixed(2)}%`;
+    });
 
     // Populate all events table and stats table & view
     populateAll(allEvents);
@@ -493,6 +490,12 @@ async function initAdminPage() {
       is_read: false,
     });
 
+    showModal("Event approved", "Event approved successfully!", "success", {
+      autoClose: 3000,
+      onClose: () => {
+        window.location.href = "/admin/index.html";
+      },
+    });
     loadAll();
   };
 
@@ -553,8 +556,6 @@ async function initAdminPage() {
     if (approveBtn) {
       if (status === "pending") {
         approveBtn.setAttribute("onclick", `quickApprove('${event.id}')`);
-        alert("Event approved successfully!");
-        closeModal();
       } else {
         approveBtn.removeAttribute("onclick");
       }
@@ -623,6 +624,12 @@ async function initAdminPage() {
 
     closeRejectModal();
     closeModal();
+    showModal("Event rejected", "Event rejected successfully!", "success", {
+      autoClose: 3000,
+      onClose: () => {
+        window.location.href = "/admin/index.html";
+      },
+    });
     loadAll();
   };
 
@@ -665,8 +672,12 @@ async function initAdminPage() {
       );
       return;
     }
-    //successfully approved event modal
-    alert("Event approved successfully!");
+    showModal("Event approved", "Event approved successfully!", "success", {
+      autoClose: 3000,
+      onClose: () => {
+        window.location.href = "/admin/index.html";
+      },
+    });
 
     const { error: notificationError } = await supabase
       .from("notifications")
@@ -793,3 +804,11 @@ async function initAdminPage() {
 }
 
 document.addEventListener("DOMContentLoaded", initAdminPage);
+
+// bfcache restores the full DOM state including inline styles, without
+// re-firing DOMContentLoaded — reset the modal on any cached page restore
+window.addEventListener("pageshow", (e) => {
+  if (e.persisted) {
+    document.getElementById("eventsDetailModal").style.display = "none";
+  }
+});

@@ -95,7 +95,7 @@ style.textContent = `
     --text-font: 'Manrope', sans-serif;
     }   
 
-    .modal-overlay {
+    #customModal {
         position: fixed;
         top: 0;
         left: 0;
