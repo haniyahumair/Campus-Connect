@@ -155,6 +155,10 @@ Inspired by the success of Classmate (a student discount platform in Qatar), Cam
    - Browse and filter events
    - Add events to your cart and register
    - Create and submit your own events for admin approval
+  
+### 🔑 Note on Environment Variables
+For the purpose of this academic evaluation, the API configuration file (`scripts/config/env.js`) has been included in the repository. This contains the necessary **Supabase** and **Google Maps** keys to ensure the application works "out of the box" without additional setup.
+**Security Note:** In a production environment, these sensitive credentials would be managed via `.env` files and excluded from version control (via `.gitignore`) to follow industry security best practices.
 
 ---
 
