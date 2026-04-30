@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     sendBtn.value = "Sending...";
     sendBtn.disabled = true;
 
-    const redirectTo = `${window.location.origin}/pages/reset-password.html`;
+    const redirectTo = "https://qc-3002-campus-connect.vercel.app/pages/reset-password.html";
 
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
