@@ -1472,13 +1472,31 @@ tbody tr:hover {
     font-size: 0.6rem;
     padding: 0;
   }
+
+  /* Show AI button in bottom nav */
+  .ai-sidebar-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 8px 12px;
+    font-size: 0.65rem;
+    border-radius: 10px;
+    background: #ffbdb73e;
+    color: var(--primary-accent);
+    border: none;
+    width: auto;
+    height: auto;
+    margin: 0;
+  }
  
   /* ── Main layout ── */
   .main {
     margin-left: 0;
     margin-right: 0;
     margin-top: 0;
-    margin-bottom: 74px; /* space for bottom nav */
+    margin-bottom: 74px;
     border-radius: 0;
     min-height: 100vh;
   }
@@ -1506,10 +1524,15 @@ tbody tr:hover {
     width: auto;
   }
  
-  /* hide the refresh and AI text button on mobile, keep bell + avatar */
-  .refresh-btn,
-  .ai-top-btn {
+  /* Keep AI button in top bar on mobile (show it, don't hide) */
+  .refresh-btn {
     display: none;
+  }
+  
+  .ai-top-btn {
+    display: flex; /* Show AI button in top bar */
+    padding: 9px 14px;
+    font-size: 0.8rem;
   }
  
   /* ── Content padding ── */
@@ -1569,7 +1592,6 @@ tbody tr:hover {
     width: 100%;
   }
  
-  /* tables scroll horizontally */
   .table-scroll-wrap {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -1651,4 +1673,3 @@ tbody tr:hover {
     width: 140px;
   }
 }
- 
