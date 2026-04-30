@@ -306,6 +306,10 @@ campus-connect/
 
 - Admin Dashboard
 
+<img width="2552" height="1650" alt="CampusConnect _ Admin" src="https://github.com/user-attachments/assets/7fb335b2-25f1-46ab-8d1e-bf2dc467baae" />
+<img width="2552" height="3898" alt="CampusConnect _ Admin · 3 38pm · 04-30" src="https://github.com/user-attachments/assets/daeac8e5-00b6-409b-9fd7-4c7c48303ae4" />
+<img width="2552" height="4738" alt="CampusConnect _ Admin · 3 39pm · 04-30" src="https://github.com/user-attachments/assets/7e5d94ef-0639-4876-969a-694ca465d949" />
+<img width="2552" height="1650" alt="CampusConnect _ Admin · 3 39pm · 04-30 (1)" src="https://github.com/user-attachments/assets/bd1b632b-5b42-4bd9-b764-15ef3d566b37" />
 
 ---
 
@@ -317,6 +321,7 @@ CampusConnect successfully delivered a functional MVP addressing the need for a 
 - **University SSO Integration** — Connect directly with university databases to automate student verification via Single Sign-On
 - **Strategic Sponsorships** — Partner with local Qatari businesses (cafes, bookstores, tech hubs) to offer exclusive CampusConnect Discounts, establishing a sustainable revenue model
 - **Official University Sanctioning** — Transition from a student-led prototype to an officially recognised campus tool, ensuring all events meet institutional safety and policy standards
+- **Advanced Notification features** - Currently the notifications are limited to admin and students for approve/reject events, or creation of events. We will transition to more advanced notifications to communicate attendance updates, new events alert, and more flexible communication between students and admin.
 
 ### Phase 2 — Operational Scaling
 - **Native Mobile Deployment** — Transition the responsive web app into a native iOS/Android application with push notifications and event reminders
@@ -327,16 +332,16 @@ CampusConnect successfully delivered a functional MVP addressing the need for a 
 - **Peer-to-Peer Engagement** — User-to-user messaging, collaborative event study groups, and social features including sharing, liking, and commenting on events
 - **Gamification** — Introduction of bonuses, event funding, points, and discounts to drive ongoing user engagement
 - **Multilingual Expansion** — Full localisation into Arabic to serve the diverse university demographic in Qatar
-- **Financial Integration** — Secure payment gateway integration for paid events
+- **Payment Integration** — Secure payment gateway integration for paid events
 
 ---
 
-## 🐛 Known Issues
+## Known Issues
 
-- Cart currently only supports free events (paid event checkout coming soon)
+- Cart doesn't process paid events money (paid event checkout will be fully implemented with a proper payment and ticketing system)
 - Event editing/deletion not yet implemented
 - Admin approval system UI complete but backend pending
-- Profile event lists currently show mock data (integration with real data in progress)
+- Ticketing and approval of tickets not yet implemented
 
 ---
 
@@ -354,14 +359,6 @@ CampusConnect successfully delivered a functional MVP addressing the need for a 
 ## 📄 License
 
 This project was developed as part of a university coursework assignment at the University of Aberdeen.
-
----
-
-## 🙏 Acknowledgments
-
-- Inspired by **Classmate**, a successful student discount platform in Qatar
-- Built to address real student needs for centralized event discovery
-- Developed for students, by students
 
 ---
 
