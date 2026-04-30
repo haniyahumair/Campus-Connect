@@ -342,6 +342,7 @@ CampusConnect successfully delivered a functional MVP addressing the need for a 
 - Event editing/deletion not yet implemented
 - Admin approval system UI complete but backend pending
 - Ticketing and approval of tickets not yet implemented
+- AI Chatbot not funcitonal on deployed version
 
 ---
 
