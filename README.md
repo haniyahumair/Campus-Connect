@@ -273,38 +273,43 @@ campus-connect/
 
 - Homepage with event cards
 
-  <img width="1267" height="720" alt="image" src="https://github.com/user-attachments/assets/7c895f91-ca2b-488a-b715-fbc316505b37" />
-  <img width="1267" height="720" alt="image" src="https://github.com/user-attachments/assets/e9b9d8c4-7d66-4c32-8ca4-31e4e9d2521a" />
+<img width="2530" height="7084" alt="CampusConnect" src="https://github.com/user-attachments/assets/3b5d5d33-ba84-4fc0-8b75-a22949d0a33a" />
+
 
 - Event page
 
-  <img width="1267" height="720" alt="image" src="https://github.com/user-attachments/assets/891512b8-fcdf-4965-871e-e100bc80c82b" />
-  <img width="1267" height="720" alt="image" src="https://github.com/user-attachments/assets/1d72254a-b9d8-463a-95a4-27671f9ef232" />
+<img width="2530" height="5008" alt="CampusConnect · 3 28pm · 04-30" src="https://github.com/user-attachments/assets/9efc31e0-fea6-480a-b2f8-c214b86d6e63" />
+
 
 - Event Detail page
 
-  <img width="1267" height="716" alt="image" src="https://github.com/user-attachments/assets/41f857ee-1c6c-427a-8d34-806b2e2221a8" />
-  <img width="1267" height="716" alt="image" src="https://github.com/user-attachments/assets/b325e19f-34a6-4f4a-9620-cfc00f217774" />
+<img width="2530" height="3696" alt="CampusConnect · 3 29pm · 04-30" src="https://github.com/user-attachments/assets/1e7345d2-0393-44a7-9a96-5c3160bf2676" />
+
 
 - Registration flow
 
-  <img width="1267" height="720" alt="image" src="https://github.com/user-attachments/assets/2acb0f21-0e07-45a8-9940-5817b5e3f412" />
-  <img width="1267" height="720" alt="image" src="https://github.com/user-attachments/assets/ba9580d7-f385-4faf-904a-6aa4028a2996" />
+<img width="2530" height="1716" alt="Login page" src="https://github.com/user-attachments/assets/69bcfd21-99ac-4028-99db-d203a0d42d67" />
+<img width="2530" height="1716" alt="Sign Up - Campus Connect" src="https://github.com/user-attachments/assets/ab04e15f-98fe-4d65-a029-402d275c4a40" />
+
 
 - User profile
 
-  <img width="1267" height="720" alt="image" src="https://github.com/user-attachments/assets/52f0af39-65fa-4ee3-9ff1-f7f6bfffe7f9" />
-  <img width="1267" height="610" alt="image" src="https://github.com/user-attachments/assets/50b86dc5-139e-4349-b1d4-e2e4eac2e122" />
+<img width="2530" height="4562" alt="CampusConnect · 3 30pm · 04-30" src="https://github.com/user-attachments/assets/5a53c649-828f-469f-8ee7-5dc60f1af0d8" />
 
 - Event creation form
 
-  <img width="1267" height="712" alt="image" src="https://github.com/user-attachments/assets/6fa1b1f9-3162-4595-ba82-d2eaf6a8afe0" />
-  <img width="1267" height="716" alt="image" src="https://github.com/user-attachments/assets/3f6da120-08f5-43f2-ba48-731d406c6520" />
+<img width="2530" height="5090" alt="CampusConnect · 3 31pm · 04-30" src="https://github.com/user-attachments/assets/9769ee97-84a4-4c53-b510-31b6af65701e" />
 
 - Cart page
 
-  <img width="1267" height="716" alt="image" src="https://github.com/user-attachments/assets/470b34a8-a258-45f0-a9f0-cc9d4f51fa2e" />
-  <img width="1267" height="716" alt="image" src="https://github.com/user-attachments/assets/50e79265-730a-4283-8b05-66bbef5bb850" />
+<img width="2530" height="1816" alt="CampusConnect" src="https://github.com/user-attachments/assets/334151fc-9819-4373-93fc-b671dba054e7" />
+
+- Admin Dashboard
+
+<img width="2552" height="1650" alt="CampusConnect _ Admin" src="https://github.com/user-attachments/assets/7fb335b2-25f1-46ab-8d1e-bf2dc467baae" />
+<img width="2552" height="3898" alt="CampusConnect _ Admin · 3 38pm · 04-30" src="https://github.com/user-attachments/assets/daeac8e5-00b6-409b-9fd7-4c7c48303ae4" />
+<img width="2552" height="4738" alt="CampusConnect _ Admin · 3 39pm · 04-30" src="https://github.com/user-attachments/assets/7e5d94ef-0639-4876-969a-694ca465d949" />
+<img width="2552" height="1650" alt="CampusConnect _ Admin · 3 39pm · 04-30 (1)" src="https://github.com/user-attachments/assets/bd1b632b-5b42-4bd9-b764-15ef3d566b37" />
 
 ---
 
@@ -316,6 +321,7 @@ CampusConnect successfully delivered a functional MVP addressing the need for a 
 - **University SSO Integration** — Connect directly with university databases to automate student verification via Single Sign-On
 - **Strategic Sponsorships** — Partner with local Qatari businesses (cafes, bookstores, tech hubs) to offer exclusive CampusConnect Discounts, establishing a sustainable revenue model
 - **Official University Sanctioning** — Transition from a student-led prototype to an officially recognised campus tool, ensuring all events meet institutional safety and policy standards
+- **Advanced Notification features** - Currently the notifications are limited to admin and students for approve/reject events, or creation of events. We will transition to more advanced notifications to communicate attendance updates, new events alert, and more flexible communication between students and admin.
 
 ### Phase 2 — Operational Scaling
 - **Native Mobile Deployment** — Transition the responsive web app into a native iOS/Android application with push notifications and event reminders
@@ -326,16 +332,16 @@ CampusConnect successfully delivered a functional MVP addressing the need for a 
 - **Peer-to-Peer Engagement** — User-to-user messaging, collaborative event study groups, and social features including sharing, liking, and commenting on events
 - **Gamification** — Introduction of bonuses, event funding, points, and discounts to drive ongoing user engagement
 - **Multilingual Expansion** — Full localisation into Arabic to serve the diverse university demographic in Qatar
-- **Financial Integration** — Secure payment gateway integration for paid events
+- **Payment Integration** — Secure payment gateway integration for paid events
 
 ---
 
-## 🐛 Known Issues
+## Known Issues
 
-- Cart currently only supports free events (paid event checkout coming soon)
+- Cart doesn't process paid events money (paid event checkout will be fully implemented with a proper payment and ticketing system)
 - Event editing/deletion not yet implemented
 - Admin approval system UI complete but backend pending
-- Profile event lists currently show mock data (integration with real data in progress)
+- Ticketing and approval of tickets not yet implemented
 
 ---
 
@@ -353,14 +359,6 @@ CampusConnect successfully delivered a functional MVP addressing the need for a 
 ## 📄 License
 
 This project was developed as part of a university coursework assignment at the University of Aberdeen.
-
----
-
-## 🙏 Acknowledgments
-
-- Inspired by **Classmate**, a successful student discount platform in Qatar
-- Built to address real student needs for centralized event discovery
-- Developed for students, by students
 
 ---
 
