@@ -147,7 +147,7 @@ Inspired by the success of Classmate (a student discount platform in Qatar), Cam
    Then open `http://localhost:8000` in your browser.
 
    **Option B: Direct file opening**
-   - Open `home.html` directly in your browser
+   - Open the root file `index.html` directly in your browser using live server
    - Note: Some features may behave differently without a local server
 
 4. **Start using Campus Connect**
