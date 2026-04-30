@@ -162,43 +162,69 @@ Inspired by the success of Classmate (a student discount platform in Qatar), Cam
 
 ```
 campus-connect/
+├── admin/
+│   ├── admin.css                 # Admin dashboard styles
+│   ├── admin.js                  # Admin panel, moderation logic, and role-based access
+│   ├── ai.js                     # AI chatbot logic
+│   └── index.html                # Admin dashboard page
+├── api/
+│   └── config.js                 # Google API handlers
 ├── assets/
 │   ├── Icons/                    # UI icons and logos
 │   └── Images/                   # Event images and graphics
+├── pages/
+│   ├── cart.html                 # Cart page
+│   ├── contact.html              # Contact page
+│   ├── create.html               # Create event page
+│   ├── details.html              # Individual event detail page
+│   ├── email-verification.html   # Email verification page
+│   ├── events.html               # Browse events page
+│   ├── help.html                 # Help/User Manual page
+│   ├── login.html                # Login page
+│   ├── profile.html              # User profile page
+│   ├── reset-password.html       # Password reset page
+│   └── signup.html               # Registration page
+├── scripts/
+│   ├── components/
+│   │   ├── eventCardsComponents.js   # Reusable event card rendering function
+│   │   ├── footerComponent.js        # Reusable footer component
+│   │   └── navbarComponent.js        # Reusable navigation bar component
+│   ├── config/
+│   │   ├── env.js                    # API keys and environment variables
+│   │   └── supabase.js               # Supabase client initialization
+│   ├── pages/
+│   │   ├── cart.js                   # Cart management and checkout
+│   │   ├── createEvent.js            # Event creation form handling
+│   │   ├── events.js                 # Event browsing, filtering, and search
+│   │   ├── home.js                   # Homepage logic
+│   │   ├── login.js                  # Login form handling and post-login redirection
+│   │   ├── profile.js                # User profile interactions
+│   │   └── signup.js                 # Registration form handling
+│   ├── services/
+│   │   ├── emailVerification.js      # Email verification flow
+│   │   ├── eventsDatabase.js         # Supabase event data queries
+│   │   ├── loggedInLogic.js          # Auth state UI across all pages
+│   │   ├── notifications.js          # User notification handling
+│   │   ├── resetPassword.js          # Password reset logic
+│   │   └── wishlist.js               # Wishlist/saved events logic
+│   └── utils/
+│       └── modal.js                  # Reusable modal utility
 ├── styles/
-│   ├── global.css                # Shared styles across all pages
-│   ├── home.css                  # Homepage styles
-│   ├── events.css                # Events page styles
-│   ├── eventDetails.css          # Event detail page styles
-│   ├── cart.css                  # Cart page styles
-│   ├── profile.css               # Profile page styles
-│   ├── admin.css                 # Admin dashboard styles
-│   ├── create.css                # Event creation page styles
-│   └── login-register.css        # Login and signup page styles
-├── auth.js                       # Authentication logic (localStorage + Supabase Auth)
-├── login.js                      # Login form handling and post-login redirection
-├── signup.js                     # Registration form handling
-├── cart.js                       # Cart management and checkout
-├── events.js                     # Event browsing, filtering, and search
-├── admin.js                      # Admin panel, moderation logic, and role-based access
-├── loggedInLogic.js              # Navigation and auth state UI across all pages
-├── navbarComponent.js            # Reusable navigation bar component
-├── footerComponent.js            # Reusable footer component
-├── eventCardsComponents.js       # Reusable event card rendering function
-├── cardDetails.js                # Event detail page interactions and Google Maps integration
-├── server.js                     # Node.js server for AI chatbot
-├── home.html                     # Landing page
-├── events.html                   # Browse events page
-├── eventDetails.html             # Individual event detail page
-├── create.html                   # Create event page
-├── cart.html                     # Shopping cart page
-├── profile.html                  # User profile page
-├── admin.html                    # Admin dashboard page
-├── login.html                    # Login page
-├── signup.html                   # Registration page
-└── README.md
+│   ├── pages/
+│   │   ├── cart.css                  # Cart page styles
+│   │   ├── details.css               # Event detail page styles
+│   │   ├── events.css                # Events page styles
+│   │   ├── home.css                  # Homepage styles
+│   │   ├── login-register.css        # Login and signup page styles
+│   │   └── profile.css               # Profile page styles
+│   └── global.css                    # Shared styles across all pages
+├── .gitignore
+├── index.html                        # Landing page
+├── package.json                      # Project dependencies
+├── README.md                         # Project documentation and setup guide
+├── server.js                         # Node.js server for AI chatbot
+└── terms&conditions.txt              # Terms and conditions
 ```
-
 ---
 
 ## 📖 Usage
@@ -317,7 +343,7 @@ CampusConnect successfully delivered a functional MVP addressing the need for a 
 
 | Name | Role |
 |------|------|
-| **Haniyah Umair** | Project Manager, UX/UI Designer, Frontend Developer |
+| **Haniyah Umair** | Project Manager, UX/UI Designer, Full-Stack Developer |
 | **Abdalla Kabashi** | Full-Stack Developer (JavaScript, Supabase Integration, Admin Panel) |
 | **Rafiah Al Mohannadi** | Assistant Manager, Technical Writer, Frontend Developer |
 | **Mohammad Al Nasr** | Frontend Developer (HTML) |
