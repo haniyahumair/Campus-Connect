@@ -61,7 +61,6 @@ html, body {
   gap: 15px;
   align-items: center;
   justify-content: center;
-  margin-right: 5rem;
   text-decoration: none;
   list-style: none;
   padding: 0;
@@ -938,4 +937,20 @@ footer .brand .logo {
 }
 .accent-text {
   color: var(--primary-accent);
+}
+
+
+@media (min-width: 769px) {
+  .close-menu,
+  .navbar-overlay {
+    display: none !important;
+  }
+  .navbar-nav {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    display: flex;
+    gap: 15px;
+  }
 }
