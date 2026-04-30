@@ -249,6 +249,28 @@ body {
   background: var(--primary-grey);
 }
 
+/* notification bell badge */
+#notificationBtn {
+  position: relative;
+}
+
+#notificationBtn .bell-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background-color: var(--primary-accent);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
 /* notification dropdown */
 .notif-dropdown {
   position: absolute;

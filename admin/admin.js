@@ -144,23 +144,6 @@ async function initAdminPage() {
     }
   };
 
-  //notification dropdown
-  const notificationBtn = document.getElementById("notificationBtn");
-  const notificationDropdown = document.getElementById("notifDropdown");
-
-  notificationBtn.addEventListener("click", () => {
-    notificationDropdown.style.display =
-      notificationDropdown.style.display === "block" ? "none" : "block";
-  });
-
-  window.addEventListener("click", (e) => {
-    if (
-      !notificationBtn.contains(e.target) &&
-      !notificationDropdown.contains(e.target)
-    ) {
-      notificationDropdown.style.display = "none";
-    }
-  });
 
   //refresh button
   const refreshBtn = document.getElementById("refreshBtn");

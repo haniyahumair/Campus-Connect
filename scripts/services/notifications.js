@@ -36,7 +36,8 @@ export async function initNotifications() {
     .subscribe();
 
   // toggle dropdown on bell click
-  document.getElementById("bellBtn")?.addEventListener("click", (e) => {
+  const bellBtn = document.getElementById("bellBtn") || document.getElementById("notificationBtn");
+  bellBtn?.addEventListener("click", (e) => {
     e.stopPropagation();
     const dropdown = document.getElementById("notifDropdown");
     dropdown.style.display =
