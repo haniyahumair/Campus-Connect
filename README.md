@@ -343,7 +343,7 @@ CampusConnect successfully delivered a functional MVP addressing the need for a 
 
 | Name | Role |
 |------|------|
-| **Haniyah Umair** | Project Manager, UX/UI Designer, Frontend Developer |
+| **Haniyah Umair** | Project Manager, UX/UI Designer, Full-Stack Developer |
 | **Abdalla Kabashi** | Full-Stack Developer (JavaScript, Supabase Integration, Admin Panel) |
 | **Rafiah Al Mohannadi** | Assistant Manager, Technical Writer, Frontend Developer |
 | **Mohammad Al Nasr** | Frontend Developer (HTML) |
