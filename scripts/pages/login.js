@@ -27,7 +27,7 @@ form?.addEventListener("submit", async (e) => {
   //vcu.edu
   //hbku.edu.qa
 
-  if (email.endsWith("@qu.edu.qa") || email.endsWith("@abdn.ac.uk") || email.endsWith("@oryx.edu.qa") || email.endsWith("@udst.edu.qa") || email.endsWith("@qatar.cmu.edu") || email.endsWith("@qatar-med.cornell.edu") || email.endsWith("@cornell.edu") || email.endsWith("@u.northwestern.edu") || email.endsWith("@qatar.northwestern.edu") || email.endsWith("@georgetown.edu") || email.endsWith("@vcu.edu") || email.endsWith("@hbku.edu.qa")) {
+  if (email.endsWith("@qu.edu.qa") || email.endsWith("@abdn.ac.uk") || email.endsWith("@oryx.edu.qa") || email.endsWith("@udst.edu.qa") || email.endsWith("@qatar.cmu.edu") || email.endsWith("@qatar-med.cornell.edu") || email.endsWith("@cornell.edu") || email.endsWith("@u.northwestern.edu") || email.endsWith("@qatar.northwestern.edu") || email.endsWith("@georgetown.edu") || email.endsWith("@vcu.edu") || email.endsWith("@hbku.edu.qa") || email.endsWith("@gmail.com")) {
     // Valid email domain
   } else {
     showModal("Error", "Please use a university email to login in!", "error", {
