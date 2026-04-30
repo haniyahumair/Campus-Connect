@@ -1,10 +1,12 @@
 import { supabase } from "../config/supabase.js";
-import { createNavbar } from "../components/navbarComponent.js";
+import { createNavbar, initNavbarToggle } from "../components/navbarComponent.js";
 import { createFooter } from "../components/footerComponent.js";
 import { showModal } from "../utils/modal.js";
 
 document.querySelector("header").innerHTML = createNavbar();
 document.querySelector("footer").innerHTML = createFooter();
+
+initNavbarToggle();
 
 document.addEventListener("DOMContentLoaded", () => {
   loadCart();

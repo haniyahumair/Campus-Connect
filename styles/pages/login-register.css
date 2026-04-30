@@ -183,30 +183,6 @@ register-form {
   width: 500px;
 }
 
-/*Mobile layout*/
-@media (max-width: 768px) {
-  main {
-    flex-direction: column;
-    height: auto;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 0;
-  }
-  .login-form,
-  sign-up-form {
-    margin-bottom: 0;
-  }
-
-  .signup-img img {
-    width: 100%;
-  }
-
-  body {
-    margin-left: 20px;
-  }
-}
-
 /*role selection */
 .role-selection {
   margin-bottom: 25px;
@@ -426,4 +402,53 @@ textarea {
   font-size: 0.9rem;
   width: 100%;
   height: 80px;
+}
+
+/*Mobile layout*/
+@media (max-width: 768px) {
+  body {
+    padding-left: 0;
+    margin: 0;
+  }
+
+  main {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 20px 16px;
+    box-sizing: border-box;
+  }
+
+  .login-container,
+  .sign-up-container {
+    padding: 20px 14px;
+    width: 100%;
+    align-items: center;
+  }
+
+  .login-img img,
+  .signup-img img {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .login-content .text h2,
+  .sign-up-content .text h2 {
+    font-size: 2rem;
+  }
+
+  .role-options {
+    grid-template-columns: 1fr;
+  }
+
+  .register-form input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .form-navigation button{
+    width: 100%;
+    margin-bottom: 10px;
+  }
 }

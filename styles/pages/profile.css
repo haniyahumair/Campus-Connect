@@ -256,3 +256,31 @@ section {
   opacity: 0.6;
   border: 2px solid var(--red);
 }
+
+@media (max-width: 768px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-header h1 {
+    font-size: 2.5rem;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tab-panel .events-container {
+    grid-template-columns: 1fr !important;
+  }
+
+  .events-tab {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+
+  section {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}

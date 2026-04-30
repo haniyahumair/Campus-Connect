@@ -344,3 +344,74 @@ section {
   background-color: var(--black);
   color: var(--white);
 }
+
+@media (max-width: 768px) {
+  .cart-container h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    margin-top: 30px;
+  }
+
+  .cart-layout {
+    flex-direction: column;
+    padding: 12px;
+  }
+
+  .cart-item {
+    flex-direction: column;
+    height: auto;
+    align-items: flex-start;
+  }
+
+  .item-image {
+    width: 100%;
+    height: 200px;
+  }
+
+  .item-details .location{
+    text-align: center;
+  }
+
+  .item-details {
+    transform: none;
+    width: 100%;
+  }
+
+  .item-details h5 {
+    white-space: normal;
+  }
+
+  .date-time-container {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .item-actions {
+    flex-direction: row;
+    width: 100%;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--light-grey);
+  }
+  
+  .remove-btn {
+    margin-right: 0;
+  }
+
+  .cart-right {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  .cart-layout {
+    padding: 12px;
+    box-sizing: border-box;
+  }
+  
+  #apple-pay-btn,
+  .paypal-btn,
+  .card {
+    width: 100%;
+  }
+}

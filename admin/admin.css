@@ -1418,3 +1418,237 @@ tbody tr:hover {
   background: var(--light-grey);
   border-radius: 4px;
 }
+
+@media (max-width: 768px) {
+ 
+  /* ── Sidebar → bottom nav bar ── */
+  .sidebar {
+    width: 100%;
+    min-height: unset;
+    height: 64px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 8px;
+    gap: 0;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    top: unset;
+    z-index: 50;
+    border-top: 1px solid var(--light-grey);
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+  }
+ 
+  .sidebar-logo,
+  .sidebar-section-label,
+  .sidebar-bottom {
+    display: none;
+  }
+ 
+  .nav-item {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 8px 12px;
+    font-size: 0.65rem;
+    border-radius: 10px;
+    margin-bottom: 0;
+    flex: 1;
+    text-align: center;
+  }
+ 
+  .nav-icon {
+    font-size: 1.2rem;
+  }
+ 
+  .nav-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 14px;
+    height: 14px;
+    font-size: 0.6rem;
+    padding: 0;
+  }
+ 
+  /* ── Main layout ── */
+  .main {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 74px; /* space for bottom nav */
+    border-radius: 0;
+    min-height: 100vh;
+  }
+ 
+  /* ── Topbar ── */
+  .topbar {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 16px 16px 12px;
+  }
+ 
+  .page-title {
+    font-size: 1.4rem;
+  }
+ 
+  .topbar-right {
+    width: 100%;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+ 
+  .topbar-search {
+    flex: 1;
+    min-width: 0;
+    width: auto;
+  }
+ 
+  /* hide the refresh and AI text button on mobile, keep bell + avatar */
+  .refresh-btn,
+  .ai-top-btn {
+    display: none;
+  }
+ 
+  /* ── Content padding ── */
+  .content {
+    padding: 0 12px 24px;
+  }
+ 
+  /* ── Stat cards → 2 columns ── */
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 0 0 20px;
+  }
+ 
+  .stat-card {
+    padding: 16px;
+  }
+ 
+  .stat-card-icon img {
+    width: 70px;
+    height: 70px;
+  }
+ 
+  .stat-card-value {
+    font-size: 1.5rem;
+  }
+ 
+  .stat-card-label {
+    font-size: 0.8rem;
+  }
+ 
+  /* ── Table cards ── */
+  .table-card {
+    border-radius: 12px;
+    margin-top: 12px;
+  }
+ 
+  .table-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 16px 14px 12px;
+  }
+ 
+  .table-controls {
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 6px;
+  }
+ 
+  .search-ctrl {
+    flex: 1;
+    min-width: 0;
+  }
+ 
+  .search-ctrl input {
+    width: 100%;
+  }
+ 
+  /* tables scroll horizontally */
+  .table-scroll-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+ 
+  table {
+    min-width: 560px;
+  }
+ 
+  th, td {
+    padding: 10px 12px;
+    font-size: 0.8rem;
+  }
+ 
+  .cell-title {
+    font-size: 0.85rem;
+    width: 130px;
+  }
+ 
+  /* ── Modals ── */
+  .modal {
+    width: 95vw;
+    max-height: 92vh;
+    border-radius: 16px;
+  }
+ 
+  .modal-header {
+    padding: 18px 18px 14px;
+  }
+ 
+  .modal-title {
+    font-size: 1.3rem;
+  }
+ 
+  .modal-body {
+    padding: 16px 18px;
+  }
+ 
+  .modal-img-wrap {
+    height: 180px;
+  }
+ 
+  .detail-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+ 
+  .reason-card {
+    width: 92vw;
+    padding: 20px;
+  }
+ 
+  /* ── AI Panel ── */
+  .ai-panel {
+    width: 100%;
+    max-width: 100%;
+    right: -100%;
+    border-radius: 20px 20px 0 0;
+    top: auto;
+    height: 85vh;
+  }
+ 
+  .ai-panel.open {
+    right: 0;
+  }
+ 
+  /* ── Notification dropdown ── */
+  .notif-dropdown {
+    left: auto;
+    right: 10px;
+    width: calc(100vw - 20px);
+    max-width: 360px;
+  }
+ 
+  /* ── Avatar dropdown ── */
+  .avatar-dropdown {
+    left: auto;
+    right: 10px;
+    width: 140px;
+  }
+}
+ 

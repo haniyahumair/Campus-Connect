@@ -1,6 +1,6 @@
 import { supabase } from '../config/supabase.js';
 import { showModal } from '../utils/modal.js';
-import { createNavbar } from '../components/navbarComponent.js';
+import { createNavbar, initNavbarToggle } from '../components/navbarComponent.js';
 import { createFooter } from '../components/footerComponent.js';
 import { Loader } from 'https://cdn.jsdelivr.net/npm/@googlemaps/js-api-loader@1.16.6/+esm';
 
@@ -8,6 +8,7 @@ try {
   const headerEl = document.querySelector('header');
   const footerEl = document.querySelector('footer');
   if (headerEl) headerEl.innerHTML = createNavbar();
+  if(headerEl) initNavbarToggle();
   if (footerEl) footerEl.innerHTML = createFooter();
 } catch (err) {
   console.error('Navbar/Footer render failed:', err);

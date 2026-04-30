@@ -1,11 +1,13 @@
 // imports
-import { createNavbar } from "../components/navbarComponent.js";
+import { createNavbar, initNavbarToggle } from "../components/navbarComponent.js";
 import { createFooter } from "../components/footerComponent.js";
 import { supabase } from "../config/supabase.js";
 import { createEventCard } from "../components/eventCardsComponents.js";
 
 document.querySelector("header").innerHTML = createNavbar();
 document.querySelector("footer").innerHTML = createFooter();
+
+initNavbarToggle();
 
 async function loadEvents() {
   const today = new Date().toISOString().split("T")[0]; // date from today

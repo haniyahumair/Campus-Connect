@@ -1,4 +1,4 @@
-import { createNavbar } from "../components/navbarComponent.js";
+import { createNavbar, initNavbarToggle } from "../components/navbarComponent.js";
 import { createFooter } from "../components/footerComponent.js";
 import { supabase } from "../config/supabase.js";
 import { createEventCard } from "../components/eventCardsComponents.js";
@@ -6,6 +6,8 @@ import { getWishlist, toggleWishlist } from "../services/wishlist.js";
 
 document.querySelector("header").innerHTML = createNavbar();
 document.querySelector("footer").innerHTML = createFooter();
+
+initNavbarToggle();
 
 const categoriesBtn = document.getElementById("categoriesBtn");
 const priceBtn = document.getElementById("priceBtn");

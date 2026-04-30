@@ -134,3 +134,14 @@ section {
   font-size: 1rem;
   cursor: pointer;
 }
+
+@media (max-width: 786px) {
+  .hero h2 {
+    font-size: 2.7rem;
+  }
+
+  .upload-area {
+    height: 300px;
+  }
+  
+}
