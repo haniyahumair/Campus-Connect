@@ -25,57 +25,55 @@
                 <div class="search-bar">
                     <input type="text" class="form-control" placeholder="Search event’s by name">
                 </div>
+                
+                <!-- Categories Filter -->
                 <div class="filter-buttons">
-                    <button class="filter-btn" id="categoriesBtn">
-                        <!--<img src="/assets/Icons/Funnel Icon.svg" alt="Funnel Icon" class="me-2" width="12" height="12">-->⬇️
-                        All Categories
-                    </button>
+                    <button class="filter-btn" id="categoriesBtn">⬇️ All Categories</button>
                     <div class="dropdown-menu-custom" id="categoriesDropdown">
-                        <div><b>All Events</b></div>
-                        <hr style="border: 0.7px black solid;">
-                        <div>Academic</div>
-                        <div>Sports</div>
-                        <div>Arts & Culture</div>
-                        <div>Tech & Innovation</div>
-                        <div>Workshop</div>
-                        <div>Career</div>
-                        <div>Social</div>
-                        <div>Health & Wellness</div>
-                        <div>Entertainment</div>
+                        <div class="option"><b>All Events</b></div>
+                        <hr style="border: 0.5px rgba(0,0,0,0.1) solid; margin: 8px 0;">
+                        <div class="option">Academic</div>
+                        <div class="option">Sports</div>
+                        <div class="option">Arts & Culture</div>
+                        <div class="option">Tech & Innovation</div>
+                        <div class="option">Workshop</div>
+                        <div class="option">Career</div>
+                        <div class="option">Social</div>
+                        <div class="option">Health & Wellness</div>
+                        <div class="option">Entertainment</div>
                     </div>
                 </div>
 
+                <!-- Price Filter -->
                 <div class="filter-buttons">
-                    <button class="filter-btn" id="priceBtn">
-                        <!--<img src="/assets/Icons/Coin Stacked Icon.svg" alt="Coin Stacked Icon" class="me-2" width="20" height="20">-->💲
-                        Filter By Price
-                    </button>
+                    <button class="filter-btn" id="priceBtn">💲 Filter By Price</button>
                     <div class="dropdown-menu-custom price-btn" id="priceDropdown">
-                        <div data-filter="all"><b>All Events</b></div>
-                        <hr style="border: 0.7px black solid;">
-                        <div data-filter="free">Free</div>
-                        <div data-filter="paid">Paid</div>
+                        <div class="option" data-filter="all"><b>All Events</b></div>
+                        <hr style="border: 0.5px rgba(0,0,0,0.1) solid; margin: 8px 0;">
+                        <div class="option" data-filter="free">Free</div>
+                        <div class="option" data-filter="paid">Paid</div>
+                        <button class="reset-btn" id="resetPriceFilter">Reset</button>
                     </div>
                 </div>
 
+                <!-- Date Filter -->
                 <div class="filter-buttons">
-                    <button class="filter-btn" id="dateBtn">
-                        <!--<img src="/assets/Icons/Calendar.svg" alt="Calendar-Icon" class="me-2" width="20"
-                            height="20">-->📆 Filter By Date
-                    </button>
-                    <div class="dropdown-menu-custom date-filter-btn" id="dateDropdown">
+                    <button class="filter-btn" id="dateBtn">📆 Filter By Date</button>
+                    <!-- Added dropdown-date-right to fix positioning -->
+                    <div class="dropdown-menu-custom dropdown-date-right" id="dateDropdown">
                         <div class="date-filter-form">
                             <label>Month</label>
-                            <input type="text" id="monthInput" placeholder="e.g., January">
+                            <input type="text" id="monthInput" placeholder="e.g. January">
 
                             <label>Day</label>
-                            <input type="text" id="dayInput" placeholder="e.g., 15">
+                            <input type="text" id="dayInput" placeholder="e.g. 15">
 
                             <label>Year</label>
-                            <input type="text" id="yearInput" placeholder="e.g., 2024">
+                            <input type="text" id="yearInput" placeholder="e.g. 2024">
 
-                            <button id="applyDateFilter">Apply</button>
+                            <button class="filter-apply-btn" id="applyDateFilter">Apply</button>
                         </div>
+                        <button class="reset-btn" id="resetDateFilter">Reset</button>
                     </div>
                 </div>
             </div>

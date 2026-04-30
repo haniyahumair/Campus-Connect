@@ -5,7 +5,7 @@ export function createFooter() {
                 <p class="company-name">Campus<b>Connect</b></p>
         </div>
         <div class="footer-links">
-            <a href="/scripts/pages/login.js">Create Event</a>
+            <a href="/pages/create.html">Create Event</a>
             <a href="/pages/events.html">Events</a>
             <a href="/pages/contact.html">Contact Us</a>
             <a href="/pages/help.html">User Manual</a>

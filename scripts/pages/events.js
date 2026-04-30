@@ -108,7 +108,7 @@ async function loadEvents() {
     });
   }
 
-  eventCardsArray = document.querySelectorAll(".event-card");
+  eventCardsArray = Array.from(document.querySelectorAll(".event-card"));
 
   // Wishlist: mark saved events and attach toggle handlers
   const {
@@ -216,9 +216,9 @@ if (priceDropdown) {
         const priceText = cardPrice.textContent.trim().toLowerCase();
 
         card.classList.remove("hidden");
-        if (filter === "free" && priceText !== "free") {
+        if (filter === "free" && !priceText.includes("free")) {
           card.classList.add("hidden");
-        } else if (filter === "paid" && priceText === "free") {
+        } else if (filter === "paid" && priceText.includes("free")) {
           card.classList.add("hidden");
         }
       });
@@ -231,26 +231,25 @@ if (priceDropdown) {
 if (dateDropdown) {
   const applyFilterBtn = document.getElementById("applyDateFilter");
   applyFilterBtn.addEventListener("click", () => {
-    const monthInput = document
-      .getElementById("monthInput")
-      .value.trim()
-      .toLowerCase();
+    const monthInput = document.getElementById("monthInput").value.trim();
     const dayInput = document.getElementById("dayInput").value.trim();
     const yearInput = document.getElementById("yearInput").value.trim();
 
     eventCardsArray.forEach((card) => {
-      const month = card.querySelector(".month").textContent;
-      const day = card.querySelector(".day").textContent;
-      const year = card.querySelector(".year").textContent;
+      const cardDate = new Date(
+        `${card.querySelector(".month").textContent} ${card.querySelector(".day").textContent}, ${card.querySelector(".year").textContent}`
+      );
+
+      const filterDate = new Date(
+        `${monthInput || cardDate.toLocaleString("default", { month: "long" })} ${dayInput || cardDate.getDate()}, ${yearInput || cardDate.getFullYear()}`
+      );
 
       card.classList.remove("hidden");
-      if (monthInput && month.toLowerCase() !== monthInput) {
-        card.classList.add("hidden");
-      }
-      if (dayInput && day !== dayInput) {
-        card.classList.add("hidden");
-      }
-      if (yearInput && year !== yearInput) {
+      if (
+        (monthInput && filterDate.getMonth() !== cardDate.getMonth()) ||
+        (dayInput && filterDate.getDate() !== cardDate.getDate()) ||
+        (yearInput && filterDate.getFullYear() !== cardDate.getFullYear())
+      ) {
         card.classList.add("hidden");
       }
     });
@@ -272,6 +271,32 @@ if (searchInput) {
         card.classList.add("hidden");
       }
     });
+  });
+}
+
+// price filter
+const resetPriceFilterBtn = document.getElementById("resetPriceFilter");
+if (resetPriceFilterBtn) {
+  resetPriceFilterBtn.addEventListener("click", () => {
+    priceBtn.textContent = "Filter By Price";
+    eventCardsArray.forEach((card) => {
+      card.classList.remove("hidden");
+    });
+    priceDropdown.classList.remove("show");
+  });
+}
+
+//date filter
+const resetDateFilterBtn = document.getElementById("resetDateFilter");
+if (resetDateFilterBtn) {
+  resetDateFilterBtn.addEventListener("click", () => {
+    document.getElementById("monthInput").value = "";
+    document.getElementById("dayInput").value = "";
+    document.getElementById("yearInput").value = "";
+    eventCardsArray.forEach((card) => {
+      card.classList.remove("hidden");
+    });
+    dateDropdown.classList.remove("show");
   });
 }
 
